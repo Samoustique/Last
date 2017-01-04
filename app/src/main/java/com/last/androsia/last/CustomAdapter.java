@@ -58,10 +58,6 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
 
             // nous plaçons dans notre MyViewHolder les vues de notre layout
             mViewHolder = new MyViewHolder();
-            /*mViewHolder.textViewName = (TextView) convertView
-                    .findViewById(R.id.textViewName);
-            mViewHolder.textViewAge = (TextView) convertView
-                    .findViewById(R.id.textViewAge);*/
             mViewHolder.imageView = (ImageView) convertView
                     .findViewById(R.id.imageView);
 
@@ -76,9 +72,6 @@ public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClic
         // nous récupérons l'item de la liste demandé par getView
         TagsListItem tagsListItem = (TagsListItem) getItem(position);
 
-        // nous pouvons attribuer à nos vues les valeurs de l'élément de la liste
-        /*mViewHolder.textViewName.setText(tagsListItem.getName());
-        mViewHolder.textViewAge.setText(String.valueOf(tagsListItem.getAge()) + " ans");*/
         m_imageLoader.loadImage(tagsListItem.getImageUrl(), m_context, mViewHolder.imageView);
 
         // nous retournos la vue de l'item demandé
