@@ -15,7 +15,7 @@ import com.squareup.picasso.Transformation;
 
 public class ImageLoader {
     public void loadImage(String url, Context context, final ImageView imageView) {
-        Picasso.with(context).load(url).transform(new Transformation() {
+        Picasso.with(context).load(url)/*.transform(new Transformation() {
             @Override
             public Bitmap transform(Bitmap source) {
                 Bitmap combinedBitmap;
@@ -37,6 +37,6 @@ public class ImageLoader {
             public String key() {
                 return ImageLoader.class.getName() + ".Transformation";
             }
-        }).fit().error(android.R.drawable.sym_contact_card).placeholder(android.R.drawable.sym_contact_card).into(imageView);
+        })*/.fit().error(android.R.drawable.sym_contact_card).placeholder(android.R.drawable.sym_contact_card).into(imageView);
     }
 }

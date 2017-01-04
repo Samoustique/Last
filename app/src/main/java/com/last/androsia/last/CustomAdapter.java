@@ -1,14 +1,14 @@
 package com.last.androsia.last;
 
 import android.app.Activity;
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by SPhilipps on 1/3/2017.
  */
 
-public class CustomAdapter extends BaseAdapter /*implements OnItemClickListener*/ {
+public class CustomAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
     ArrayList<TagsListItem> m_tagList = new ArrayList<TagsListItem>();
     Context m_context;
     ImageLoader m_imageLoader = new ImageLoader();
@@ -58,10 +58,10 @@ public class CustomAdapter extends BaseAdapter /*implements OnItemClickListener*
 
             // nous plaçons dans notre MyViewHolder les vues de notre layout
             mViewHolder = new MyViewHolder();
-            mViewHolder.textViewName = (TextView) convertView
+            /*mViewHolder.textViewName = (TextView) convertView
                     .findViewById(R.id.textViewName);
             mViewHolder.textViewAge = (TextView) convertView
-                    .findViewById(R.id.textViewAge);
+                    .findViewById(R.id.textViewAge);*/
             mViewHolder.imageView = (ImageView) convertView
                     .findViewById(R.id.imageView);
 
@@ -77,8 +77,8 @@ public class CustomAdapter extends BaseAdapter /*implements OnItemClickListener*
         TagsListItem tagsListItem = (TagsListItem) getItem(position);
 
         // nous pouvons attribuer à nos vues les valeurs de l'élément de la liste
-        mViewHolder.textViewName.setText(tagsListItem.getName());
-        mViewHolder.textViewAge.setText(String.valueOf(tagsListItem.getAge()) + " ans");
+        /*mViewHolder.textViewName.setText(tagsListItem.getName());
+        mViewHolder.textViewAge.setText(String.valueOf(tagsListItem.getAge()) + " ans");*/
         m_imageLoader.loadImage(tagsListItem.getImageUrl(), m_context, mViewHolder.imageView);
 
         // nous retournos la vue de l'item demandé
@@ -88,18 +88,16 @@ public class CustomAdapter extends BaseAdapter /*implements OnItemClickListener*
     // MyViewHolder va nous permettre de ne pas devoir rechercher
     // les vues à chaque appel de getView, nous gagnons ainsi en performance
     private class MyViewHolder {
-        TextView textViewName, textViewAge;
+        //TextView textViewName, textViewAge;
         ImageView imageView;
     }
 
-    /*// nous affichons un Toast à chaque clic sur un item de la liste
+    // nous affichons un Toast à chaque clic sur un item de la liste
     // nous récupérons l'objet grâce à sa position
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-        Toast toast = Toast.makeText(context, "Item " + (position + 1) + ": "
-                + this.myList.get(position), Toast.LENGTH_SHORT);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast toast = Toast.makeText(m_context, "Item " + (position + 1) + ": "
+                + m_tagList.get(position), Toast.LENGTH_SHORT);
         toast.show();
-
-    }*/
+    }
 }
