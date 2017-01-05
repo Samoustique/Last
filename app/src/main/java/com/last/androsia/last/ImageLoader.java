@@ -13,6 +13,7 @@ public class ImageLoader {
     public void loadImage(String url, Context context, final ImageView imageView) {
         Picasso.with(context).load(url)
                 .fit()
+                //.resize(200,200)
                 .error(android.R.drawable.sym_contact_card)
                 .placeholder(android.R.drawable.sym_contact_card)
                 .into(imageView);
