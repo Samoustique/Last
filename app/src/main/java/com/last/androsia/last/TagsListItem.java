@@ -5,42 +5,46 @@ package com.last.androsia.last;
  */
 
 public class TagsListItem {
-    private String name;
-    private String imageUrl;
-    private int age;
+    private String m_title;
+    private String m_imageUrl;
+    private int m_counter;
 
-    public TagsListItem(String name, int age, String imageUrl) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.age = age;
+    public TagsListItem(String title, int counter, String imageUrl) {
+        m_title = title;
+        m_imageUrl = imageUrl;
+        m_counter = counter;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return m_title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        m_title = title;
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return m_imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        m_imageUrl = imageUrl;
     }
 
-    public int getAge() {
-        return age;
+    public int getCounter() {
+        return m_counter;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setCounter(int counter) {
+        m_counter = counter;
+    }
+
+    public void incrementCounter(){
+        ++m_counter;
     }
 
     @Override
-    public String toString() {
-        return this.name + " : " + this.age;
+    public String toString(){
+        return m_title + " #" + m_counter;
     }
 }

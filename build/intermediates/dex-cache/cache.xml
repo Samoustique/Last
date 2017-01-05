@@ -16,26 +16,8 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="77fe8b3bac6e41eaab06533fbe1d21fb6666285f">
+        sha1="c3bd564d0c35d182240e2d618b6ad51ee0426bef">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_03a5eb94a9e8ae7d0a1b589d3745639a652e3b65\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\Libs\picasso-2.5.2.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\2\picasso-2.5.2_aa1c9408cde18423bd1339ee30946d0cad562b70\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.1.0_8236daf5027b17665f24d5c000ceee333bcd5939\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -45,24 +27,6 @@
         revision="25.0.2"
         sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.1.0_2750269455796d5eeb42f58f4a4c9bc2af7bb370\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.1.0_8a9ae90b8b9a2874df3a7067d0a9affde5487624\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.1.0_b34a4a0fadc465064a197fc07fd6d3e0060f8606\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -84,6 +48,42 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\Libs\picasso-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\2\picasso-2.5.2_aa1c9408cde18423bd1339ee30946d0cad562b70\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.1.0_8236daf5027b17665f24d5c000ceee333bcd5939\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.1.0_8a9ae90b8b9a2874df3a7067d0a9affde5487624\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.1.0_b34a4a0fadc465064a197fc07fd6d3e0060f8606\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -97,7 +97,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="e5aa7e712756d5db28be6b2de143e0df3914ebf0">
+        sha1="8656622b2a1a3565570059033a72eec93b7d4128">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_b75c66b5af0203bed66ba1ee8a703c16e7e22449\classes.dex" />
     </item>
     <item
