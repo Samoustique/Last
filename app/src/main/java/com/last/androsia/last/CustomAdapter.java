@@ -56,6 +56,7 @@ public class CustomAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         MyViewHolder mViewHolder = null;
+        boolean doCenter = false;
 
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) m_context
@@ -72,19 +73,25 @@ public class CustomAdapter extends BaseAdapter {
             mViewHolder.m_textViewCounter.setTypeface(custom_font);
 
             convertView.setTag(mViewHolder);
+            doCenter = true;
         } else {
             mViewHolder = (MyViewHolder) convertView.getTag();
         }
-
         TagsListItem tagsListItem = (TagsListItem) getItem(position);
 
         m_imageLoader.loadImage(tagsListItem.getImageUrl(), m_context, mViewHolder.m_imageView);
-        formatCounter(tagsListItem, mViewHolder.m_textViewCounter);
+        SpannableString counter = formatCounter(tagsListItem);
+        mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
+
+        if (doCenter) {
+            centerCounter(mViewHolder.m_textViewCounter);
+            doCenter = false;
+        }
 
         return convertView;
     }
 
-    private void formatCounter(TagsListItem item, TextView txtView){
+    private SpannableString formatCounter(TagsListItem item){
         SpannableString  counter = new SpannableString("");
         switch(item.getType()){
             case BOOK:
@@ -96,32 +103,30 @@ public class CustomAdapter extends BaseAdapter {
             default:
                 break;
         }
-        txtView.setText(counter, TextView.BufferType.SPANNABLE);
-        centerCounter(txtView);
+        return counter;
     }
 
     private void centerCounter(TextView txtView){
-        int left;
-        int top;
         RelativeLayout.LayoutParams lp =
                 (RelativeLayout.LayoutParams) txtView.getLayoutParams();
+        int top = lp.topMargin;
+        int left = lp.leftMargin;
 
         switch(txtView.length()){
             case 1:
-                left = 220;
-                top = 220;
+                left += 40;
+                top += 10;
                 break;
             case 2:
-                left = 190;
-                top = 225;
+                left += 20;
                 break;
             case 3:
-                left = 160;
-                top = 225;
+                left += 10;
+                top += 10;
                 break;
             case 6:
-                left = 140;
-                top = 235;
+                left -= 10;
+                top += 20;
                 break;
             default :
                 left = 0;
