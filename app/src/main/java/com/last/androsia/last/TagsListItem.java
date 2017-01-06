@@ -5,14 +5,22 @@ package com.last.androsia.last;
  */
 
 public class TagsListItem {
+
+    public enum Type{
+        BOOK,
+        SCREEN
+    }
+
     private String m_title;
     private String m_imageUrl;
-    private int m_counter;
+    private double m_counter;
+    private Type m_type;
 
-    public TagsListItem(String title, int counter, String imageUrl) {
+    public TagsListItem(String title, double counter, String imageUrl, Type type) {
         m_title = title;
         m_imageUrl = imageUrl;
         m_counter = counter;
+        m_type = type;
     }
 
     public String getTitle() {
@@ -31,16 +39,38 @@ public class TagsListItem {
         m_imageUrl = imageUrl;
     }
 
-    public int getCounter() {
+    public double getCounter() {
         return m_counter;
     }
 
-    public void setCounter(int counter) {
+    public void setCounter(double counter) {
         m_counter = counter;
     }
 
+    public Type getType() { return m_type; }
+
+    public void setType(Type type) {
+        m_type = type;
+    }
+
     public void incrementCounter(){
-        ++m_counter;
+        switch(m_type){
+            case BOOK:
+                ++m_counter;
+                break;
+            case SCREEN:
+                int real = (int) m_counter;
+                int decimal = (int) (100 * (m_counter - real));
+
+                if(decimal == 0){
+                    ++m_counter;
+                } else {
+                    m_counter = ((m_counter * 100) + 1) / 100;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

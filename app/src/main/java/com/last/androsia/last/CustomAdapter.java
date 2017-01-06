@@ -3,12 +3,17 @@ package com.last.androsia.last;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,9 +28,11 @@ public class CustomAdapter extends BaseAdapter {
     Context m_context;
     ImageLoader m_imageLoader = new ImageLoader();
 
-    // on passe le context afin d'obtenir un LayoutInflater pour utiliser notre
-    // row_layout.xml
-    // on passe les valeurs de notre à l'adapter
+    private class MyViewHolder {
+        ImageView m_imageView;
+        TextView m_textViewCounter;
+    }
+
     public CustomAdapter(Context context, ArrayList<TagsListItem> list) {
         m_tagList = list;
         m_context = context;
@@ -46,19 +53,16 @@ public class CustomAdapter extends BaseAdapter {
         return m_tagList.indexOf(getItem(position));
     }
 
-    // retourne la vue d'un élément de la liste
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         MyViewHolder mViewHolder = null;
 
-        // au premier appel ConvertView est null, on inflate notre layout
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) m_context
                     .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
             convertView = mInflater.inflate(R.layout.tag, parent, false);
 
-            // nous plaçons dans notre MyViewHolder les vues de notre layout
             mViewHolder = new MyViewHolder();
             mViewHolder.m_imageView = (ImageView) convertView.findViewById(R.id.imgUser);
             mViewHolder.m_textViewCounter = (TextView) convertView.findViewById(R.id.txtCounter);
@@ -67,26 +71,86 @@ public class CustomAdapter extends BaseAdapter {
                     String.format(Locale.US, "fonts/%s", "old_stamper.ttf"));
             mViewHolder.m_textViewCounter.setTypeface(custom_font);
 
-            // nous attribuons comme tag notre MyViewHolder à convertView
             convertView.setTag(mViewHolder);
         } else {
-            // convertView n'est pas null, nous récupérons notre objet MyViewHolder
-            // et évitons ainsi de devoir retrouver les vues à chaque appel de getView
             mViewHolder = (MyViewHolder) convertView.getTag();
         }
 
-        // nous récupérons l'item de la liste demandé par getView
         TagsListItem tagsListItem = (TagsListItem) getItem(position);
 
         m_imageLoader.loadImage(tagsListItem.getImageUrl(), m_context, mViewHolder.m_imageView);
-        mViewHolder.m_textViewCounter.setText(String.valueOf(tagsListItem.getCounter()));
+        formatCounter(tagsListItem, mViewHolder.m_textViewCounter);
 
-        // nous retournos la vue de l'item demandé
         return convertView;
     }
 
-    private class MyViewHolder {
-        ImageView m_imageView;
-        TextView m_textViewCounter;
+    private void formatCounter(TagsListItem item, TextView txtView){
+        SpannableString  counter = new SpannableString("");
+        switch(item.getType()){
+            case BOOK:
+                counter = new SpannableString(String.valueOf((int) item.getCounter()));
+                break;
+            case SCREEN:
+                counter = formatScreenCounter(item);
+                break;
+            default:
+                break;
+        }
+        txtView.setText(counter, TextView.BufferType.SPANNABLE);
+        centerCounter(txtView);
+    }
+
+    private void centerCounter(TextView txtView){
+        int left;
+        int top;
+        RelativeLayout.LayoutParams lp =
+                (RelativeLayout.LayoutParams) txtView.getLayoutParams();
+
+        switch(txtView.length()){
+            case 1:
+                left = 220;
+                top = 220;
+                break;
+            case 2:
+                left = 190;
+                top = 225;
+                break;
+            case 3:
+                left = 160;
+                top = 225;
+                break;
+            case 6:
+                left = 140;
+                top = 235;
+                break;
+            default :
+                left = 0;
+                top = 0;
+                break;
+        }
+
+        lp.setMargins(left, top, 0, 0);
+        txtView.setLayoutParams(lp);
+    }
+
+    private SpannableString formatScreenCounter(TagsListItem item){
+        int real = (int) item.getCounter();
+        int decimal = (int) (100 * (item.getCounter() - real));
+
+        if(decimal == 0){
+            // This is a movie
+            return new SpannableString(String.valueOf(real));
+        }
+
+        // This is a Serie or Anim
+        int green = Color.rgb(79, 49, 23);
+
+        String strCounter = String.format("S%02dE%02d", real, decimal);
+        SpannableString counter = new SpannableString(strCounter);
+        counter.setSpan(new ForegroundColorSpan(green), 0, 1, 0);
+        counter.setSpan(new ForegroundColorSpan(green), 3, 4, 0);
+        counter.setSpan(new RelativeSizeSpan(0.65f), 0, strCounter.length(), 0);
+
+        return counter;
     }
 }

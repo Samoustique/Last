@@ -19,7 +19,19 @@ public class TagsActivity extends AppCompatActivity {
         String[] titles = new String[]{"San Gohan", "Inspecteur Gadget",
                 "Quick and Flupke", "Tom", "dz", "dzd", "zdz", "zdz", "dzd"};
 
-        int[] counters = {1, 458, 27, 99, 54, 56, 102, 34, 1};
+        double[] counters = {1.01, 2.12, 10.23, 99, 458, 56, 102, 34, 1};
+
+        TagsListItem.Type[] types = {
+                TagsListItem.Type.SCREEN,
+                TagsListItem.Type.SCREEN,
+                TagsListItem.Type.SCREEN,
+                TagsListItem.Type.SCREEN,
+                TagsListItem.Type.BOOK,
+                TagsListItem.Type.BOOK,
+                TagsListItem.Type.SCREEN,
+                TagsListItem.Type.BOOK,
+                TagsListItem.Type.BOOK
+        };
 
         String[] images = {
                 "http://vignette2.wikia.nocookie.net/onepiece/images/c/c8/Luffy_Anime_Avant_Ellipse_Infobox.png/revision/latest/scale-to-width-down/250?cb=20161021213623&path-prefix=fr",
@@ -35,7 +47,7 @@ public class TagsActivity extends AppCompatActivity {
         ArrayList<TagsListItem> myList = new ArrayList<TagsListItem>();
 
         for (int i = 0; i < titles.length; i++) {
-            myList.add(new TagsListItem(titles[i], counters[i], images[i]));
+            myList.add(new TagsListItem(titles[i], counters[i], images[i], types[i]));
         }
 
         final CustomAdapter adapter = new CustomAdapter(this, myList);
