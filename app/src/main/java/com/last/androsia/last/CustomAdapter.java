@@ -24,9 +24,9 @@ import java.util.Locale;
  */
 
 public class CustomAdapter extends BaseAdapter {
-    ArrayList<TagsListItem> m_tagList = new ArrayList<TagsListItem>();
-    Context m_context;
-    ImageLoader m_imageLoader = new ImageLoader();
+    private ArrayList<TagsListItem> m_tagList = new ArrayList<TagsListItem>();
+    private Context m_context;
+    private ImageLoader m_imageLoader = new ImageLoader();
 
     private class MyViewHolder {
         ImageView m_imageView;
@@ -67,10 +67,7 @@ public class CustomAdapter extends BaseAdapter {
             mViewHolder = new MyViewHolder();
             mViewHolder.m_imageView = (ImageView) convertView.findViewById(R.id.imgUser);
             mViewHolder.m_textViewCounter = (TextView) convertView.findViewById(R.id.txtCounter);
-            AssetManager am = m_context.getApplicationContext().getAssets();
-            Typeface custom_font = Typeface.createFromAsset(am,
-                    String.format(Locale.US, "fonts/%s", "old_stamper.ttf"));
-            mViewHolder.m_textViewCounter.setTypeface(custom_font);
+            mViewHolder.m_textViewCounter.setTypeface(CounterHelper.getFont(m_context));
 
             convertView.setTag(mViewHolder);
             doCenter = true;
@@ -80,82 +77,13 @@ public class CustomAdapter extends BaseAdapter {
         TagsListItem tagsListItem = (TagsListItem) getItem(position);
 
         m_imageLoader.loadImage(tagsListItem.getImageUrl(), m_context, mViewHolder.m_imageView);
-        SpannableString counter = formatCounter(tagsListItem);
+        SpannableString counter = CounterHelper.formatCounter(tagsListItem);
         mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
 
         if (doCenter) {
-            centerCounter(mViewHolder.m_textViewCounter);
-            doCenter = false;
+            CounterHelper.centerCounter(mViewHolder.m_textViewCounter);
         }
 
         return convertView;
-    }
-
-    private SpannableString formatCounter(TagsListItem item){
-        SpannableString  counter = new SpannableString("");
-        switch(item.getType()){
-            case BOOK:
-                counter = new SpannableString(String.valueOf((int) item.getCounter()));
-                break;
-            case SCREEN:
-                counter = formatScreenCounter(item);
-                break;
-            default:
-                break;
-        }
-        return counter;
-    }
-
-    private void centerCounter(TextView txtView){
-        RelativeLayout.LayoutParams lp =
-                (RelativeLayout.LayoutParams) txtView.getLayoutParams();
-        int top = lp.topMargin;
-        int left = lp.leftMargin;
-
-        switch(txtView.length()){
-            case 1:
-                left += 40;
-                top += 10;
-                break;
-            case 2:
-                left += 20;
-                break;
-            case 3:
-                left += 10;
-                top += 10;
-                break;
-            case 6:
-                left -= 10;
-                top += 20;
-                break;
-            default :
-                left = 0;
-                top = 0;
-                break;
-        }
-
-        lp.setMargins(left, top, 0, 0);
-        txtView.setLayoutParams(lp);
-    }
-
-    private SpannableString formatScreenCounter(TagsListItem item){
-        int real = (int) item.getCounter();
-        int decimal = (int) (100 * (item.getCounter() - real));
-
-        if(decimal == 0){
-            // This is a movie
-            return new SpannableString(String.valueOf(real));
-        }
-
-        // This is a Serie or Anim
-        int green = Color.rgb(79, 49, 23);
-
-        String strCounter = String.format("S%02dE%02d", real, decimal);
-        SpannableString counter = new SpannableString(strCounter);
-        counter.setSpan(new ForegroundColorSpan(green), 0, 1, 0);
-        counter.setSpan(new ForegroundColorSpan(green), 3, 4, 0);
-        counter.setSpan(new RelativeSizeSpan(0.65f), 0, strCounter.length(), 0);
-
-        return counter;
     }
 }

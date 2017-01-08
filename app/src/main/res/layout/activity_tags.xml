@@ -1,18 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_tags"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.last.androsia.last.TagsActivity">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.last.androsia.last.TagsActivity"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/tagsGridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        />
+                <!--   GOLD  -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
 
-</RelativeLayout>
+                    <ImageView
+                        android:id="@+id/imgUserGold"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="17dp"
+                        android:scaleType="center"/>
+
+                    <ImageView
+                        android:src="@mipmap/big_tag"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"/>
+
+                    <TextView
+                        android:id="@+id/txtCounterGold"
+                        android:textColor="#ff0000"
+                        android:textSize="40dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rotation="-35"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginTop="120dp"/>
+
+                </RelativeLayout >
+                <!--  / GOLD  -->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- vertical buttons here -->
+                </LinearLayout>
+            </LinearLayout>
+
+            <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/tagsGridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:gravity="center"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
