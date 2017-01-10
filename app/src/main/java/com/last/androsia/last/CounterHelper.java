@@ -31,24 +31,15 @@ public class CounterHelper {
         return counter;
     }
 
-    static public void centerOffsetCounter(TextView txtView, int topOffset, int leftOffset) {
-        centerCounter(txtView, topOffset, leftOffset);
-    }
-
-    static public void centerCounter(TextView txtView) {
-        centerCounter(txtView, 0, 0);
-    }
-
-    static private void centerCounter(TextView txtView, int topOffset, int leftOffset){
+    static public void centerCounter(TextView txtView){
     RelativeLayout.LayoutParams lp =
             (RelativeLayout.LayoutParams) txtView.getLayoutParams();
-    int top = lp.topMargin + topOffset;
-    int left = lp.leftMargin + leftOffset;
+    int top = lp.topMargin;
+    int left = lp.leftMargin;
 
     switch(txtView.length()){
         case 1:
-            left += 40;
-            top += 10;
+            left += 55;
             break;
         case 2:
             left += 20;
@@ -59,7 +50,7 @@ public class CounterHelper {
             top += 10;
             break;
         case 6:
-            left -= 5;
+            left -= 30;
             top += 15;
             break;
         default :
@@ -74,7 +65,7 @@ public class CounterHelper {
 
     static private SpannableString formatScreenCounter(TagsListItem item, float fontSize){
         int real = (int) item.getCounter();
-        int decimal = (int) (100 * (item.getCounter() - real));
+        int decimal = (int) (item.getCounter() * 100 - real * 100);
 
         if(decimal == 0){
             // This is a movie

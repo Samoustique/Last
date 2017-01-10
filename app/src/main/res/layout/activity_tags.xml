@@ -8,9 +8,9 @@
     tools:context="com.last.androsia.last.TagsActivity"
     android:orientation="vertical">
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:fillViewport="true"
         android:scrollbars="vertical">
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,11 +42,11 @@
                     <TextView
                         android:id="@+id/txtCounterGold"
                         android:textColor="#ff0000"
-                        android:textSize="40dp"
+                        android:textSize="50dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:rotation="-35"
-                        android:layout_marginLeft="80dp"
+                        android:layout_marginLeft="100dp"
                         android:layout_marginTop="120dp"/>
 
                 </RelativeLayout >
@@ -62,10 +62,17 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            <!--<GridView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/tagsGridView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:gravity="center"/>-->
+            <com.last.androsia.last.ExpandedGridView
+                android:id="@+id/tagsGridView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
                 android:gravity="center"/>

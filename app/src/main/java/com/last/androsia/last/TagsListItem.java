@@ -60,7 +60,7 @@ public class TagsListItem {
                 break;
             case SCREEN:
                 int real = (int) m_counter;
-                int decimal = (int) (100 * (m_counter - real));
+                int decimal = (int) (m_counter * 100 - real * 100);
 
                 if(decimal == 0){
                     ++m_counter;

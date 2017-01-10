@@ -4,15 +4,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TagsActivity extends AppCompatActivity {
     private LastestTrio m_trio;
-    private GridView m_tagsGridView;
+    private ExpandedGridView m_tagsGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +24,9 @@ public class TagsActivity extends AppCompatActivity {
 
         String[] titles = new String[]{"San Gohan", "Inspecteur Gadget",
                 "Quick and Flupke", "Tom", "dz", "dzd", "errtrt", "hhthth",
-                "yuyuj", "kiukiku", "zdz", "zdz", "dzd"};
+                "yuyuj", "kiukiku", "zdz", "zdz", "dzd", "zdz", "dzd"};
 
-        double[] counters = {1.01, 2.12, 10.23, 99, 458, 10, 7, 103, 96, 56, 102, 34, 1};
+        double[] counters = {7.3, 2.12, 10.23, 99, 458, 10, 7.3, 103, 96.1, 56.25, 102, 12.2, 555, 34, 1};
 
         TagsListItem.Type[] types = {
                 TagsListItem.Type.SCREEN,
@@ -31,6 +34,8 @@ public class TagsActivity extends AppCompatActivity {
                 TagsListItem.Type.SCREEN,
                 TagsListItem.Type.SCREEN,
                 TagsListItem.Type.BOOK,
+                TagsListItem.Type.BOOK,
+                TagsListItem.Type.SCREEN,
                 TagsListItem.Type.BOOK,
                 TagsListItem.Type.SCREEN,
                 TagsListItem.Type.SCREEN,
@@ -43,6 +48,8 @@ public class TagsActivity extends AppCompatActivity {
 
         String[] images = {
                 "http://vignette2.wikia.nocookie.net/onepiece/images/c/c8/Luffy_Anime_Avant_Ellipse_Infobox.png/revision/latest/scale-to-width-down/250?cb=20161021213623&path-prefix=fr",
+                "http://media.rtl.fr/online/image/2015/0507/7778268024_david-bowie.jpg",
+                "http://d1ya1fm0bicxg1.cloudfront.net/2016/03/radiohead-tickets_08-05-16_17_56df735b99d63.png",
                 "https://media.planete-starwars.com/news/59010-dark-vador-compressor-169-lg.jpg",
                 "http://img1.wikia.nocookie.net/__cb20140506233242/epicrapbattlesofhistory/images/6/63/Luffy.jpg",
                 "https://i.ytimg.com/vi/zbCbwP6ibR4/maxresdefault.jpg",
@@ -56,32 +63,27 @@ public class TagsActivity extends AppCompatActivity {
                 "http://cdhlemag.com/wp-content/uploads/2016/05/rantanplan.jpg",
                 "http://www.lucky-luke.com/fr-uploads/personnages/billy-the-kid.jpg"};
 
-        ArrayList<TagsListItem> myList = new ArrayList<TagsListItem>();
+        ArrayList<TagsListItem> myList = new ArrayList<>();
 
         for (int i = 0; i < titles.length; i++) {
             myList.add(new TagsListItem(titles[i], counters[i], images[i], types[i]));
         }
 
-        CustomAdapter adapter = new CustomAdapter(this, myList);
-        OnTagClickListener clickListener = new OnTagClickListener(adapter);
+        List trioList = new ArrayList<>(myList.subList(0,3));
+        myList.removeAll(trioList);
 
         m_trio = new LastestTrio(
                 this,
+                trioList,
                 (ImageView) findViewById(R.id.imgUserGold),
                 (TextView) findViewById(R.id.txtCounterGold));
-        m_trio.setAdapter(adapter);
-        m_trio.setClickListener(clickListener);
-        m_trio.displayImage(myList.get(0));
+        m_trio.setupClickListeners();
+        m_trio.display();
 
-        myList.remove(0);
-        m_tagsGridView = (GridView) findViewById(R.id.tagsGridView);
+        CustomAdapter adapter = new CustomAdapter(this, myList);
+        m_tagsGridView = (ExpandedGridView) findViewById(R.id.tagsGridView);
         m_tagsGridView.setAdapter(adapter);
-        m_tagsGridView.setOnItemClickListener(clickListener);
-        m_tagsGridView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return event.getAction() == MotionEvent.ACTION_MOVE;
-            }
-        });
+        m_tagsGridView.setExpanded(true);
+        m_tagsGridView.setOnItemClickListener(new OnTagClickListener(adapter));
     }
 }
