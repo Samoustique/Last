@@ -15,15 +15,10 @@ import java.util.List;
  */
 
 public class LastestTrio {
-    private Context m_context;
-    private List<TagsListItem> m_tags;
-    private ImageLoader m_imageLoader;
-    private boolean m_doCenter;
-
-    // --- GOLD
     private static int GOLD = 0;
-    private ImageView m_imgGold;
-    private TextView m_txtGold;
+    private static int SILVER = 1;
+    private static int BRONZE = 2;
+    private List<TagView> m_tagViews;
 
     /*private ImageView m_imgSilver;
     private TextView m_txtSilver;
@@ -33,61 +28,28 @@ public class LastestTrio {
     public LastestTrio(Context context,
                        List<TagsListItem> tags,
                        ImageView imgGold,
-                       TextView txtGold) {
-        m_context = context;
-        m_tags = new ArrayList<>(tags);
-        m_imageLoader = new ImageLoader();
-        m_doCenter = false;
+                       TextView txtGold,
+                       ImageView imgSilver,
+                       TextView txtSilver,
+                       ImageView imgBronze,
+                       TextView txtBronze) {
+        m_tagViews = new ArrayList<>(3);
+        m_tagViews.add(new TagView(imgGold, txtGold, tags.get(GOLD), context));
+        m_tagViews.add(new TagView(imgSilver, txtSilver, tags.get(SILVER), context));
+        m_tagViews.add(new TagView(imgBronze, txtBronze, tags.get(BRONZE), context));
 
-        m_imgGold = imgGold;
-        m_txtGold = txtGold;
-
-        m_imgGold.setFocusableInTouchMode(true);
-        m_imgGold.requestFocus();
+        m_tagViews.get(GOLD).focus();
     }
 
     public void setupClickListeners() {
-        m_imgGold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                m_tags.get(GOLD).incrementCounter();
-                display(GOLD);
-            }
-        });
-        /*m_imgSilver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                m_tags.get(SILVER).incrementCounter();
-            }
-        });
-        m_imgBronze.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                m_tags.get(BRONZE).incrementCounter();
-            }
-        });*/
+        for (TagView tagView : m_tagViews) {
+            tagView.setupClickListener();
+        }
     }
 
     public void display() {
-        m_doCenter = true;
-        display(GOLD);
-        /*display(SILVER);
-        display(BRONZE);*/
-        m_doCenter = false;
-    }
-
-    private void display(int id) {
-        TagsListItem goldItem = m_tags.get(id);
-        // Img
-        m_imageLoader.loadImage(goldItem.getImageUrl(), m_context, m_imgGold);
-        // Txt
-        SpannableString counter = CounterHelper.formatCounter(goldItem);
-        m_txtGold.setText(counter, TextView.BufferType.SPANNABLE);
-        //float fontSize = m_txtGold.getTextSize();
-        //m_txtGold.setTextSize(fontSize + 0.3f);
-        m_txtGold.setTypeface(CounterHelper.getFont(m_context));
-        if(m_doCenter) {
-            CounterHelper.centerCounter(m_txtGold);
+        for (TagView tagView : m_tagViews) {
+            tagView.display(true);
         }
     }
 }

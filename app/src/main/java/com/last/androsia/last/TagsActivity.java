@@ -26,7 +26,7 @@ public class TagsActivity extends AppCompatActivity {
                 "Quick and Flupke", "Tom", "dz", "dzd", "errtrt", "hhthth",
                 "yuyuj", "kiukiku", "zdz", "zdz", "dzd", "zdz", "dzd"};
 
-        double[] counters = {7.3, 2.12, 10.23, 99, 458, 10, 7.3, 103, 96.1, 56.25, 102, 12.2, 555, 34, 1};
+        double[] counters = {7.3, 2, 150., 99, 458, 10, 7.3, 103, 96.1, 56.25, 102, 12.2, 555, 34, 1};
 
         TagsListItem.Type[] types = {
                 TagsListItem.Type.SCREEN,
@@ -49,7 +49,7 @@ public class TagsActivity extends AppCompatActivity {
         String[] images = {
                 "http://vignette2.wikia.nocookie.net/onepiece/images/c/c8/Luffy_Anime_Avant_Ellipse_Infobox.png/revision/latest/scale-to-width-down/250?cb=20161021213623&path-prefix=fr",
                 "http://media.rtl.fr/online/image/2015/0507/7778268024_david-bowie.jpg",
-                "http://d1ya1fm0bicxg1.cloudfront.net/2016/03/radiohead-tickets_08-05-16_17_56df735b99d63.png",
+                "http://www.lucky-luke.com/fr-uploads/personnages/vignette_lucky.png",
                 "https://media.planete-starwars.com/news/59010-dark-vador-compressor-169-lg.jpg",
                 "http://img1.wikia.nocookie.net/__cb20140506233242/epicrapbattlesofhistory/images/6/63/Luffy.jpg",
                 "https://i.ytimg.com/vi/zbCbwP6ibR4/maxresdefault.jpg",
@@ -76,7 +76,11 @@ public class TagsActivity extends AppCompatActivity {
                 this,
                 trioList,
                 (ImageView) findViewById(R.id.imgUserGold),
-                (TextView) findViewById(R.id.txtCounterGold));
+                (TextView) findViewById(R.id.txtCounterGold),
+                (ImageView) findViewById(R.id.imgUserSilver),
+                (TextView) findViewById(R.id.txtCounterSilver),
+                (ImageView) findViewById(R.id.imgUserBronze),
+                (TextView) findViewById(R.id.txtCounterBronze));
         m_trio.setupClickListeners();
         m_trio.display();
 

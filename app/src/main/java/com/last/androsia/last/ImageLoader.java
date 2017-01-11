@@ -15,7 +15,7 @@ public class ImageLoader {
                 .fit()
                 //.resize(200,200)
                 .error(android.R.drawable.sym_contact_card)
-                .placeholder(android.R.drawable.sym_contact_card)
+                .placeholder(android.R.drawable.spinner_background)
                 .into(imageView);
     }
 }

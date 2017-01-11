@@ -6,6 +6,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context="com.last.androsia.last.TagsActivity"
+    android:background="@color/white"
     android:orientation="vertical">
     <ScrollView
         android:id="@+id/scrollView"
@@ -24,20 +25,21 @@
                 <!--   GOLD  -->
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
 
                     <ImageView
                         android:id="@+id/imgUserGold"
-                        android:layout_width="160dp"
-                        android:layout_height="160dp"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="17dp"
                         android:scaleType="center"/>
 
                     <ImageView
                         android:src="@mipmap/big_tag"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"/>
+                        android:layout_width="240dp"
+                        android:layout_height="240dp"/>
 
                     <TextView
                         android:id="@+id/txtCounterGold"
@@ -46,9 +48,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:rotation="-35"
-                        android:layout_marginLeft="100dp"
-                        android:layout_marginTop="120dp"/>
-
+                        android:layout_marginLeft="125dp"
+                        android:layout_marginTop="140dp"/>
                 </RelativeLayout >
                 <!--  / GOLD  -->
 
@@ -58,17 +59,68 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!-- vertical buttons here -->
+                    <!--   SILVER  -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <ImageView
+                            android:id="@+id/imgUserSilver"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="15dp"
+                            android:scaleType="center"/>
+
+                        <ImageView
+                            android:src="@mipmap/small_tag"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"/>
+
+                        <TextView
+                            android:id="@+id/txtCounterSilver"
+                            android:textColor="#ff0000"
+                            android:textSize="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rotation="-35"
+                            android:layout_marginLeft="55dp"
+                            android:layout_marginTop="80dp"/>
+                    </RelativeLayout >
+                    <!--  / SILVER  -->
+
+                    <!--   BRONZE  -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <ImageView
+                            android:id="@+id/imgUserBronze"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="15dp"
+                            android:scaleType="center"/>
+
+                        <ImageView
+                            android:src="@mipmap/big_tag"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"/>
+
+                        <TextView
+                            android:id="@+id/txtCounterBronze"
+                            android:textColor="#ff0000"
+                            android:textSize="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:rotation="-35"
+                            android:layout_marginLeft="55dp"
+                            android:layout_marginTop="80dp"/>
+                    </RelativeLayout >
+                    <!--  / BRONZE  -->
                 </LinearLayout>
             </LinearLayout>
 
-            <!--<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/tagsGridView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:numColumns="3"
-                android:stretchMode="columnWidth"
-                android:gravity="center"/>-->
             <com.last.androsia.last.ExpandedGridView
                 android:id="@+id/tagsGridView"
                 android:layout_width="match_parent"
