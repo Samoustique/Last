@@ -27,4 +27,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     compile files('Libs/picasso-2.5.2.jar')
+    compile files('Libs/aws-android-sdk-core-2.3.8.jar')
+    compile files('Libs/aws-android-sdk-ddb-2.3.8.jar')
+    compile files('Libs/aws-android-sdk-s3-2.3.8.jar')
+    compile files('Libs/aws-android-sdk-ddb-mapper-2.3.8.jar')
 }

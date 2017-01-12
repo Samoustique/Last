@@ -2,23 +2,51 @@ package com.last.androsia.last;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.*;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
 public class TagsActivity extends AppCompatActivity {
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
 
+    private class Testitem{
+        public int Id;
+        public int CtrOwned;
+        public int CtrSeen;
+        public String Img;
+        public String Title;
+        public int Type;
+
+        public Testitem(int id, int owned, int seen, String title, String img, int type){
+            Id = id;
+            CtrOwned = owned;
+            CtrSeen = seen;
+            Title = title;
+            Img = img;
+            Type = type;
+        }
+    }
+
+    private void connectDB(){
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-west-2:858f4720-169d-4706-bc66-b746fceefcfa", // Identity Pool ID
+                Regions.US_WEST_2 // Region
+        );
+        AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient(credentialsProvider);
+        DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
+        Testitem test = mapper.load(Testitem.class, 0);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
-
-        String[] titles = new String[]{"San Gohan", "Inspecteur Gadget",
+        connectDB();
+        /*String[] titles = new String[]{"San Gohan", "Inspecteur Gadget",
                 "Quick and Flupke", "Tom", "dz", "dzd", "errtrt", "hhthth",
                 "yuyuj", "kiukiku", "zdz", "zdz", "dzd", "zdz", "dzd"};
 
@@ -87,6 +115,6 @@ public class TagsActivity extends AppCompatActivity {
         m_tagsGridView = (ExpandedGridView) findViewById(R.id.tagsGridView);
         m_tagsGridView.setAdapter(adapter);
         m_tagsGridView.setExpanded(true);
-        m_tagsGridView.setOnItemClickListener(new OnTagClickListener(adapter));
+        m_tagsGridView.setOnItemClickListener(new OnTagClickListener(adapter));*/
     }
 }
