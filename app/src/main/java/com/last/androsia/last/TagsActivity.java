@@ -2,12 +2,8 @@ package com.last.androsia.last;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -69,18 +65,21 @@ public class TagsActivity extends AppCompatActivity {
             myList.add(new TagsListItem(titles[i], counters[i], images[i], types[i]));
         }
 
-        List trioList = new ArrayList<>(myList.subList(0,3));
+        List trioList;
+        if (myList.size() > 3) {
+            trioList = new ArrayList<>(myList.subList(0, 3));
+        } else {
+            trioList = new ArrayList<>(myList);
+        }
         myList.removeAll(trioList);
 
         m_trio = new LastestTrio(
                 this,
                 trioList,
-                (ImageView) findViewById(R.id.imgUserGold),
-                (TextView) findViewById(R.id.txtCounterGold),
-                (ImageView) findViewById(R.id.imgUserSilver),
-                (TextView) findViewById(R.id.txtCounterSilver),
-                (ImageView) findViewById(R.id.imgUserBronze),
-                (TextView) findViewById(R.id.txtCounterBronze));
+                new ImgCounterView((ImageView) findViewById(R.id.imgUserGold), (TextView) findViewById(R.id.txtCounterGold), (RelativeLayout) findViewById(R.id.layoutGold)),
+                new ImgCounterView((ImageView) findViewById(R.id.imgUserSilver), (TextView) findViewById(R.id.txtCounterSilver), (RelativeLayout) findViewById(R.id.layoutSilver)),
+                new ImgCounterView((ImageView) findViewById(R.id.imgUserBronze), (TextView) findViewById(R.id.txtCounterBronze), (RelativeLayout) findViewById(R.id.layoutBronze))
+        );
         m_trio.setupClickListeners();
         m_trio.display();
 

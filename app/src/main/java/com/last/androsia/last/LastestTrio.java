@@ -15,30 +15,20 @@ import java.util.List;
  */
 
 public class LastestTrio {
-    private static int GOLD = 0;
-    private static int SILVER = 1;
-    private static int BRONZE = 2;
     private List<TagView> m_tagViews;
-
-    /*private ImageView m_imgSilver;
-    private TextView m_txtSilver;
-    private ImageView m_imgBronze;
-    private TextView m_txtBronze;*/
 
     public LastestTrio(Context context,
                        List<TagsListItem> tags,
-                       ImageView imgGold,
-                       TextView txtGold,
-                       ImageView imgSilver,
-                       TextView txtSilver,
-                       ImageView imgBronze,
-                       TextView txtBronze) {
-        m_tagViews = new ArrayList<>(3);
-        m_tagViews.add(new TagView(imgGold, txtGold, tags.get(GOLD), context));
-        m_tagViews.add(new TagView(imgSilver, txtSilver, tags.get(SILVER), context));
-        m_tagViews.add(new TagView(imgBronze, txtBronze, tags.get(BRONZE), context));
+                       ImgCounterView... imgCounterViews) {
+        m_tagViews = new ArrayList<>();
+        for(int i = 0 ; i < tags.size() ; ++i){
+            imgCounterViews[i].show();
+            m_tagViews.add(new TagView(imgCounterViews[i], tags.get(i), context));
+        }
 
-        m_tagViews.get(GOLD).focus();
+        if(tags.size() > 0) {
+            m_tagViews.get(0).focus();
+        }
     }
 
     public void setupClickListeners() {

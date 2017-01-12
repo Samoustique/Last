@@ -24,6 +24,8 @@
 
                 <!--   GOLD  -->
                 <RelativeLayout
+                    android:id="@+id/layoutGold"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp">
@@ -61,6 +63,8 @@
 
                     <!--   SILVER  -->
                     <RelativeLayout
+                        android:id="@+id/layoutSilver"
+                        android:visibility="invisible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" >
 
@@ -91,6 +95,8 @@
 
                     <!--   BRONZE  -->
                     <RelativeLayout
+                        android:id="@+id/layoutBronze"
+                        android:visibility="invisible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" >
 

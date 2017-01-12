@@ -11,28 +11,25 @@ import android.widget.TextView;
  */
 
 public class TagView {
-    private ImageView m_img;
-    private TextView m_txt;
+    private ImgCounterView m_imgCounterView;
     private TagsListItem m_item;
 
     private Context m_context;
     private ImageLoader m_imageLoader;
 
-    public TagView(ImageView img, TextView txt, TagsListItem item, Context context){
-        m_img = img;
-        m_txt = txt;
+    public TagView(ImgCounterView imgCounterView, TagsListItem item, Context context){
+        m_imgCounterView = imgCounterView;
         m_item = item;
         m_context = context;
         m_imageLoader = new ImageLoader();
     }
 
     public void focus(){
-        m_img.setFocusableInTouchMode(true);
-        m_img.requestFocus();
+        m_imgCounterView.focus();
     }
 
     public void setupClickListener() {
-        m_img.setOnClickListener(new View.OnClickListener() {
+        m_imgCounterView.getImg().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 m_item.incrementCounter();
@@ -43,15 +40,15 @@ public class TagView {
 
     public void display(boolean doCenter) {
         // Img
-        m_imageLoader.loadImage(m_item.getImageUrl(), m_context, m_img);
+        m_imageLoader.loadImage(m_item.getImageUrl(), m_context, m_imgCounterView.getImg());
         // Txt
         SpannableString counter = CounterHelper.formatCounter(m_item);
-        m_txt.setText(counter, TextView.BufferType.SPANNABLE);
+        m_imgCounterView.getTxt().setText(counter, TextView.BufferType.SPANNABLE);
         //float fontSize = m_txtGold.getTextSize();
         //m_txtGold.setTextSize(fontSize + 0.3f);
-        m_txt.setTypeface(CounterHelper.getFont(m_context));
+        m_imgCounterView.getTxt().setTypeface(CounterHelper.getFont(m_context));
         if(doCenter) {
-            CounterHelper.centerCounter(m_txt);
+            CounterHelper.centerCounter(m_imgCounterView.getTxt());
         }
     }
 }
