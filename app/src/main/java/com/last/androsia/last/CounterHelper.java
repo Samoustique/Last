@@ -18,16 +18,16 @@ import java.util.Locale;
 public class CounterHelper {
     static public SpannableString formatCounter(TagsListItem item){
         SpannableString  counter = new SpannableString("");
-        switch(item.getType()){
+        /*switch(item.getType()){
             case BOOK:
-                counter = new SpannableString(String.valueOf((int) item.getCounter()));
+                counter = new SpannableString(String.valueOf((int) item.getCtrSeen()));
                 break;
             case SCREEN:
                 counter = formatScreenCounter(item, 0.65f);
                 break;
             default:
                 break;
-        }
+        }*/
         return counter;
     }
 
@@ -64,8 +64,8 @@ public class CounterHelper {
     }
 
     static private SpannableString formatScreenCounter(TagsListItem item, float fontSize){
-        int real = (int) item.getCounter();
-        int decimal = (int) (item.getCounter() * 100 - real * 100);
+        int real = (int) item.getCtrSeen();
+        int decimal = (int) (item.getCtrSeen() * 100 - real * 100);
 
         if(decimal == 0){
             // This is a movie

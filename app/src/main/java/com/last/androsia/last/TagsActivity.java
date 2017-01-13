@@ -38,7 +38,7 @@ public class TagsActivity extends AppCompatActivity {
         );
         AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient(credentialsProvider);
         DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
-        Testitem test = mapper.load(Testitem.class, 0);
+        TagsListItem item = mapper.load(TagsListItem.class, 1);
     }
 
     @Override
