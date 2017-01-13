@@ -19,18 +19,14 @@ import java.util.List;
 public class TagsActivity extends AppCompatActivity {
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
-    private CognitoCachingCredentialsProvider m_credentialsProvider;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
 
-        m_credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                "us-west-2:858f4720-169d-4706-bc66-b746fceefcfa", // Identity Pool ID
-                Regions.US_WEST_2 // Region
-        );
+
 
         // 1. Attempt of DB connect
         DbConnect db = new DbConnect(m_credentialsProvider);
