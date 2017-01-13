@@ -2,51 +2,46 @@ package com.last.androsia.last;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TagsActivity extends AppCompatActivity {
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
-
-    private class Testitem{
-        public int Id;
-        public int CtrOwned;
-        public int CtrSeen;
-        public String Img;
-        public String Title;
-        public int Type;
-
-        public Testitem(int id, int owned, int seen, String title, String img, int type){
-            Id = id;
-            CtrOwned = owned;
-            CtrSeen = seen;
-            Title = title;
-            Img = img;
-            Type = type;
-        }
-    }
-
-    private void connectDB(){
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                "us-west-2:858f4720-169d-4706-bc66-b746fceefcfa", // Identity Pool ID
-                Regions.US_WEST_2 // Region
-        );
-        AmazonDynamoDBClient ddbClient = new AmazonDynamoDBClient(credentialsProvider);
-        DynamoDBMapper mapper = new DynamoDBMapper(ddbClient);
-        TagsListItem item = mapper.load(TagsListItem.class, 1);
-    }
+    private CognitoCachingCredentialsProvider m_credentialsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
-        connectDB();
-        /*String[] titles = new String[]{"San Gohan", "Inspecteur Gadget",
+
+        m_credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-west-2:858f4720-169d-4706-bc66-b746fceefcfa", // Identity Pool ID
+                Regions.US_WEST_2 // Region
+        );
+
+        // 1. Attempt of DB connect
+        DbConnect db = new DbConnect(m_credentialsProvider);
+        db.execute();
+
+        // 2. or Uncomment here and in TagListItem to use the hardcoded version
+        // hardcodedLoading();
+    }
+
+    private void hardcodedLoading() {
+        String[] titles = new String[]{"San Gohan", "Inspecteur Gadget",
                 "Quick and Flupke", "Tom", "dz", "dzd", "errtrt", "hhthth",
                 "yuyuj", "kiukiku", "zdz", "zdz", "dzd", "zdz", "dzd"};
 
@@ -90,7 +85,7 @@ public class TagsActivity extends AppCompatActivity {
         ArrayList<TagsListItem> myList = new ArrayList<>();
 
         for (int i = 0; i < titles.length; i++) {
-            myList.add(new TagsListItem(titles[i], counters[i], images[i], types[i]));
+            //myList.add(new TagsListItem(titles[i], counters[i], images[i], types[i]));
         }
 
         List trioList;
@@ -115,6 +110,6 @@ public class TagsActivity extends AppCompatActivity {
         m_tagsGridView = (ExpandedGridView) findViewById(R.id.tagsGridView);
         m_tagsGridView.setAdapter(adapter);
         m_tagsGridView.setExpanded(true);
-        m_tagsGridView.setOnItemClickListener(new OnTagClickListener(adapter));*/
+        m_tagsGridView.setOnItemClickListener(new OnTagClickListener(adapter));
     }
 }

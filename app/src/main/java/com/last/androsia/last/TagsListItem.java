@@ -20,24 +20,24 @@ public class TagsListItem {
     private Integer m_id;
     private String m_title;
     private String m_imageUrl;
-   /*private double m_ctrSeen;
-    private double m_ctrOwned;*/
+
     private Integer m_ctrSeen;
     private Integer m_ctrOwned;
-    //private Type m_type;
     private Integer m_type;
 
-    /*public TagsListItem() {
-    }
+    /*
+    private double m_ctrSeen;
+    private double m_ctrOwned;
+    private Type m_type;
 
-    public TagsListItem(String title, double ctrSeen, double ctrOwned, String imageUrl, int type) {
-        //public TagsListItem(String title, double ctrSeen, double ctrOwned, String imageUrl, Type type) {
+    public TagsListItem(String title, double ctrSeen, double ctrOwned, String imageUrl, Type type) {
         m_title = title;
         m_imageUrl = imageUrl;
         m_ctrSeen = ctrSeen;
         m_ctrOwned = ctrOwned;
         m_type = type;
-    }*/
+    }
+    */
 
     @DynamoDBHashKey(attributeName = "Id")
     public Integer getId() { return m_id; }
@@ -71,13 +71,9 @@ public class TagsListItem {
         m_ctrSeen = counter;
     }
     /*
-    public double getCtrSeen() {
-        return m_ctrSeen;
-    }
-    public void setCtrSeen(double counter) {
-        m_ctrSeen = counter;
-    }
-     */
+    public double getCtrSeen() { return m_ctrSeen; }
+    public void setCtrSeen(double counter) { m_ctrSeen = counter; }
+    */
 
     @DynamoDBAttribute(attributeName = "CtrOwned")
     public Integer getCtrOwned() {
@@ -87,25 +83,19 @@ public class TagsListItem {
         m_ctrOwned = counter;
     }
     /*
-    public double getCtrOwned() {
-        return m_ctrOwned;
-    }
-    public void setCtrOwned(double counter) {
-        m_ctrOwned = counter;
-    }
-     */
+    public double getCtrOwned() { return m_ctrOwned; }
+    public void setCtrOwned(double counter) { m_ctrOwned = counter; }
+    */
 
     @DynamoDBAttribute(attributeName = "Type")
     public Integer getType() { return m_type; }
     public void setType(Integer type) {
         m_type = type;
     }
-
-    /*@DynamoDBHashKey(attributeName = "Type")
+    /*
     public Type getType() { return m_type; }
-    public void setType(Type type) {
-        m_type = type;
-    }*/
+    public void setType(Type type) { m_type = type; }
+    */
 
     public void incrementCounter(){
         /*switch(m_type){
