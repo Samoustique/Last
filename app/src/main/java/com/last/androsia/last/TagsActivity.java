@@ -8,10 +8,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amazonaws.auth.AWSSessionCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
+import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +29,24 @@ public class TagsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
 
-
-
         // 1. Attempt of DB connect
-        DbConnect db = new DbConnect(m_credentialsProvider);
-        db.execute();
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                XXXXXXXX,
+                Regions.US_WEST_2 // Region
+        );
+        AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
+
+        AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(creds);
+        DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
+        //TagsListItem item = mapper.load(TagsListItem.class, "0");
+        ListTablesResult list = dynamoDB.listTables();
+
+
+
 
         // 2. or Uncomment here and in TagListItem to use the hardcoded version
-        // hardcodedLoading();
+        //hardcodedLoading();
     }
 
     private void hardcodedLoading() {
@@ -81,7 +94,7 @@ public class TagsActivity extends AppCompatActivity {
         ArrayList<TagsListItem> myList = new ArrayList<>();
 
         for (int i = 0; i < titles.length; i++) {
-            //myList.add(new TagsListItem(titles[i], counters[i], images[i], types[i]));
+            //myList.add(new TagsListItem(titles[i], counters[i], 0, images[i], types[i]));
         }
 
         List trioList;
