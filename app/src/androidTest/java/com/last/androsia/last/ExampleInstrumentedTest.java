@@ -9,8 +9,10 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.regions.Region;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
+import com.amazonaws.services.dynamodbv2.*;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,13 +33,24 @@ public class ExampleInstrumentedTest {
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 appContext,
-                XXXXXXXX,
+                XXXXX,
                 Regions.US_WEST_2 // Region
         );
         AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
 
         AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(arnCredentials);
+        dynamoDB.setRegion(Region.getRegion(Regions.US_WEST_2));
         DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
+        TagsListItem putItem = new TagsListItem();
+        putItem.setCtrOwned(10);
+        putItem.setCtrSeen(20);
+        putItem.setId("5");
+        putItem.setImageUrl("https://s-media-cache-ak0.pinimg.com/236x/59/87/6c/59876c15abd6d705ea8b87033633f009.jpg");
+        putItem.setTitle("put item");
+        putItem.setType(2);
+        //mapper.save(putItem);
+
         TagsListItem item = mapper.load(TagsListItem.class, "0");
+        //int i = 2;
     }
 }

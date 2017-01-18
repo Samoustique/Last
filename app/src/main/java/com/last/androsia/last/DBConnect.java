@@ -11,10 +11,10 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
  * Created by Samoustique on 13/01/2017.
  */
 
-public class DbConnect extends AsyncTask<String, Void, String> {
+public class DBConnect extends AsyncTask<String, Void, String> {
     private CognitoCachingCredentialsProvider m_credentialsProvider;
 
-    public DbConnect(CognitoCachingCredentialsProvider credentialsProvider){
+    public DBConnect(CognitoCachingCredentialsProvider credentialsProvider){
         m_credentialsProvider = credentialsProvider;
     }
 
