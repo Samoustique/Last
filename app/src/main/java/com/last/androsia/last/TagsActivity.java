@@ -30,18 +30,17 @@ public class TagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tags);
 
         // 1. Attempt of DB connect
-        /*CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                XXXXXX,
-                Regions.US_WEST_2 // Region
-        );
-        AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
+        DBConnect db = new DBConnect(getApplicationContext());
+        db.start();
+        TagsListItem item = db.getItem();
 
-        AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(creds);
-        DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
-        //TagsListItem item = mapper.load(TagsListItem.class, "0");
-        ListTablesResult list = dynamoDB.listTables();*/
-
+        /*try {
+            db.join();
+            TagsListItem item = db.getItem();
+            TagsListItem it = db.getItem();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
 
 
 

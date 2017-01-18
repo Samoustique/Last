@@ -33,7 +33,7 @@ public class ExampleInstrumentedTest {
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 appContext,
-                XXXXX,
+                XXXXXXXXXXX,
                 Regions.US_WEST_2 // Region
         );
         AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
