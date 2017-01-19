@@ -3,8 +3,10 @@ package com.last.androsia.last;
 import android.os.AsyncTask;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by SPhilipps on 1/19/2017.
@@ -20,13 +22,13 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, ArrayList<T
 
     @Override
     protected ArrayList<TagsListItem> doInBackground(DynamoDBMapper... params) {
-        ArrayList<TagsListItem> tagsList = new ArrayList<>();
-        tagsList.add(params[0].load(TagsListItem.class, "0"));
-        tagsList.add(params[0].load(TagsListItem.class, "1"));
-        tagsList.add(params[0].load(TagsListItem.class, "2"));
-        tagsList.add(params[0].load(TagsListItem.class, "3"));
+        if(params.length != 1){
+            return new ArrayList<>();
+        }
 
-        return tagsList;
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+        List<TagsListItem> scanResult = params[0].parallelScan(TagsListItem.class, scanExpression, 4);
+        return new ArrayList<>(scanResult);
     }
 
     @Override
