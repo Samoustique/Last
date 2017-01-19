@@ -1,5 +1,8 @@
 package com.last.androsia.last;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -31,11 +35,14 @@ public class TagsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
 
-        // 1. Attempt of DB connect
-        m_dbConnect.execute(getApplicationContext());
+        Context context = getApplicationContext();
 
-        // 2. or Uncomment here and in TagListItem to use the hardcoded version
-        //hardcodedLoading();
+        if(isNetworkAvailable()) {
+            m_dbConnect.execute(context);
+            return;
+        }
+
+        Toast.makeText(context, "You should try again with internet on", Toast.LENGTH_LONG).show();
     }
 
     public void notifyMapperReady(DynamoDBMapper mapper) {
@@ -44,6 +51,13 @@ public class TagsActivity extends AppCompatActivity {
 
     public void notifyItemsReady(ArrayList<TagsListItem> tagsList) {
         displayTags(tagsList);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void hardcodedLoading() {

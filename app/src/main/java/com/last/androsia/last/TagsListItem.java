@@ -13,8 +13,8 @@ public class TagsListItem {
 
     public enum Type{
         NONE,
-        BOOK,
-        SCREEN
+        SCREEN,
+        BOOK
     }
 
     private String m_id;
