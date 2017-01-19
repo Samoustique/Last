@@ -44,7 +44,6 @@ public class TagView {
         // Txt
         SpannableString counter = CounterHelper.formatCounter(m_item);
         m_imgCounterView.getTxt().setText(counter, TextView.BufferType.SPANNABLE);
-        //float fontSize = m_txtGold.getTextSize();
         //m_txtGold.setTextSize(fontSize + 0.3f);
         m_imgCounterView.getTxt().setTypeface(CounterHelper.getFont(m_context));
         if(doCenter) {

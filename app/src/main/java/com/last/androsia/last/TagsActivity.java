@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
@@ -22,7 +23,8 @@ import java.util.List;
 public class TagsActivity extends AppCompatActivity {
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
-
+    private DBConnect m_dbConnect = new DBConnect(this);
+    private DBItemsAccessor m_dbItems = new DBItemsAccessor(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,22 +32,18 @@ public class TagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tags);
 
         // 1. Attempt of DB connect
-        DBConnect db = new DBConnect(getApplicationContext());
-        db.start();
-        TagsListItem item = db.getItem();
-
-        /*try {
-            db.join();
-            TagsListItem item = db.getItem();
-            TagsListItem it = db.getItem();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
-
+        m_dbConnect.execute(getApplicationContext());
 
         // 2. or Uncomment here and in TagListItem to use the hardcoded version
         //hardcodedLoading();
+    }
+
+    public void notifyMapperReady(DynamoDBMapper mapper) {
+        m_dbItems.execute(mapper);
+    }
+
+    public void notifyItemsReady(ArrayList<TagsListItem> tagsList) {
+        displayTags(tagsList);
     }
 
     private void hardcodedLoading() {
@@ -96,6 +94,10 @@ public class TagsActivity extends AppCompatActivity {
             //myList.add(new TagsListItem(titles[i], counters[i], 0, images[i], types[i]));
         }
 
+        displayTags(myList);
+    }
+
+    private void displayTags(ArrayList<TagsListItem> myList){
         List trioList;
         if (myList.size() > 3) {
             trioList = new ArrayList<>(myList.subList(0, 3));

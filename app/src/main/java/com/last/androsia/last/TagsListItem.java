@@ -12,6 +12,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 public class TagsListItem {
 
     public enum Type{
+        NONE,
         BOOK,
         SCREEN
     }
@@ -19,31 +20,13 @@ public class TagsListItem {
     private String m_id;
     private String m_title;
     private String m_imageUrl;
-
-    private Integer m_ctrSeen;
-    private Integer m_ctrOwned;
-    private Integer m_type;
-
-    /*private double m_ctrSeen;
+    private double m_ctrSeen;
     private double m_ctrOwned;
-    private Type m_type;*/
-
-    /*public TagsListItem(String title, double ctrSeen, double ctrOwned, String imageUrl, Type type) {
-        m_title = title;
-        m_imageUrl = imageUrl;
-        m_ctrSeen = ctrSeen;
-        m_ctrOwned = ctrOwned;
-        m_type = type;
-    }*/
-
+    private Integer m_iType;
 
     @DynamoDBHashKey(attributeName = "Id")
     public String getId() { return m_id; }
     public void setId(String id) { m_id = id; }
-
-    /*public int getId() { return m_id; }
-    public void setId(int id) { m_id = id; }*/
-
 
     @DynamoDBAttribute(attributeName = "Title")
     public String getTitle() {
@@ -62,41 +45,29 @@ public class TagsListItem {
     }
 
     @DynamoDBAttribute(attributeName = "CtrSeen")
-    public Integer getCtrSeen() {
-        return m_ctrSeen;
-    }
-    public void setCtrSeen(Integer counter) {
-        m_ctrSeen = counter;
-    }
-    /*
     public double getCtrSeen() { return m_ctrSeen; }
-    public void setCtrSeen(double counter) { m_ctrSeen = counter; }*/
+    public void setCtrSeen(double counter) { m_ctrSeen = counter; }
 
 
     @DynamoDBAttribute(attributeName = "CtrOwned")
-    public Integer getCtrOwned() {
-        return m_ctrOwned;
-    }
-    public void setCtrOwned(Integer counter) {
-        m_ctrOwned = counter;
-    }
-
-    /*public double getCtrOwned() { return m_ctrOwned; }
-    public void setCtrOwned(double counter) { m_ctrOwned = counter; }*/
+    public double getCtrOwned() { return m_ctrOwned; }
+    public void setCtrOwned(double counter) { m_ctrOwned = counter; }
 
 
     @DynamoDBAttribute(attributeName = "Type")
-    public Integer getType() { return m_type; }
-    public void setType(Integer type) {
-        m_type = type;
+    public Integer getItype() { return m_iType; }
+    public void setItype(Integer iType) { m_iType = iType; }
+
+    public Type getType(){
+        Type[] types = Type.values();
+        if (types.length < m_iType){
+            return Type.NONE;
+        }
+        return types[m_iType];
     }
 
-    /*public Type getType() { return m_type; }
-    public void setType(Type type) { m_type = type; }*/
-
-
     public void incrementCounter(){
-        /*switch(m_type){
+        switch(getType()){
             case BOOK:
                 ++m_ctrSeen;
                 break;
@@ -112,7 +83,7 @@ public class TagsListItem {
                 break;
             default:
                 break;
-        }*/
+        }
     }
 
     @Override

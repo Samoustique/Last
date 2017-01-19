@@ -11,48 +11,42 @@ import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+
+import java.net.URL;
+
 /**
  * Created by Samoustique on 13/01/2017.
  */
 
-public class DBConnect implements Runnable {
-    private Context m_context;
-    private DynamoDBMapper m_mapper;
-    private Thread m_thread = new Thread();
+public class DBConnect extends AsyncTask <Context, Void, DynamoDBMapper> {
+    DynamoDBMapper m_mapper;
+    TagsActivity m_tagsActivity;
 
-    public DBConnect(Context context){
-        m_context = context;
+    public DBConnect(TagsActivity tagsActivity) {
+        m_tagsActivity = tagsActivity;
     }
 
-    public void start(){
-        m_thread.start();
+    public DynamoDBMapper getMapper() {
+        return m_mapper;
     }
 
     @Override
-    public void run() {
+    protected DynamoDBMapper doInBackground(Context... params) {
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                m_context,
-                XXXXXXXXXXXXXX,
+                params[0],
+                XXXX,
                 Regions.US_WEST_2 // Region
         );
         AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
 
         AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(arnCredentials);
         dynamoDB.setRegion(Region.getRegion(Regions.US_WEST_2));
-        m_mapper = new DynamoDBMapper(dynamoDB);
+        return new DynamoDBMapper(dynamoDB);
     }
 
-    public TagsListItem getItem() {
-        try {
-            m_thread.join();
-            return m_mapper.load(TagsListItem.class, "0");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void join() throws Exception {
-        m_thread.join();
+    @Override
+    protected void onPostExecute(DynamoDBMapper mapper) {
+        m_mapper = mapper;
+        m_tagsActivity.notifyMapperReady(mapper);
     }
 }

@@ -17,18 +17,13 @@ import java.util.Locale;
 
 public class CounterHelper {
     static public SpannableString formatCounter(TagsListItem item){
-        SpannableString  counter = new SpannableString("");
-        /*switch(item.getType()){
+        switch(item.getType()){
             case BOOK:
-                counter = new SpannableString(String.valueOf((int) item.getCtrSeen()));
-                break;
+                return new SpannableString(String.valueOf((int) item.getCtrSeen()));
             case SCREEN:
-                counter = formatScreenCounter(item, 0.65f);
-                break;
-            default:
-                break;
-        }*/
-        return counter;
+                return formatScreenCounter(item, 0.65f);
+        }
+        return new SpannableString("");
     }
 
     static public void centerCounter(TextView txtView){
