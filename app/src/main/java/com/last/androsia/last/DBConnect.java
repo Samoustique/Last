@@ -34,7 +34,7 @@ public class DBConnect extends AsyncTask <Context, Void, DynamoDBMapper> {
     protected DynamoDBMapper doInBackground(Context... params) {
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 params[0],
-                XXXXXXX,
+                xxxxxxxx,
                 Regions.US_WEST_2 // Region
         );
         AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();

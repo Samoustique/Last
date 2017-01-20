@@ -8,86 +8,77 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
  * Created by SPhilipps on 1/3/2017.
  */
 
-@DynamoDBTable(tableName="Item")
 public class TagsListItem {
-
     public enum Type{
         NONE,
         SCREEN,
         BOOK
     }
 
-    private String m_id;
-    private String m_title;
-    private String m_imageUrl;
-    private double m_ctrSeen;
-    private double m_ctrOwned;
-    private Integer m_iType;
+    private DBItem m_dbItem;
+    private DBUpdater m_dbUpdater;
 
-    @DynamoDBHashKey(attributeName = "Id")
-    public String getId() { return m_id; }
-    public void setId(String id) { m_id = id; }
+    public String getId() { return m_dbItem.m_id; }
+    public void setId(String id) { m_dbItem.m_id = id; }
 
-    @DynamoDBAttribute(attributeName = "Title")
     public String getTitle() {
-        return m_title;
+        return m_dbItem.m_title;
     }
-    public void setTitle(String title) {
-        m_title = title;
-    }
+    public void setTitle(String title) { m_dbItem.m_title = title; }
 
-    @DynamoDBAttribute(attributeName = "Img")
     public String getImageUrl() {
-        return m_imageUrl;
+        return m_dbItem.m_imageUrl;
     }
     public void setImageUrl(String imageUrl) {
-        m_imageUrl = imageUrl;
+        m_dbItem.m_imageUrl = imageUrl;
     }
 
-    @DynamoDBAttribute(attributeName = "CtrSeen")
-    public double getCtrSeen() { return m_ctrSeen; }
-    public void setCtrSeen(double counter) { m_ctrSeen = counter; }
+    public double getCtrSeen() { return m_dbItem.m_ctrSeen; }
+    public void setCtrSeen(double counter) { m_dbItem.m_ctrSeen = counter; }
 
+    public double getCtrOwned() { return m_dbItem.m_ctrOwned; }
+    public void setCtrOwned(double counter) { m_dbItem.m_ctrOwned = counter; }
 
-    @DynamoDBAttribute(attributeName = "CtrOwned")
-    public double getCtrOwned() { return m_ctrOwned; }
-    public void setCtrOwned(double counter) { m_ctrOwned = counter; }
+    public Integer getItype() { return m_dbItem.m_iType; }
+    public void setItype(Integer iType) { m_dbItem.m_iType = iType; }
 
-
-    @DynamoDBAttribute(attributeName = "Type")
-    public Integer getItype() { return m_iType; }
-    public void setItype(Integer iType) { m_iType = iType; }
+    public DBItem getDBItem() { return m_dbItem; }
+    public void setDBItem(DBItem dbItem) { m_dbItem = dbItem; }
 
     public Type getType(){
         Type[] types = Type.values();
-        if (types.length < m_iType){
+        if (types.length < m_dbItem.m_iType){
             return Type.NONE;
         }
-        return types[m_iType];
+        return types[m_dbItem.m_iType];
     }
+
+    public DBUpdater getDBUpdater() { return m_dbUpdater; }
+    public void setDBUpdater(DBUpdater dbUpdater) { m_dbUpdater = dbUpdater; }
 
     public void incrementCounter(){
         switch(getType()){
             case BOOK:
-                ++m_ctrSeen;
+                ++m_dbItem.m_ctrSeen;
                 break;
             case SCREEN:
-                int real = (int) m_ctrSeen;
-                int decimal = (int) (m_ctrSeen * 100 - real * 100);
+                int real = (int) m_dbItem.m_ctrSeen;
+                int decimal = (int) (m_dbItem.m_ctrSeen * 100 - real * 100);
 
                 if(decimal == 0){
-                    ++m_ctrSeen;
+                    ++m_dbItem.m_ctrSeen;
                 } else {
-                    m_ctrSeen = ((m_ctrSeen * 100) + 1) / 100;
+                    m_dbItem.m_ctrSeen = ((m_dbItem.m_ctrSeen * 100) + 1) / 100;
                 }
                 break;
             default:
                 break;
         }
+        m_dbUpdater.execute(m_dbItem);
     }
 
     @Override
     public String toString(){
-        return m_title + " #" + m_ctrSeen;
+        return m_dbItem.m_title + " #" + m_dbItem.m_ctrSeen;
     }
 }

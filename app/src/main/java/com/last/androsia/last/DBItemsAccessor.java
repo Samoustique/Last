@@ -13,10 +13,13 @@ import java.util.List;
  */
 
 public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, ArrayList<TagsListItem>> {
-    TagsActivity m_tagsActivity;
-    ArrayList<TagsListItem> m_tagsList;
+    private TagsActivity m_tagsActivity;
+    private ArrayList<TagsListItem> m_tagsList;
+    private DBUpdater m_dbUpdater;
+    private DynamoDBMapper m_mapper;
 
-    public DBItemsAccessor(TagsActivity tagsActivity) {
+    public DBItemsAccessor(TagsActivity tagsActivity, DynamoDBMapper mapper) {
+        m_mapper = mapper;
         m_tagsActivity = tagsActivity;
     }
 
@@ -33,6 +36,11 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, ArrayList<T
 
     @Override
     protected void onPostExecute(ArrayList<TagsListItem> tagsList) {
+        m_dbUpdater = new DBUpdater(m_mapper);
+        // allow each item to update the db
+        for (TagsListItem item : tagsList) {
+            item.setDBUpdater(m_dbUpdater);
+        }
         m_tagsList = tagsList;
         m_tagsActivity.notifyItemsReady(tagsList);
     }

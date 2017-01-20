@@ -13,7 +13,6 @@ import android.widget.TextView;
 public class TagView {
     private ImgCounterView m_imgCounterView;
     private TagsListItem m_item;
-
     private Context m_context;
     private ImageLoader m_imageLoader;
 
