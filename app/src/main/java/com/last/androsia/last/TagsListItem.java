@@ -1,14 +1,11 @@
 package com.last.androsia.last;
 
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
-
 /**
  * Created by SPhilipps on 1/3/2017.
  */
 
 public class TagsListItem {
+
     public enum Type{
         NONE,
         SCREEN,
@@ -17,6 +14,10 @@ public class TagsListItem {
 
     private DBItem m_dbItem;
     private DBUpdater m_dbUpdater;
+
+    public TagsListItem(DBItem dbItem) {
+        m_dbItem = dbItem;
+    }
 
     public String getId() { return m_dbItem.m_id; }
     public void setId(String id) { m_dbItem.m_id = id; }
@@ -39,6 +40,9 @@ public class TagsListItem {
     public double getCtrOwned() { return m_dbItem.m_ctrOwned; }
     public void setCtrOwned(double counter) { m_dbItem.m_ctrOwned = counter; }
 
+    public DBUpdater getDBUpdater() { return m_dbUpdater; }
+    public void setDBUpdater(DBUpdater dbUpdater) { m_dbUpdater = dbUpdater; }
+
     public Integer getItype() { return m_dbItem.m_iType; }
     public void setItype(Integer iType) { m_dbItem.m_iType = iType; }
 
@@ -52,9 +56,6 @@ public class TagsListItem {
         }
         return types[m_dbItem.m_iType];
     }
-
-    public DBUpdater getDBUpdater() { return m_dbUpdater; }
-    public void setDBUpdater(DBUpdater dbUpdater) { m_dbUpdater = dbUpdater; }
 
     public void incrementCounter(){
         switch(getType()){

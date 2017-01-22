@@ -12,7 +12,7 @@ import java.util.List;
  * Created by SPhilipps on 1/19/2017.
  */
 
-public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, ArrayList<TagsListItem>> {
+public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, List<DBItem>> {
     private TagsActivity m_tagsActivity;
     private ArrayList<TagsListItem> m_tagsList;
     private DBUpdater m_dbUpdater;
@@ -24,24 +24,25 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, ArrayList<T
     }
 
     @Override
-    protected ArrayList<TagsListItem> doInBackground(DynamoDBMapper... params) {
+    protected List<DBItem> doInBackground(DynamoDBMapper... params) {
         if(params.length != 1){
             return new ArrayList<>();
         }
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-        List<TagsListItem> scanResult = params[0].parallelScan(TagsListItem.class, scanExpression, 4);
-        return new ArrayList<>(scanResult);
+        return params[0].parallelScan(DBItem.class, scanExpression, 4);
     }
 
     @Override
-    protected void onPostExecute(ArrayList<TagsListItem> tagsList) {
+    protected void onPostExecute(List<DBItem> dbItems) {
         m_dbUpdater = new DBUpdater(m_mapper);
         // allow each item to update the db
-        for (TagsListItem item : tagsList) {
-            item.setDBUpdater(m_dbUpdater);
+        m_tagsList = new ArrayList<>();
+        for (DBItem item : dbItems) {
+            TagsListItem tag = new TagsListItem(item);
+            tag.setDBUpdater(m_dbUpdater);
+            m_tagsList.add(tag);
         }
-        m_tagsList = tagsList;
-        m_tagsActivity.notifyItemsReady(tagsList);
+        m_tagsActivity.notifyItemsReady(m_tagsList);
     }
 }

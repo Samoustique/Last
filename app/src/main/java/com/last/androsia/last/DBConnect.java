@@ -7,7 +7,6 @@ import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.*;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -34,7 +33,7 @@ public class DBConnect extends AsyncTask <Context, Void, DynamoDBMapper> {
     protected DynamoDBMapper doInBackground(Context... params) {
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 params[0],
-                xxxxxxxx,
+                xxxxxxxxxxxxx,
                 Regions.US_WEST_2 // Region
         );
         AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
