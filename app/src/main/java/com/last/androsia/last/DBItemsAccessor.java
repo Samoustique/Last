@@ -35,12 +35,9 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, List<DBItem
 
     @Override
     protected void onPostExecute(List<DBItem> dbItems) {
-        m_dbUpdater = new DBUpdater(m_mapper);
-        // allow each item to update the db
         m_tagsList = new ArrayList<>();
         for (DBItem item : dbItems) {
-            TagsListItem tag = new TagsListItem(item);
-            tag.setDBUpdater(m_dbUpdater);
+            TagsListItem tag = new TagsListItem(item, m_mapper);
             m_tagsList.add(tag);
         }
         m_tagsActivity.notifyItemsReady(m_tagsList);

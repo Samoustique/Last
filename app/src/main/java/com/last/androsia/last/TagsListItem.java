@@ -1,5 +1,7 @@
 package com.last.androsia.last;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+
 /**
  * Created by SPhilipps on 1/3/2017.
  */
@@ -13,10 +15,11 @@ public class TagsListItem {
     }
 
     private DBItem m_dbItem;
-    private DBUpdater m_dbUpdater;
+    private DynamoDBMapper m_mapper;
 
-    public TagsListItem(DBItem dbItem) {
+    public TagsListItem(DBItem dbItem, DynamoDBMapper mapper) {
         m_dbItem = dbItem;
+        m_mapper = mapper;
     }
 
     public String getId() { return m_dbItem.m_id; }
@@ -40,8 +43,8 @@ public class TagsListItem {
     public double getCtrOwned() { return m_dbItem.m_ctrOwned; }
     public void setCtrOwned(double counter) { m_dbItem.m_ctrOwned = counter; }
 
-    public DBUpdater getDBUpdater() { return m_dbUpdater; }
-    public void setDBUpdater(DBUpdater dbUpdater) { m_dbUpdater = dbUpdater; }
+    /*public DBUpdater getDBUpdater() { return m_dbUpdater; }
+    public void setDBUpdater(DBUpdater dbUpdater) { m_dbUpdater = dbUpdater; }*/
 
     public Integer getItype() { return m_dbItem.m_iType; }
     public void setItype(Integer iType) { m_dbItem.m_iType = iType; }
@@ -75,7 +78,7 @@ public class TagsListItem {
             default:
                 break;
         }
-        m_dbUpdater.execute(m_dbItem);
+        new DBUpdater(m_mapper).execute(m_dbItem);
     }
 
     @Override

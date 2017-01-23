@@ -1,12 +1,8 @@
 package com.last.androsia.last;
 
 import android.os.AsyncTask;
-
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by SPhilipps on 1/20/2017.
