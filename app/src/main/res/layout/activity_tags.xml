@@ -28,20 +28,20 @@
                     android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="40dp">
 
                     <ImageView
                         android:id="@+id/imgUserGold"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="17dp"
                         android:scaleType="center"/>
 
                     <ImageView
                         android:src="@mipmap/big_tag"
-                        android:layout_width="240dp"
-                        android:layout_height="240dp"/>
+                        android:layout_width="230dp"
+                        android:layout_height="230dp"
+                        android:layout_marginLeft="-14dp"
+                        android:layout_marginTop="-16dp"/>
 
                     <TextView
                         android:id="@+id/txtCounterGold"
@@ -50,8 +50,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:rotation="-35"
-                        android:layout_marginLeft="125dp"
-                        android:layout_marginTop="140dp"/>
+                        android:layout_marginLeft="110dp"
+                        android:layout_marginTop="130dp"/>
                 </RelativeLayout >
                 <!--  / GOLD  -->
 
@@ -59,7 +59,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
 
                     <!--   SILVER  -->
                     <RelativeLayout
@@ -70,16 +71,16 @@
 
                         <ImageView
                             android:id="@+id/imgUserSilver"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="15dp"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
                             android:scaleType="center"/>
 
                         <ImageView
                             android:src="@mipmap/middle_tag"
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"/>
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_marginLeft="-14dp"
+                            android:layout_marginTop="-32dp"/>
 
                         <TextView
                             android:id="@+id/txtCounterSilver"
@@ -88,7 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:rotation="-35"
-                            android:layout_marginLeft="55dp"
+                            android:layout_marginLeft="65dp"
                             android:layout_marginTop="80dp"/>
                     </RelativeLayout >
                     <!--  / SILVER  -->
@@ -98,20 +99,21 @@
                         android:id="@+id/layoutBronze"
                         android:visibility="invisible"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-30dp">
 
                         <ImageView
                             android:id="@+id/imgUserBronze"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="15dp"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
                             android:scaleType="center"/>
 
                         <ImageView
                             android:src="@mipmap/middle_tag"
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"/>
+                            android:layout_width="200dp"
+                            android:layout_height="200dp"
+                            android:layout_marginLeft="-14dp"
+                            android:layout_marginTop="-32dp"/>
 
                         <TextView
                             android:id="@+id/txtCounterBronze"
@@ -120,7 +122,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:rotation="-35"
-                            android:layout_marginLeft="55dp"
+                            android:layout_marginLeft="65dp"
                             android:layout_marginTop="80dp"/>
                     </RelativeLayout >
                     <!--  / BRONZE  -->
@@ -133,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:layout_marginTop="-30dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
