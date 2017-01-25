@@ -1,10 +1,15 @@
 package com.last.androsia.last;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +27,8 @@ public class TagsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tags);
+        setContentView(R.layout.tags_activity);
+        ActionBar bar = getSupportActionBar();
 
         Context context = getApplicationContext();
 
@@ -32,6 +38,25 @@ public class TagsActivity extends AppCompatActivity {
         }
 
         Toast.makeText(context, "You should try again with internet on", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tags_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+            case R.id.add_tag:
+                startActivity(new Intent(this, AddTagActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void notifyMapperReady(DynamoDBMapper mapper) {
