@@ -6,6 +6,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +41,7 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, List<DBItem
             TagsListItem tag = new TagsListItem(item, m_mapper);
             m_tagsList.add(tag);
         }
+        Collections.sort(m_tagsList);
         m_tagsActivity.notifyItemsReady(m_tagsList);
     }
 }

@@ -6,7 +6,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
  * Created by SPhilipps on 1/3/2017.
  */
 
-public class TagsListItem {
+public class TagsListItem implements Comparable<TagsListItem> {
 
     public enum Type{
         NONE,
@@ -43,14 +43,8 @@ public class TagsListItem {
     public double getCtrOwned() { return m_dbItem.m_ctrOwned; }
     public void setCtrOwned(double counter) { m_dbItem.m_ctrOwned = counter; }
 
-    /*public DBUpdater getDBUpdater() { return m_dbUpdater; }
-    public void setDBUpdater(DBUpdater dbUpdater) { m_dbUpdater = dbUpdater; }*/
-
-    public Integer getItype() { return m_dbItem.m_iType; }
-    public void setItype(Integer iType) { m_dbItem.m_iType = iType; }
-
-    public DBItem getDBItem() { return m_dbItem; }
-    public void setDBItem(DBItem dbItem) { m_dbItem = dbItem; }
+    public String getDate() { return m_dbItem.m_date; }
+    public void setDate(String date) { m_dbItem.m_date = date; }
 
     public Type getType(){
         Type[] types = Type.values();
@@ -84,5 +78,10 @@ public class TagsListItem {
     @Override
     public String toString(){
         return m_dbItem.m_title + " #" + m_dbItem.m_ctrSeen;
+    }
+
+    @Override
+    public int compareTo(TagsListItem other) {
+        return other.m_dbItem.m_date.compareTo(m_dbItem.m_date);
     }
 }

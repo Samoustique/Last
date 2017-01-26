@@ -3,6 +3,7 @@ package com.last.androsia.last;
 import android.os.AsyncTask;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by SPhilipps on 1/20/2017.
@@ -22,8 +23,11 @@ public class DBUpdater extends AsyncTask<DBItem, Void, Boolean> {
             return false;
         }
 
-        m_mapper.delete(params[0]);
+        DBItem item = params[0];
+        item.setDate(Long.toString(new Date().getTime()));
+
         m_mapper.save(params[0]);
+
         return true;
     }
 }

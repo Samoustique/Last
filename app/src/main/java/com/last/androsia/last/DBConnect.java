@@ -12,6 +12,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.net.URL;
+import java.util.Date;
 
 /**
  * Created by Samoustique on 13/01/2017.
@@ -33,7 +34,7 @@ public class DBConnect extends AsyncTask <Context, Void, DynamoDBMapper> {
     protected DynamoDBMapper doInBackground(Context... params) {
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 params[0],
-                xxxx,
+                xxxxxxxxxx,
                 Regions.US_WEST_2 // Region
         );
         AWSSessionCredentials arnCredentials = credentialsProvider.getCredentials();
