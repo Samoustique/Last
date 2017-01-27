@@ -4,4 +4,5 @@
     <color name="white">#FFFFFF</color>
     <string name="title_activity_add_tag">Add a new Tag</string>
     <string name="save_tag">save tag</string>
+    <string name="btnPicture">Picture</string>
 </resources>

@@ -16,71 +16,8 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="39fe6bbc33d970d165e63638151a381609a5d424">
+        sha1="4ab97708322d23320843b1a11620373fbfb8e7d2">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_03a5eb94a9e8ae7d0a1b589d3745639a652e3b65\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-ddb-mapper\2.2.22\57538cc0c8d6f9279d94aa347fb1a90f68592719\aws-android-sdk-ddb-mapper-2.2.22.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="57538cc0c8d6f9279d94aa347fb1a90f68592719">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-mapper-2.2.22_31bc5305368b0e855093e492a9a0e492676942cc\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.1.0_2750269455796d5eeb42f58f4a4c9bc2af7bb370\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-core\2.2.22\c6789de00db9d1f93faec881fa0c1f5960fb8a15\aws-android-sdk-core-2.2.22.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c6789de00db9d1f93faec881fa0c1f5960fb8a15">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-core-2.2.22_9352407bc1f0b748fb662702908edaa31a11397f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-s3\2.2.22\40fe82092e0ae3ca549b132a1e7e876807525176\aws-android-sdk-s3-2.2.22.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="40fe82092e0ae3ca549b132a1e7e876807525176">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-s3-2.2.22_67df594cd79bdde9742e7774d960db8beeaddf09\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.1.0_839281c41f773f4b2393b857f7567289a8eee98e\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.1.0_9fde97d35bc5b8bba799df8c0cf0e47fa29640af\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-ddb\2.2.22\a1e0dd0d91d40d9e67342d3a8bd26f08edaa3549\aws-android-sdk-ddb-2.2.22.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="a1e0dd0d91d40d9e67342d3a8bd26f08edaa3549">
-        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-2.2.22_efca114d923159b5a4fe38b3f941661dbbf0d5c6\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -111,12 +48,48 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-ddb-mapper\2.2.22\57538cc0c8d6f9279d94aa347fb1a90f68592719\aws-android-sdk-ddb-mapper-2.2.22.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="57538cc0c8d6f9279d94aa347fb1a90f68592719">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-mapper-2.2.22_31bc5305368b0e855093e492a9a0e492676942cc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.1.0_2750269455796d5eeb42f58f4a4c9bc2af7bb370\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-25.1.0_4b38909f13919839ffb2527801ce1c2b6cf800fc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-core\2.2.22\c6789de00db9d1f93faec881fa0c1f5960fb8a15\aws-android-sdk-core-2.2.22.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c6789de00db9d1f93faec881fa0c1f5960fb8a15">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-core-2.2.22_9352407bc1f0b748fb662702908edaa31a11397f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-s3\2.2.22\40fe82092e0ae3ca549b132a1e7e876807525176\aws-android-sdk-s3-2.2.22.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="40fe82092e0ae3ca549b132a1e7e876807525176">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-s3-2.2.22_67df594cd79bdde9742e7774d960db8beeaddf09\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -147,6 +120,24 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.1.0_839281c41f773f4b2393b857f7567289a8eee98e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.1.0_9fde97d35bc5b8bba799df8c0cf0e47fa29640af\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -160,7 +151,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="46ce595e7ac85865e464c8e7f294108f319027ba">
+        sha1="0d62e1397cbd6b7828eb6cf4f374a604b3719cab">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_b75c66b5af0203bed66ba1ee8a703c16e7e22449\classes.dex" />
     </item>
     <item
@@ -180,6 +171,15 @@
         revision="25.0.2"
         sha1="aee64634871d88a419d59eb743c1258a60f19700">
         <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.1.0_d352aa83474005e9cef2caf68ba91e64f2493912\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\sphilipps\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-ddb\2.2.22\a1e0dd0d91d40d9e67342d3a8bd26f08edaa3549\aws-android-sdk-ddb-2.2.22.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a1e0dd0d91d40d9e67342d3a8bd26f08edaa3549">
+        <dex dex="C:\Users\sphilipps\AndroidStudioProjects\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-2.2.22_efca114d923159b5a4fe38b3f941661dbbf0d5c6\classes.dex" />
     </item>
     <item
         is-multidex="true"
