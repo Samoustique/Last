@@ -28,8 +28,6 @@ public class TagsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tags_activity);
-        ActionBar bar = getSupportActionBar();
-
         Context context = getApplicationContext();
 
         if(isNetworkAvailable()) {

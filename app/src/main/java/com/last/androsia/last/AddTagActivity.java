@@ -8,17 +8,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -28,14 +35,18 @@ import java.util.Date;
 public class AddTagActivity extends AppCompatActivity {
     private final int TAKE_PICTURE = 1;
     private final int ACTIVITY_SELECT_IMAGE = 2;
+    private final Boolean isScreenChecked = true;
     private final String DLG_PICTURE_TITLE = "Picture";
     private final String STR_TAKE_PICTURE = "Take Photo";
     private final String STR_GALLERY = "Choose from Gallery";
     private final String STR_CANCEL = "Cancel";
 
-    private Button m_btnPicture;
     private ImageView m_imagePreview;
     private String m_pictureImagePath;
+    private LinearLayout m_layoutScreen;
+    private EditText m_counter;
+    private EditText m_screenSeason;
+    private EditText m_screenEpisode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +57,40 @@ public class AddTagActivity extends AppCompatActivity {
         bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
 
-        m_imagePreview = (ImageView) this.findViewById(R.id.picture);
-        m_btnPicture = (Button)findViewById(R.id.btnPicture);
-        m_btnPicture.setOnClickListener(new View.OnClickListener() {
+        m_layoutScreen = (LinearLayout) this.findViewById(R.id.layScreen);
+
+        View.OnFocusChangeListener focusEmptyCounter = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // empty counter
+                    m_counter.setText("");
+                }
+            }
+        };
+
+        m_screenSeason = (EditText) this.findViewById(R.id.edtScreenSeason);
+        m_screenSeason.setOnFocusChangeListener(focusEmptyCounter);
+        m_screenEpisode = (EditText) this.findViewById(R.id.edtScreenEpisode);
+        m_screenEpisode.setOnFocusChangeListener(focusEmptyCounter);
+
+        m_counter = (EditText) this.findViewById(R.id.edtCounter);
+        m_counter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // empty screen season/episode
+                    m_screenEpisode.setText("");
+                    m_screenSeason.setText("");
+                }
+            }
+        });
+
+        RelativeLayout layoutGold = (RelativeLayout) this.findViewById(R.id.layoutGold);
+        layoutGold.setVisibility(View.VISIBLE);
+
+        m_imagePreview = (ImageView) this.findViewById(R.id.imgUserGold);
+        m_imagePreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayImageChoice();
@@ -124,6 +166,23 @@ public class AddTagActivity extends AppCompatActivity {
         }
     }
 
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch(view.getId()) {
+            case R.id.radScreen:
+                if (checked){
+                    m_layoutScreen.setVisibility(View.VISIBLE);
+                    break;
+                }
+            case R.id.radBook:
+                if (checked){
+                    m_layoutScreen.setVisibility(View.INVISIBLE);
+                    break;
+                }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_tag_menu, menu);
@@ -146,5 +205,4 @@ public class AddTagActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
