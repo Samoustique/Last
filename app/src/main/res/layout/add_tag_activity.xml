@@ -1,97 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:paddingLeft="20dp">
 
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" >
-
-        <include layout="@layout/gold_tag" />
-
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/edtTitle"
-        android:maxLength="30"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/edtTitle"
-        android:layout_gravity="center" />
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-
-        <RadioButton
-            android:id="@+id/radBook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/radBook"
-            android:onClick="onRadioButtonClicked"
-            android:checked = "true"
-            android:layout_marginRight="20dp"/>
-
-        <RadioButton android:id="@+id/radScreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/radScreen"
-            android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
-
-    <EditText
-        android:id="@+id/edtCounter"
-        android:maxLength="3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/edtCounter"
-        android:inputType="number"
-        android:layout_gravity="center" />
+    <include layout="@layout/gold_tag" />
 
     <LinearLayout
-        android:id="@+id/layScreen"
         android:orientation="vertical"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" >
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="-40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp">
 
-        <TextView
+        <EditText
+            android:id="@+id/edtTitle"
+            android:maxLength="30"
+            android:layout_width="127dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/edtTitle"
+            android:layout_gravity="center" />
+
+        <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="or"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <RadioButton
+                android:id="@+id/radBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radBook"
+                android:onClick="onRadioButtonClicked"
+                android:checked = "true"
+                android:layout_marginBottom="10dp"/>
+
+            <RadioButton android:id="@+id/radScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radScreen"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/edtCounter"
+            android:maxLength="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/edtCounter"
+            android:inputType="number"
             android:layout_gravity="center" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/layScreen"
+            android:orientation="vertical"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" >
-            <EditText
-                android:id="@+id/edtScreenSeason"
-                android:maxLength="2"
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/edtScreenSeason"
-                android:inputType="number"
+                android:text="or"
                 android:layout_gravity="center" />
-            <EditText
-                android:id="@+id/edtScreenEpisode"
-                android:maxLength="2"
+
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/edtScreenEpisode"
-                android:inputType="number"
-                android:layout_gravity="center" />
+                android:layout_gravity="center" >
+                <EditText
+                    android:id="@+id/edtScreenSeason"
+                    android:maxLength="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edtScreenSeason"
+                    android:inputType="number"
+                    android:layout_gravity="center" />
+                <EditText
+                    android:id="@+id/edtScreenEpisode"
+                    android:maxLength="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edtScreenEpisode"
+                    android:inputType="number"
+                    android:layout_gravity="center" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

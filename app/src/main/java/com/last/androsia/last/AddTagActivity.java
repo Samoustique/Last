@@ -57,8 +57,20 @@ public class AddTagActivity extends AppCompatActivity {
         bar.setHomeButtonEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
 
-        m_layoutScreen = (LinearLayout) this.findViewById(R.id.layScreen);
+        // 1. Image
+        RelativeLayout layoutGold = (RelativeLayout) this.findViewById(R.id.layoutGold);
+        layoutGold.setVisibility(View.VISIBLE);
+        m_imagePreview = (ImageView) this.findViewById(R.id.imgUserGold);
+        m_imagePreview.setImageResource(R.mipmap.select_picture);
+        m_imagePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayImageChoice();
+            }
+        });
 
+        // 2. Form : screen
+        m_layoutScreen = (LinearLayout) this.findViewById(R.id.layScreen);
         View.OnFocusChangeListener focusEmptyCounter = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -68,12 +80,12 @@ public class AddTagActivity extends AppCompatActivity {
                 }
             }
         };
-
         m_screenSeason = (EditText) this.findViewById(R.id.edtScreenSeason);
         m_screenSeason.setOnFocusChangeListener(focusEmptyCounter);
         m_screenEpisode = (EditText) this.findViewById(R.id.edtScreenEpisode);
         m_screenEpisode.setOnFocusChangeListener(focusEmptyCounter);
 
+        // 3. Form : basic counter
         m_counter = (EditText) this.findViewById(R.id.edtCounter);
         m_counter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -83,17 +95,6 @@ public class AddTagActivity extends AppCompatActivity {
                     m_screenEpisode.setText("");
                     m_screenSeason.setText("");
                 }
-            }
-        });
-
-        RelativeLayout layoutGold = (RelativeLayout) this.findViewById(R.id.layoutGold);
-        layoutGold.setVisibility(View.VISIBLE);
-
-        m_imagePreview = (ImageView) this.findViewById(R.id.imgUserGold);
-        m_imagePreview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displayImageChoice();
             }
         });
     }
