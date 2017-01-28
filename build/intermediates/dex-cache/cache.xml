@@ -43,7 +43,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="72ad7ded412caa9f035e7da44f71bcf0f6af06ed">
+        sha1="3756b711b0376f4e600e14e259b19bb9dc973497">
         <dex dex="C:\Users\Samoustique\Documents\Last\Source\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_ecdfdb146dc0e8d7ff0c7a4fe43c5c4571c2f32f\classes.dex" />
     </item>
     <item
@@ -61,7 +61,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="73b40f838796ccf000d7ab3d1bd8ff935e77e39d">
+        sha1="63cb3ff354133067a02dc59a19289f4c61bf21e1">
         <dex dex="C:\Users\Samoustique\Documents\Last\Source\Last\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_642c24c79a62fd0915dc1adac1503800a3ff2288\classes.dex" />
     </item>
     <item

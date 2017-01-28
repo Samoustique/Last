@@ -35,7 +35,6 @@ import java.util.Date;
 public class AddTagActivity extends AppCompatActivity {
     private final int TAKE_PICTURE = 1;
     private final int ACTIVITY_SELECT_IMAGE = 2;
-    private final Boolean isScreenChecked = true;
     private final String DLG_PICTURE_TITLE = "Picture";
     private final String STR_TAKE_PICTURE = "Take Photo";
     private final String STR_GALLERY = "Choose from Gallery";
@@ -61,7 +60,7 @@ public class AddTagActivity extends AppCompatActivity {
         RelativeLayout layoutGold = (RelativeLayout) this.findViewById(R.id.layoutGold);
         layoutGold.setVisibility(View.VISIBLE);
         m_imagePreview = (ImageView) this.findViewById(R.id.imgUserGold);
-        m_imagePreview.setImageResource(R.mipmap.select_picture);
+        m_imagePreview.setImageResource(R.drawable.select_picture);
         m_imagePreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

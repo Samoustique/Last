@@ -36,21 +36,20 @@
                     <RelativeLayout
                         android:id="@+id/layoutSilver"
                         android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:layout_gravity="center">
 
                         <ImageView
                             android:id="@+id/imgUserSilver"
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"/>
+                            android:scaleType="centerCrop"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"/>
 
                         <ImageView
-                            android:src="@mipmap/middle_tag"
-                            android:layout_width="220dp"
-                            android:layout_height="220dp"
-                            android:layout_marginLeft="-15dp"
-                            android:layout_marginTop="-48dp"/>
+                            android:src="@drawable/middle_tag"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"/>
 
                         <TextView
                             android:id="@+id/txtCounterSilver"
@@ -59,8 +58,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:rotation="-35"
-                            android:layout_marginLeft="65dp"
-                            android:layout_marginTop="80dp"/>
+                            android:layout_marginLeft="67dp"
+                            android:layout_marginTop="77dp"/>
                     </RelativeLayout >
                     <!--  / SILVER  -->
 
@@ -68,22 +67,20 @@
                     <RelativeLayout
                         android:id="@+id/layoutBronze"
                         android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-30dp">
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center">
 
                         <ImageView
                             android:id="@+id/imgUserBronze"
-                            android:layout_width="120dp"
-                            android:layout_height="120dp"
-                            android:scaleType="centerCrop"/>
+                            android:scaleType="centerCrop"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"/>
 
                         <ImageView
-                            android:src="@mipmap/middle_tag"
-                            android:layout_width="220dp"
-                            android:layout_height="220dp"
-                            android:layout_marginLeft="-15dp"
-                            android:layout_marginTop="-48dp"/>
+                            android:src="@drawable/middle_tag"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"/>
 
                         <TextView
                             android:id="@+id/txtCounterBronze"
@@ -92,11 +89,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:rotation="-35"
-                            android:layout_marginLeft="65dp"
-                            android:layout_marginTop="80dp"/>
+                            android:layout_marginLeft="55dp"
+                            android:layout_marginTop="70dp"/>
                     </RelativeLayout >
                     <!--  / BRONZE  -->
-                </LinearLayout>
+                </LinearLayout
+>
             </LinearLayout>
 
             <com.last.androsia.last.ExpandedGridView
@@ -105,8 +103,7 @@
                 android:layout_height="wrap_content"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
-                android:gravity="center"
-                android:layout_marginTop="-30dp"/>
+                android:gravity="center"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

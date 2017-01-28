@@ -31,11 +31,21 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, List<DBItem
         }
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-        return params[0].parallelScan(DBItem.class, scanExpression, 4);
+        List<DBItem> toReturn;
+        try {
+            toReturn = params[0].parallelScan(DBItem.class, scanExpression, 4);
+        }catch(Exception e){
+            return null;
+        }
+        return toReturn;
     }
 
     @Override
     protected void onPostExecute(List<DBItem> dbItems) {
+        if(dbItems == null) {
+            return;
+        }
+
         m_tagsList = new ArrayList<>();
         for (DBItem item : dbItems) {
             TagsListItem tag = new TagsListItem(item, m_mapper);

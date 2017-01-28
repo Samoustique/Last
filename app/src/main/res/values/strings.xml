@@ -2,7 +2,7 @@
     <string name="app_name">Last</string>
     <string name="add_tag">New</string>
     <color name="white">#FFFFFF</color>
-    <string name="title_activity_add_tag">Add a new Tag</string>
+    <string name="title_activity_add_tag">Last - New Tag</string>
     <string name="save_tag">save tag</string>
     <string name="btnPicture">Picture</string>
     <string name="edtTitle">Title...</string>
@@ -10,7 +10,6 @@
     <string name="radScreen">Screen</string>
     <string name="radBook">Book</string>
     <string name="edtCounter">Counter...</string>
-    <string name="edtScreenSeason">Season...</string>
-    <string name="edtScreenEpisode">Episode...</string>
+    <string name="edtScreen">XX</string>
     <string name="edtBook">Counter...</string>
 </resources>
