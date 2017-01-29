@@ -65,14 +65,29 @@
                 android:onClick="onRadioButtonClicked"/>
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/edtCounter"
-            android:maxLength="3"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/edtCounter"
-            android:inputType="number"
-            android:layout_gravity="center" />
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#"
+                android:textSize="25sp"
+                android:layout_gravity="center"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/edtCounter"
+                android:maxLength="3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/edtCounter"
+                android:inputType="number"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layScreen"
@@ -100,7 +115,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="S"/>
+                    android:text="S"
+                    android:textSize="25sp"/>
                 <EditText
                     android:id="@+id/edtScreenSeason"
                     android:maxLength="2"
@@ -112,7 +128,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:text="E"/>
+                    android:text="E"
+                    android:textSize="25sp"/>
                 <EditText
                     android:id="@+id/edtScreenEpisode"
                     android:maxLength="2"

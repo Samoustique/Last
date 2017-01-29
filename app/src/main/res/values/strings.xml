@@ -9,7 +9,7 @@
     <string name="txtTitle">Title:</string>
     <string name="radScreen">Screen</string>
     <string name="radBook">Book</string>
-    <string name="edtCounter">Counter...</string>
+    <string name="edtCounter">XXX</string>
     <string name="edtScreen">XX</string>
     <string name="edtBook">Counter...</string>
 </resources>
