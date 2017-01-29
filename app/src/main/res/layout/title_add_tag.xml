@@ -12,6 +12,14 @@
         android:layout_height="49dip"
         android:background="#FFFFFF">
 
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back_icon"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"/>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -25,10 +33,10 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/btnGoToAddActivity"
+            android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/add_icon"
+            android:src="@mipmap/save_icon"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />

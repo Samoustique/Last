@@ -3,19 +3,11 @@ package com.last.androsia.last;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,7 +21,8 @@ public class TagsActivity extends Activity {
     private ExpandedGridView m_tagsGridView;
     private DBConnect m_dbConnect = new DBConnect(this);
     private DBItemsAccessor m_dbItems;
-    private ImageView m_btnAddActivity;
+    private ImageView m_btnGoToAddActivity;
+    private TextView m_txtConnexionIssue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +32,14 @@ public class TagsActivity extends Activity {
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
         Context context = getApplicationContext();
 
-        m_btnAddActivity = (ImageView) findViewById(R.id.btnAddActivity);
-        m_btnAddActivity.setOnClickListener(new View.OnClickListener() {
+        m_btnGoToAddActivity = (ImageView) findViewById(R.id.btnGoToAddActivity);
+        m_btnGoToAddActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 goToAddActivity();
             }
         });
+
+        m_txtConnexionIssue = (TextView) findViewById(R.id.txtConnexionIssue);
 
         if(isNetworkAvailable()) {
             m_dbConnect.execute(context);
@@ -98,5 +93,9 @@ public class TagsActivity extends Activity {
 
     public void goToAddActivity(){
         startActivity(new Intent(this, AddTagActivity.class));
+    }
+
+    public void notifyConnexionIssue() {
+        m_txtConnexionIssue.setVisibility(View.VISIBLE);
     }
 }

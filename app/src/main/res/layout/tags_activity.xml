@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_tags"
@@ -8,11 +8,24 @@
     tools:context="com.last.androsia.last.TagsActivity"
     android:background="@color/white"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtConnexionIssue"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="We are facing a connexion issue"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:padding="20dp"
+        android:textSize="30sp"
+        android:visibility="invisible"/>
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scrollbars="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,5 +119,5 @@
                 android:gravity="center"/>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>
 

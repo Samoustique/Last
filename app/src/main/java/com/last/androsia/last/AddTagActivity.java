@@ -1,5 +1,6 @@
 package com.last.androsia.last;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,55 +9,63 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddTagActivity extends AppCompatActivity {
+public class AddTagActivity extends Activity {
     private final int TAKE_PICTURE = 1;
     private final int ACTIVITY_SELECT_IMAGE = 2;
     private final String DLG_PICTURE_TITLE = "Picture";
     private final String STR_TAKE_PICTURE = "Take Photo";
     private final String STR_GALLERY = "Choose from Gallery";
-    private final String STR_CANCEL = "Cancel";
 
     private ImageView m_imagePreview;
+    private ImageView m_btnSave;
+    private ImageView m_btnBack;
     private String m_pictureImagePath;
     private LinearLayout m_layoutScreen;
-    private EditText m_counter;
-    private EditText m_screenSeason;
-    private EditText m_screenEpisode;
+    private EditText m_edtTitle;
+    private EditText m_edtCounter;
+    private EditText m_edtScreenSeason;
+    private EditText m_edtScreenEpisode;
+    private RadioButton m_radScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.add_tag_activity);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_add_tag);
 
-        ActionBar bar = getSupportActionBar();
-        bar.setHomeButtonEnabled(true);
-        bar.setDisplayHomeAsUpEnabled(true);
+        // 1. Title buttons
+        m_btnSave = (ImageView) findViewById(R.id.btnSave);
+        m_btnSave.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                save();
+            }
+        });
+        m_btnBack = (ImageView) findViewById(R.id.btnBack);
+        m_btnBack.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                back();
+            }
+        });
 
-        // 1. Image
+        // 2. User Image
         RelativeLayout layoutGold = (RelativeLayout) this.findViewById(R.id.layoutGold);
         layoutGold.setVisibility(View.VISIBLE);
         m_imagePreview = (ImageView) this.findViewById(R.id.imgUserGold);
@@ -68,39 +77,45 @@ public class AddTagActivity extends AppCompatActivity {
             }
         });
 
-        // 2. Form : screen
+        // 3. Form : screen
         m_layoutScreen = (LinearLayout) this.findViewById(R.id.layScreen);
         View.OnFocusChangeListener focusEmptyCounter = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // empty counter
-                    m_counter.setText("");
-                }
+            if (hasFocus) {
+                // empty counter
+                m_edtCounter.setText("");
+            }
             }
         };
-        m_screenSeason = (EditText) this.findViewById(R.id.edtScreenSeason);
-        m_screenSeason.setOnFocusChangeListener(focusEmptyCounter);
-        m_screenEpisode = (EditText) this.findViewById(R.id.edtScreenEpisode);
-        m_screenEpisode.setOnFocusChangeListener(focusEmptyCounter);
+        m_edtScreenSeason = (EditText) this.findViewById(R.id.edtScreenSeason);
+        m_edtScreenSeason.setOnFocusChangeListener(focusEmptyCounter);
+        m_edtScreenEpisode = (EditText) this.findViewById(R.id.edtScreenEpisode);
+        m_edtScreenEpisode.setOnFocusChangeListener(focusEmptyCounter);
 
-        // 3. Form : basic counter
-        m_counter = (EditText) this.findViewById(R.id.edtCounter);
-        m_counter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        // 4. Form : basic counter
+        m_edtCounter = (EditText) this.findViewById(R.id.edtCounter);
+        m_edtCounter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // empty screen season/episode
-                    m_screenEpisode.setText("");
-                    m_screenSeason.setText("");
-                }
+            if (hasFocus) {
+                // empty screen season/episode
+                m_edtScreenEpisode.setText("");
+                m_edtScreenSeason.setText("");
+            }
             }
         });
+
+        // 5. Form : title
+        m_edtTitle = (EditText) this.findViewById(R.id.edtTitle);
+
+        // 6. Form : radio
+        m_radScreen = (RadioButton) this.findViewById(R.id.radScreen);
     }
 
     public void displayImageChoice()
     {
-        final CharSequence[] options = {STR_TAKE_PICTURE, STR_GALLERY, STR_CANCEL};
+        final CharSequence[] options = {STR_TAKE_PICTURE, STR_GALLERY};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AddTagActivity.this);
         builder.setTitle(DLG_PICTURE_TITLE);
@@ -115,10 +130,6 @@ public class AddTagActivity extends AppCompatActivity {
                 {
                     Intent intent=new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, ACTIVITY_SELECT_IMAGE);
-                }
-                else if(options[which].equals(STR_CANCEL))
-                {
-                    dialog.dismiss();
                 }
             }
         });
@@ -169,6 +180,10 @@ public class AddTagActivity extends AppCompatActivity {
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
+        m_edtScreenSeason.setError(null);
+        m_edtScreenEpisode.setError(null);
+        m_edtCounter.setError(null);
+
         switch(view.getId()) {
             case R.id.radScreen:
                 if (checked){
@@ -183,6 +198,60 @@ public class AddTagActivity extends AppCompatActivity {
         }
     }
 
+    public void back() {
+        this.finish();
+    }
+
+    public void save() {
+        Boolean isValid = true;
+        TagsListItem.Type type = TagsListItem.Type.BOOK;
+
+        String title = m_edtTitle.getText().toString();
+        String season = m_edtScreenSeason.getText().toString();
+        String episode = m_edtScreenEpisode.getText().toString();
+        String counter = m_edtCounter.getText().toString();
+
+        if(title.isEmpty()){
+            isValid = false;
+            m_edtTitle.setError("Title ?");
+        }
+
+        if(m_radScreen.isChecked()){
+            type = TagsListItem.Type.SCREEN;
+            if(counter.isEmpty()){
+                if(season.isEmpty()) {
+                    if(episode.isEmpty()) {
+                        isValid = false;
+                        m_edtScreenSeason.setError("Season ?");
+                        m_edtScreenEpisode.setError("Episode ?");
+                        m_edtCounter.setError("Counter ?");
+                    } else{
+                        isValid = false;
+                        m_edtScreenSeason.setError("Season ?");
+                        m_edtCounter.setError(null);
+                    }
+                } else if(episode.isEmpty()) {
+                    isValid = false;
+                    m_edtScreenEpisode.setError("Episode ?");
+                    m_edtCounter.setError(null);
+                }
+            }
+        } else{
+            if(counter.isEmpty()){
+                isValid = false;
+                m_edtCounter.setError("Counter ?");
+                m_edtScreenSeason.setError(null);
+                m_edtScreenEpisode.setError(null);
+            }
+        }
+
+        if(isValid) {
+            Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_LONG).show();
+            this.finish();
+        }
+    }
+
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.add_tag_menu, menu);
@@ -204,5 +273,5 @@ public class AddTagActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

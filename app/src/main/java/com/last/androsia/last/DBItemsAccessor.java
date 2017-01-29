@@ -43,6 +43,7 @@ public class DBItemsAccessor extends AsyncTask<DynamoDBMapper, Void, List<DBItem
     @Override
     protected void onPostExecute(List<DBItem> dbItems) {
         if(dbItems == null) {
+            m_tagsActivity.notifyConnexionIssue();
             return;
         }
 

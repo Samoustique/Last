@@ -6,7 +6,23 @@
     android:layout_height="fill_parent"
     android:background="@color/white">
 
-    <include layout="@layout/gold_tag" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Tag"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:layout_marginBottom="-20dp"/>
+
+        <include layout="@layout/gold_tag"/>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -21,27 +37,31 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:hint="@string/edtTitle"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"/>
 
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp">
 
             <RadioButton
                 android:id="@+id/radBook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/radBook"
+                android:textColor="@color/black"
                 android:onClick="onRadioButtonClicked"
-                android:checked = "true"
-                android:layout_marginBottom="10dp"/>
+                android:checked = "true"/>
 
-            <RadioButton android:id="@+id/radScreen"
+            <RadioButton
+                android:id="@+id/radScreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/radScreen"
+                android:textColor="@color/black"
                 android:onClick="onRadioButtonClicked"/>
         </RadioGroup>
 
@@ -66,7 +86,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="or"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -77,6 +99,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="S"/>
                 <EditText
                     android:id="@+id/edtScreenSeason"
@@ -88,6 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="E"/>
                 <EditText
                     android:id="@+id/edtScreenEpisode"
