@@ -20,9 +20,10 @@ public class TagsActivity extends Activity {
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
     private DBConnect m_dbConnect = new DBConnect(this);
-    private DBItemsAccessor m_dbItems;
+    private DBItemsGetter m_dbItems;
     private ImageView m_btnGoToAddActivity;
     private TextView m_txtConnexionIssue;
+    private final int ADD_ACTIVITY = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class TagsActivity extends Activity {
     }
 
     public void notifyMapperReady(DynamoDBMapper mapper) {
-        m_dbItems = new DBItemsAccessor(this, mapper);
+        m_dbItems = new DBItemsGetter(this, mapper);
         m_dbItems.execute(mapper);
     }
 
@@ -92,10 +93,18 @@ public class TagsActivity extends Activity {
     }
 
     public void goToAddActivity(){
-        startActivity(new Intent(this, AddTagActivity.class));
+        startActivityForResult(new Intent(this, AddTagActivity.class), 1);
     }
 
     public void notifyConnexionIssue() {
         m_txtConnexionIssue.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_ACTIVITY && resultCode == RESULT_OK && data != null) {
+            DBItem item = (DBItem) data.getSerializableExtra("test");
+            int i = 0;
+        }
     }
 }

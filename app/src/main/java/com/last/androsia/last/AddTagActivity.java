@@ -228,16 +228,25 @@ public class AddTagActivity extends Activity {
     }
 
     public void save() {
+        Intent resultIntent = new Intent();
+        DBItem item = new DBItem();
+        item.setImageUrl("eeeeeeeeettttttrerererer");
+        resultIntent.putExtra("test", item);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+        /*
         //if(isFormValid()) {
             if(m_pictureFile != null){
                 AmazonS3Client s3 = m_dbConnect.connectToAmazonS3(getApplicationContext());
                 String url = uploadPicture(s3);
+
                 // delete directory Last/
                 //this.finish();
             } else{
                 Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
             }
         //}
+        */
     }
 
     private boolean isFormValid(){
@@ -300,9 +309,7 @@ public class AddTagActivity extends Activity {
     }
 
     private void transferObserverListener(TransferObserver transferObserver){
-
         transferObserver.setTransferListener(new TransferListener(){
-
             @Override
             public void onStateChanged(int id, TransferState state) {
                 Toast.makeText(getApplicationContext(), "onStateChanged " + state, Toast.LENGTH_LONG).show();

@@ -5,12 +5,14 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAutoGene
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 
+import java.io.Serializable;
+
 /**
  * Created by SPhilipps on 1/3/2017.
  */
 
 @DynamoDBTable(tableName="Item")
-public class DBItem {
+public class DBItem  implements Serializable {
     public String m_id;
     public String m_title;
     public String m_imageUrl;
