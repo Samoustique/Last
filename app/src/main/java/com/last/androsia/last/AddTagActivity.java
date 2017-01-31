@@ -2,6 +2,7 @@ package com.last.androsia.last;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,6 +22,26 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.amazonaws.auth.AWSSessionCredentials;
+import com.amazonaws.auth.AnonymousAWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
+import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
+import com.amazonaws.services.securitytoken.model.AssumeRoleWithWebIdentityRequest;
+import com.amazonaws.services.securitytoken.model.AssumeRoleWithWebIdentityResult;
+import com.amazonaws.services.securitytoken.model.Credentials;
+import com.amazonaws.services.securitytoken.model.GetSessionTokenRequest;
+import com.amazonaws.services.securitytoken.model.GetSessionTokenResult;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -43,6 +64,9 @@ public class AddTagActivity extends Activity {
     private EditText m_edtScreenSeason;
     private EditText m_edtScreenEpisode;
     private RadioButton m_radScreen;
+    private File m_pictureFile;
+
+    private DBConnect m_dbConnect = new DBConnect();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +162,10 @@ public class AddTagActivity extends Activity {
 
     private void takePicture() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "Last/" + timeStamp + ".jpg";
+        String imageFileName = timeStamp + ".jpg";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-        m_pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+        m_pictureImagePath = storageDir.getAbsolutePath() + "/Last/" + imageFileName;
         File file = new File(m_pictureImagePath);
         Uri outputFileUri = Uri.fromFile(file);
 
@@ -150,14 +174,14 @@ public class AddTagActivity extends Activity {
         startActivityForResult(cameraIntent, TAKE_PICTURE);
     }
 
-    public void onActivityResult(int requestcode,int resultcode,Intent intent) {
+    public void onActivityResult(int requestcode, int resultcode, Intent intent) {
         super.onActivityResult(requestcode, resultcode, intent);
         if (resultcode == RESULT_OK) {
             switch (requestcode) {
                 case TAKE_PICTURE:
-                    File imgFile = new File(m_pictureImagePath);
-                    if(imgFile.exists()){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    m_pictureFile = new File(m_pictureImagePath);
+                    if(m_pictureFile.exists()){
+                        Bitmap myBitmap = BitmapFactory.decodeFile(m_pictureFile.getAbsolutePath());
                         m_imagePreview.setImageBitmap(myBitmap);
                     }
                     break;
@@ -168,6 +192,7 @@ public class AddTagActivity extends Activity {
                     c.moveToFirst();
                     int columnIndex = c.getColumnIndex(filePath[0]);
                     String picturePath = c.getString(columnIndex);
+                    m_pictureFile = new File(picturePath);
                     c.close();
                     Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                     Drawable drawable = new BitmapDrawable(thumbnail);
@@ -203,6 +228,19 @@ public class AddTagActivity extends Activity {
     }
 
     public void save() {
+        //if(isFormValid()) {
+            if(m_pictureFile != null){
+                AmazonS3Client s3 = m_dbConnect.connectToAmazonS3(getApplicationContext());
+                String url = uploadPicture(s3);
+                // delete directory Last/
+                //this.finish();
+            } else{
+                Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
+            }
+        //}
+    }
+
+    private boolean isFormValid(){
         Boolean isValid = true;
         TagsListItem.Type type = TagsListItem.Type.BOOK;
 
@@ -245,33 +283,41 @@ public class AddTagActivity extends Activity {
             }
         }
 
-        if(isValid) {
-            Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_LONG).show();
-            this.finish();
-        }
+        return isValid;
     }
 
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_tag_menu, menu);
-        return true;
+    private String uploadPicture(AmazonS3Client s3){
+        TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
+
+        TransferObserver transferObserver = transferUtility.upload(
+                m_dbConnect.getBucketName(),
+                m_pictureFile.getName(),
+                m_pictureFile);
+
+        transferObserverListener(transferObserver);
+
+        return s3.getResourceUrl(m_dbConnect.getBucketName(), m_pictureFile.getName());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            case R.id.save_tag:
-                Toast.makeText(getApplicationContext(),
-                        "Let's pretend the tag is saved...",
-                        Toast.LENGTH_LONG).show();
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
+    private void transferObserverListener(TransferObserver transferObserver){
+
+        transferObserver.setTransferListener(new TransferListener(){
+
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+                Toast.makeText(getApplicationContext(), "onStateChanged " + state, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                int percentage = (int) (bytesCurrent/bytesTotal * 100);
+                Toast.makeText(getApplicationContext(), "onProgressChanged " + percentage, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                Toast.makeText(getApplicationContext(), "onError ", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }
