@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 
 @DynamoDBTable(tableName="Item")
-public class DBItem  implements Serializable {
+public class DBItem {
     public String m_id;
     public String m_title;
     public String m_imageUrl;

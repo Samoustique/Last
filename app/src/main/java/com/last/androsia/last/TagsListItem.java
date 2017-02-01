@@ -2,12 +2,13 @@ package com.last.androsia.last;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
+import java.io.Serializable;
+
 /**
  * Created by SPhilipps on 1/3/2017.
  */
 
-public class TagsListItem implements Comparable<TagsListItem> {
-
+public class TagsListItem implements Comparable<TagsListItem>, Serializable {
     public enum Type{
         NONE,
         SCREEN,
@@ -52,6 +53,19 @@ public class TagsListItem implements Comparable<TagsListItem> {
             return Type.NONE;
         }
         return types[m_dbItem.m_iType];
+    }
+    public void setType(Type type) {
+        switch (type){
+            case SCREEN:
+                this.m_dbItem.m_iType = 1;
+                break;
+            case BOOK:
+                this.m_dbItem.m_iType = 2;
+                break;
+            default:
+                this.m_dbItem.m_iType = 0;
+                break;
+        }
     }
 
     public void incrementCounter(){

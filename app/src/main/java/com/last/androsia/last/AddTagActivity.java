@@ -27,6 +27,7 @@ import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.auth.AnonymousAWSCredentials;
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
@@ -65,15 +66,20 @@ public class AddTagActivity extends Activity {
     private EditText m_edtScreenEpisode;
     private RadioButton m_radScreen;
     private File m_pictureFile;
-
-    private DBConnect m_dbConnect = new DBConnect();
+    private DBConnect m_dbConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.add_tag_activity);
+
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_add_tag);
+
+        Intent intent = this.getIntent();
+        //m_dbConnect = (DBConnect) intent.getSerializableExtra("com.last.androsia.last.dbconnect");
+        //m_dbConnect.setMapper((DBLastDynamoMapper) intent.getSerializableExtra("com.last.androsia.last.mapper"));
+        DBLastDynamoMapper m = (DBLastDynamoMapper) intent.getSerializableExtra("com.last.androsia.last.mapper");
 
         // 1. Title buttons
         m_btnSave = (ImageView) findViewById(R.id.btnSave);
@@ -174,6 +180,7 @@ public class AddTagActivity extends Activity {
         startActivityForResult(cameraIntent, TAKE_PICTURE);
     }
 
+    @Override
     public void onActivityResult(int requestcode, int resultcode, Intent intent) {
         super.onActivityResult(requestcode, resultcode, intent);
         if (resultcode == RESULT_OK) {
@@ -228,30 +235,74 @@ public class AddTagActivity extends Activity {
     }
 
     public void save() {
-        Intent resultIntent = new Intent();
-        DBItem item = new DBItem();
-        item.setImageUrl("eeeeeeeeettttttrerererer");
-        resultIntent.putExtra("test", item);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
-        /*
-        //if(isFormValid()) {
+        if(isFormValid()) {
             if(m_pictureFile != null){
-                AmazonS3Client s3 = m_dbConnect.connectToAmazonS3(getApplicationContext());
-                String url = uploadPicture(s3);
-
-                // delete directory Last/
-                //this.finish();
+                m_dbConnect.createNewItem(this);
             } else{
                 Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
             }
-        //}
-        */
+        }
+    }
+
+    private void deleteLastDirectory(){
+        if(m_pictureFile != null){
+            File lastDir = m_pictureFile.getParentFile();
+
+            if (lastDir.isDirectory())
+            {
+                String[] children = lastDir.list();
+                for (int i = 0; i < children.length; i++)
+                {
+                    new File(lastDir, children[i]).delete();
+                }
+                lastDir.delete();
+            }
+        }
+    }
+
+    private void finishReturningNewTag(String id, String url){
+        Intent resultIntent = new Intent();
+        DynamoDBMapper mapper = m_dbConnect.getMapper();
+
+        String title = m_edtTitle.getText().toString();
+        String season = m_edtScreenSeason.getText().toString();
+        String episode = m_edtScreenEpisode.getText().toString();
+        String counter = m_edtCounter.getText().toString();
+        TagsListItem.Type type = TagsListItem.Type.BOOK;
+        if(m_radScreen.isChecked()) {
+            type = TagsListItem.Type.SCREEN;
+        }
+
+        // Fill in DBItem
+        DBItem item = new DBItem();
+        item.setId(id);
+        item.setTitle(title);
+        item.setImageUrl(url);
+        if(counter.isEmpty()) {
+            double dSeason = Double.parseDouble(season);
+            double dEpisode = Double.parseDouble(episode);
+            dEpisode /= 100;
+
+            item.setCtrSeen(dSeason + dEpisode);
+        } else{
+            item.setCtrSeen(Double.parseDouble(counter));
+        }
+
+        // Encapsulate it in TagsListItem
+        TagsListItem tagsListItem = new TagsListItem(item, mapper);
+        tagsListItem.setType(type);
+
+        // Update this item in the DB
+        new DBUpdater(mapper).execute(item);
+
+        // Return it in the main activity
+        resultIntent.putExtra("item", tagsListItem);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     private boolean isFormValid(){
         Boolean isValid = true;
-        TagsListItem.Type type = TagsListItem.Type.BOOK;
 
         String title = m_edtTitle.getText().toString();
         String season = m_edtScreenSeason.getText().toString();
@@ -264,7 +315,6 @@ public class AddTagActivity extends Activity {
         }
 
         if(m_radScreen.isChecked()){
-            type = TagsListItem.Type.SCREEN;
             if(counter.isEmpty()){
                 if(season.isEmpty()) {
                     if(episode.isEmpty()) {
@@ -295,17 +345,17 @@ public class AddTagActivity extends Activity {
         return isValid;
     }
 
-    private String uploadPicture(AmazonS3Client s3){
+    private String uploadPicture(AmazonS3Client s3, String id){
         TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
 
         TransferObserver transferObserver = transferUtility.upload(
                 m_dbConnect.getBucketName(),
-                m_pictureFile.getName(),
+                id,
                 m_pictureFile);
 
         transferObserverListener(transferObserver);
 
-        return s3.getResourceUrl(m_dbConnect.getBucketName(), m_pictureFile.getName());
+        return s3.getResourceUrl(m_dbConnect.getBucketName(), id);
     }
 
     private void transferObserverListener(TransferObserver transferObserver){
@@ -326,5 +376,12 @@ public class AddTagActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "onError ", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void notifyItemCreated(String id) {
+        AmazonS3Client s3 = m_dbConnect.connectToAmazonS3(getApplicationContext());
+        String url = uploadPicture(s3, id);
+        deleteLastDirectory();
+        finishReturningNewTag(id, url);
     }
 }

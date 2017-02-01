@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagsActivity extends Activity {
+    private ArrayList<TagsListItem> m_tagsList;
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
     private DBConnect m_dbConnect = new DBConnect(this);
@@ -56,7 +57,8 @@ public class TagsActivity extends Activity {
     }
 
     public void notifyItemsReady(ArrayList<TagsListItem> tagsList) {
-        displayTags(tagsList);
+        m_tagsList = tagsList;
+        displayTags();
     }
 
     private boolean isNetworkAvailable() {
@@ -66,14 +68,15 @@ public class TagsActivity extends Activity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void displayTags(ArrayList<TagsListItem> myList){
+    private void displayTags(){
         List trioList;
-        if (myList.size() > 3) {
-            trioList = new ArrayList<>(myList.subList(0, 3));
+        ArrayList<TagsListItem> clonedList = new ArrayList<>(m_tagsList);
+        if (clonedList.size() > 3) {
+            trioList = new ArrayList<>(clonedList.subList(0, 3));
         } else {
-            trioList = new ArrayList<>(myList);
+            trioList = new ArrayList<>(clonedList);
         }
-        myList.removeAll(trioList);
+        clonedList.removeAll(trioList);
 
         m_trio = new LastestTrio(
                 this,
@@ -85,7 +88,7 @@ public class TagsActivity extends Activity {
         m_trio.setupClickListeners();
         m_trio.display();
 
-        CustomAdapter adapter = new CustomAdapter(this, myList);
+        CustomAdapter adapter = new CustomAdapter(this, clonedList);
         m_tagsGridView = (ExpandedGridView) findViewById(R.id.tagsGridView);
         m_tagsGridView.setAdapter(adapter);
         m_tagsGridView.setExpanded(true);
@@ -93,7 +96,10 @@ public class TagsActivity extends Activity {
     }
 
     public void goToAddActivity(){
-        startActivityForResult(new Intent(this, AddTagActivity.class), 1);
+        Intent intent = new Intent(this, AddTagActivity.class);
+        //intent.putExtra("com.last.androsia.last.dbconnect", m_dbConnect);
+        intent.putExtra("com.last.androsia.last.mapper", m_dbConnect.getMapper());
+        startActivityForResult(intent, ADD_ACTIVITY);
     }
 
     public void notifyConnexionIssue() {
@@ -103,8 +109,8 @@ public class TagsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_ACTIVITY && resultCode == RESULT_OK && data != null) {
-            DBItem item = (DBItem) data.getSerializableExtra("test");
-            int i = 0;
+            TagsListItem item = (TagsListItem) data.getSerializableExtra("item");
+            m_tagsList.add(0, item);
         }
     }
 }
