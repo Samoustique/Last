@@ -18,14 +18,16 @@ import java.io.Serializable;
  * Created by Samoustique on 13/01/2017.
  */
 
-public class DBConnect extends AsyncTask <Context, Void, DBLastDynamoMapper>  implements Serializable {
+public class DBConnect extends AsyncTask <Void, Void, DBLastDynamoMapper>  implements Serializable {
     private final String STR_BUCKET = "androsialast";
 
-    private transient DBLastDynamoMapper m_mapper;
-    private transient TagsActivity m_tagsActivity;
+    private DBLastDynamoMapper m_mapper;
+    private Context m_context;
+    private TagsActivity m_tagsActivity;
 
-    public DBConnect(TagsActivity tagsActivity) {
+    public DBConnect(TagsActivity tagsActivity, Context context) {
         m_tagsActivity = tagsActivity;
+        m_context = context;
     }
 
     public DBLastDynamoMapper getMapper() {
@@ -33,8 +35,8 @@ public class DBConnect extends AsyncTask <Context, Void, DBLastDynamoMapper>  im
     }
 
     @Override
-    protected DBLastDynamoMapper doInBackground(Context... params) {
-        AWSSessionCredentials arnCredentials = DBCredentialsProvider.get(params[0]).getCredentials();
+    protected DBLastDynamoMapper doInBackground(Void... params) {
+        AWSSessionCredentials arnCredentials = DBCredentialsProvider.get(m_context).getCredentials();
 
         AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(arnCredentials);
         dynamoDB.setRegion(Region.getRegion(Regions.US_WEST_2));
@@ -59,11 +61,7 @@ public class DBConnect extends AsyncTask <Context, Void, DBLastDynamoMapper>  im
         return STR_BUCKET;
     }
 
-    public void createNewItem(AddTagActivity addTagActivity){
-        new DBUpdater(m_mapper, addTagActivity).execute(new DBItem());
-    }
-
-    public void setMapper(DBLastDynamoMapper mapper) {
-        this.m_mapper = mapper;
+    public void createNewItem(DBItem item){
+        new DBUpdater(m_mapper, m_tagsActivity).execute(item);
     }
 }

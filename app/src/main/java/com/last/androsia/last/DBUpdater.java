@@ -12,17 +12,15 @@ import java.util.List;
  */
 public class DBUpdater extends AsyncTask<DBItem, Void, String> {
     private TagsActivity m_tagsActivity;
-    private AddTagActivity m_addTagActivity;
-    private ArrayList<TagsListItem> m_tagsList;
     private DynamoDBMapper m_mapper;
 
     public DBUpdater(DynamoDBMapper mapper){
         m_mapper = mapper;
     }
 
-    public DBUpdater(DynamoDBMapper mapper, AddTagActivity addTagActivity) {
+    public DBUpdater(DynamoDBMapper mapper, TagsActivity tagsActivity) {
         this(mapper);
-        m_addTagActivity = addTagActivity;
+        m_tagsActivity = tagsActivity;
     }
 
     @Override
@@ -40,9 +38,9 @@ public class DBUpdater extends AsyncTask<DBItem, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String id) {
-        if(m_addTagActivity != null) {
-            m_addTagActivity.notifyItemCreated(id);
+    protected void onPostExecute(String newItemId) {
+        if(m_tagsActivity != null) {
+            m_tagsActivity.notifyItemCreated(newItemId);
         }
     }
 }

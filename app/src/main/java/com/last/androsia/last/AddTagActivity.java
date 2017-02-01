@@ -237,30 +237,14 @@ public class AddTagActivity extends Activity {
     public void save() {
         if(isFormValid()) {
             if(m_pictureFile != null){
-                m_dbConnect.createNewItem(this);
+                finishReturningData();
             } else{
                 Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void deleteLastDirectory(){
-        if(m_pictureFile != null){
-            File lastDir = m_pictureFile.getParentFile();
-
-            if (lastDir.isDirectory())
-            {
-                String[] children = lastDir.list();
-                for (int i = 0; i < children.length; i++)
-                {
-                    new File(lastDir, children[i]).delete();
-                }
-                lastDir.delete();
-            }
-        }
-    }
-
-    private void finishReturningNewTag(String id, String url){
+    private void finishReturningData(){
         Intent resultIntent = new Intent();
         DynamoDBMapper mapper = m_dbConnect.getMapper();
 
@@ -273,30 +257,28 @@ public class AddTagActivity extends Activity {
             type = TagsListItem.Type.SCREEN;
         }
 
-        // Fill in DBItem
-        DBItem item = new DBItem();
-        item.setId(id);
-        item.setTitle(title);
-        item.setImageUrl(url);
+        Double dCounter;
         if(counter.isEmpty()) {
             double dSeason = Double.parseDouble(season);
             double dEpisode = Double.parseDouble(episode);
             dEpisode /= 100;
 
-            item.setCtrSeen(dSeason + dEpisode);
-        } else{
-            item.setCtrSeen(Double.parseDouble(counter));
+            dCounter = dSeason + dEpisode;
+        }else{
+            dCounter = Double.parseDouble(counter);
         }
+
+        DBItem item = new DBItem();
+        item.setTitle(title);
+        item.setCtrSeen(dCounter);
 
         // Encapsulate it in TagsListItem
         TagsListItem tagsListItem = new TagsListItem(item, mapper);
         tagsListItem.setType(type);
 
-        // Update this item in the DB
-        new DBUpdater(mapper).execute(item);
-
         // Return it in the main activity
-        resultIntent.putExtra("item", tagsListItem);
+        resultIntent.putExtra("item", tagsListItem.getDBItem());
+        resultIntent.putExtra("pictureFile", m_pictureFile);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
@@ -343,45 +325,5 @@ public class AddTagActivity extends Activity {
         }
 
         return isValid;
-    }
-
-    private String uploadPicture(AmazonS3Client s3, String id){
-        TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
-
-        TransferObserver transferObserver = transferUtility.upload(
-                m_dbConnect.getBucketName(),
-                id,
-                m_pictureFile);
-
-        transferObserverListener(transferObserver);
-
-        return s3.getResourceUrl(m_dbConnect.getBucketName(), id);
-    }
-
-    private void transferObserverListener(TransferObserver transferObserver){
-        transferObserver.setTransferListener(new TransferListener(){
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                Toast.makeText(getApplicationContext(), "onStateChanged " + state, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                int percentage = (int) (bytesCurrent/bytesTotal * 100);
-                Toast.makeText(getApplicationContext(), "onProgressChanged " + percentage, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                Toast.makeText(getApplicationContext(), "onError ", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public void notifyItemCreated(String id) {
-        AmazonS3Client s3 = m_dbConnect.connectToAmazonS3(getApplicationContext());
-        String url = uploadPicture(s3, id);
-        deleteLastDirectory();
-        finishReturningNewTag(id, url);
     }
 }

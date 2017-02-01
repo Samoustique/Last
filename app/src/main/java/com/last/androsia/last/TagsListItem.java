@@ -68,6 +68,10 @@ public class TagsListItem implements Comparable<TagsListItem>, Serializable {
         }
     }
 
+    public DBItem getDBItem() {
+        return m_dbItem;
+    }
+
     public void incrementCounter(){
         switch(getType()){
             case BOOK:
