@@ -100,6 +100,12 @@ public class TagsListItem implements Comparable<TagsListItem>, Serializable {
 
     @Override
     public int compareTo(TagsListItem other) {
+        if(other.m_dbItem.m_date == null){
+            return -1;
+        }
+        if(m_dbItem.m_date == null){
+            return 1;
+        }
         return other.m_dbItem.m_date.compareTo(m_dbItem.m_date);
     }
 }

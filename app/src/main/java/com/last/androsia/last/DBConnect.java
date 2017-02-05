@@ -18,10 +18,10 @@ import java.io.Serializable;
  * Created by Samoustique on 13/01/2017.
  */
 
-public class DBConnect extends AsyncTask <Void, Void, DBLastDynamoMapper>  implements Serializable {
+public class DBConnect extends AsyncTask <Void, Void, DynamoDBMapper>  implements Serializable {
     private final String STR_BUCKET = "androsialast";
 
-    private DBLastDynamoMapper m_mapper;
+    private DynamoDBMapper m_mapper;
     private Context m_context;
     private TagsActivity m_tagsActivity;
 
@@ -30,21 +30,21 @@ public class DBConnect extends AsyncTask <Void, Void, DBLastDynamoMapper>  imple
         m_context = context;
     }
 
-    public DBLastDynamoMapper getMapper() {
+    public DynamoDBMapper getMapper() {
         return m_mapper;
     }
 
     @Override
-    protected DBLastDynamoMapper doInBackground(Void... params) {
+    protected DynamoDBMapper doInBackground(Void... params) {
         AWSSessionCredentials arnCredentials = DBCredentialsProvider.get(m_context).getCredentials();
 
         AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(arnCredentials);
         dynamoDB.setRegion(Region.getRegion(Regions.US_WEST_2));
-        return new DBLastDynamoMapper(dynamoDB);
+        return new DynamoDBMapper(dynamoDB);
     }
 
     @Override
-    protected void onPostExecute(DBLastDynamoMapper mapper) {
+    protected void onPostExecute(DynamoDBMapper mapper) {
         m_mapper = mapper;
         m_tagsActivity.notifyMapperReady(mapper);
     }
@@ -59,9 +59,5 @@ public class DBConnect extends AsyncTask <Void, Void, DBLastDynamoMapper>  imple
 
     public String getBucketName(){
         return STR_BUCKET;
-    }
-
-    public void createNewItem(DBItem item){
-        new DBUpdater(m_mapper, m_tagsActivity).execute(item);
     }
 }

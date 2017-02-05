@@ -2,25 +2,23 @@ package com.last.androsia.last;
 
 import android.os.AsyncTask;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by SPhilipps on 1/20/2017.
  */
 public class DBUpdater extends AsyncTask<DBItem, Void, String> {
-    private TagsActivity m_tagsActivity;
+    private INotifiedActivity m_activity;
     private DynamoDBMapper m_mapper;
 
     public DBUpdater(DynamoDBMapper mapper){
         m_mapper = mapper;
     }
 
-    public DBUpdater(DynamoDBMapper mapper, TagsActivity tagsActivity) {
+    public DBUpdater(INotifiedActivity activity, DynamoDBMapper mapper) {
         this(mapper);
-        m_tagsActivity = tagsActivity;
+        m_activity = activity;
     }
 
     @Override
@@ -39,8 +37,8 @@ public class DBUpdater extends AsyncTask<DBItem, Void, String> {
 
     @Override
     protected void onPostExecute(String newItemId) {
-        if(m_tagsActivity != null) {
-            m_tagsActivity.notifyItemCreated(newItemId);
+        if(m_activity != null) {
+            m_activity.notifyIdGenerated(newItemId);
         }
     }
 }

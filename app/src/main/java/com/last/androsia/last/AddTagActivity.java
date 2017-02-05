@@ -2,7 +2,6 @@ package com.last.androsia.last;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,32 +22,19 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.amazonaws.auth.AWSSessionCredentials;
-import com.amazonaws.auth.AnonymousAWSCredentials;
-import com.amazonaws.auth.BasicSessionCredentials;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
-import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
-import com.amazonaws.services.securitytoken.model.AssumeRoleWithWebIdentityRequest;
-import com.amazonaws.services.securitytoken.model.AssumeRoleWithWebIdentityResult;
-import com.amazonaws.services.securitytoken.model.Credentials;
-import com.amazonaws.services.securitytoken.model.GetSessionTokenRequest;
-import com.amazonaws.services.securitytoken.model.GetSessionTokenResult;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddTagActivity extends Activity {
+public class AddTagActivity extends Activity implements INotifiedActivity {
     private final int TAKE_PICTURE = 1;
     private final int ACTIVITY_SELECT_IMAGE = 2;
     private final String DLG_PICTURE_TITLE = "Picture";
@@ -66,7 +52,8 @@ public class AddTagActivity extends Activity {
     private EditText m_edtScreenEpisode;
     private RadioButton m_radScreen;
     private File m_pictureFile;
-    private DBConnect m_dbConnect;
+    private GlobalUtilities m_global;
+    private int m_pictureMode = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +63,7 @@ public class AddTagActivity extends Activity {
 
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_add_tag);
 
-        Intent intent = this.getIntent();
-        //m_dbConnect = (DBConnect) intent.getSerializableExtra("com.last.androsia.last.dbconnect");
-        //m_dbConnect.setMapper((DBLastDynamoMapper) intent.getSerializableExtra("com.last.androsia.last.mapper"));
-        DBLastDynamoMapper m = (DBLastDynamoMapper) intent.getSerializableExtra("com.last.androsia.last.mapper");
+        m_global = (GlobalUtilities) getApplicationContext();
 
         // 1. Title buttons
         m_btnSave = (ImageView) findViewById(R.id.btnSave);
@@ -143,8 +127,7 @@ public class AddTagActivity extends Activity {
         m_radScreen = (RadioButton) this.findViewById(R.id.radScreen);
     }
 
-    public void displayImageChoice()
-    {
+    public void displayImageChoice(){
         final CharSequence[] options = {STR_TAKE_PICTURE, STR_GALLERY};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AddTagActivity.this);
@@ -152,12 +135,9 @@ public class AddTagActivity extends Activity {
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(options[which].equals(STR_TAKE_PICTURE))
-                {
+                if(options[which].equals(STR_TAKE_PICTURE)){
                     takePicture();
-                }
-                else if(options[which].equals(STR_GALLERY))
-                {
+                } else if(options[which].equals(STR_GALLERY)){
                     Intent intent=new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, ACTIVITY_SELECT_IMAGE);
                 }
@@ -171,7 +151,9 @@ public class AddTagActivity extends Activity {
         String imageFileName = timeStamp + ".jpg";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
-        m_pictureImagePath = storageDir.getAbsolutePath() + "/Last/" + imageFileName;
+        final File lastDir = new File(storageDir.getAbsolutePath() + "/Last/");
+        lastDir.mkdir();
+        m_pictureImagePath = lastDir.getPath() + imageFileName;
         File file = new File(m_pictureImagePath);
         Uri outputFileUri = Uri.fromFile(file);
 
@@ -184,6 +166,7 @@ public class AddTagActivity extends Activity {
     public void onActivityResult(int requestcode, int resultcode, Intent intent) {
         super.onActivityResult(requestcode, resultcode, intent);
         if (resultcode == RESULT_OK) {
+            m_pictureMode = requestcode;
             switch (requestcode) {
                 case TAKE_PICTURE:
                     m_pictureFile = new File(m_pictureImagePath);
@@ -220,13 +203,13 @@ public class AddTagActivity extends Activity {
             case R.id.radScreen:
                 if (checked){
                     m_layoutScreen.setVisibility(View.VISIBLE);
-                    break;
                 }
+                break;
             case R.id.radBook:
                 if (checked){
                     m_layoutScreen.setVisibility(View.INVISIBLE);
-                    break;
                 }
+                break;
         }
     }
 
@@ -237,16 +220,72 @@ public class AddTagActivity extends Activity {
     public void save() {
         if(isFormValid()) {
             if(m_pictureFile != null){
-                finishReturningData();
+                createNewItem();
             } else{
                 Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void finishReturningData(){
-        Intent resultIntent = new Intent();
-        DynamoDBMapper mapper = m_dbConnect.getMapper();
+    private void uploadPicture(String newItemId){
+        String bucketName = m_global.getBucketName();
+        TransferUtility transferUtility = new TransferUtility(m_global.getS3Client(), getApplicationContext());
+
+        TransferObserver transferObserver =
+                transferUtility.upload(bucketName, newItemId, m_pictureFile/*, CannedAccessControlList.PublicRead*/);
+
+        transferObserverListener(transferObserver, newItemId);
+    }
+
+    private void transferObserverListener(TransferObserver transferObserver, final String newItemId){
+        transferObserver.setTransferListener(new TransferListener(){
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+                if(state == TransferState.COMPLETED){
+                    Toast.makeText(getApplicationContext(), "COMPLETED", Toast.LENGTH_LONG).show();
+
+                    //deleteLastDirectory();
+                    UploadUrl(newItemId);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "onStateChanged " + state, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                if(bytesTotal == 0){
+                    Toast.makeText(getApplicationContext(), "onProgressChanged total = ZERO", Toast.LENGTH_LONG).show();
+                }  else {
+                    int percentage = (int) (bytesCurrent / bytesTotal * 100);
+                    Toast.makeText(getApplicationContext(), "onProgressChanged " + percentage, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                // TODO delete the DBItem created and delete folder Last
+                Toast.makeText(getApplicationContext(), "onError ", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void deleteLastDirectory(){
+        if(m_pictureFile != null && m_pictureMode == TAKE_PICTURE){
+            File lastDir = m_pictureFile.getParentFile();
+
+            if (lastDir.isDirectory()){
+                String[] children = lastDir.list();
+                for (int i = 0; i < children.length; i++){
+                    new File(lastDir, children[i]).delete();
+                }
+                lastDir.delete();
+            }
+        }
+    }
+
+    private void createNewItem(){
+        DynamoDBMapper mapper = m_global.getDynamoDBMapper();
 
         String title = m_edtTitle.getText().toString();
         String season = m_edtScreenSeason.getText().toString();
@@ -276,11 +315,7 @@ public class AddTagActivity extends Activity {
         TagsListItem tagsListItem = new TagsListItem(item, mapper);
         tagsListItem.setType(type);
 
-        // Return it in the main activity
-        resultIntent.putExtra("item", tagsListItem.getDBItem());
-        resultIntent.putExtra("pictureFile", m_pictureFile);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+        new DBUpdater(this, m_global.getDynamoDBMapper()).execute(tagsListItem.getDBItem());
     }
 
     private boolean isFormValid(){
@@ -325,5 +360,23 @@ public class AddTagActivity extends Activity {
         }
 
         return isValid;
+    }
+
+    private void UploadUrl(String newItemId) {
+        String url = m_global.getResourceUrl(newItemId);
+        new DBItemUrlSetter(this, m_global.getDynamoDBMapper(), url, newItemId).execute();
+    }
+
+    @Override
+    public void notifyIdGenerated(String newItemId) {
+        uploadPicture(newItemId);
+    }
+
+    @Override
+    public void notifyItemCreated(DBItem dbItem) {
+        TagsListItem tagItem = new TagsListItem(dbItem, m_global.getDynamoDBMapper());
+        m_global.addTagItemBeginning(tagItem);
+        // Return it in the main activity
+        finish();
     }
 }

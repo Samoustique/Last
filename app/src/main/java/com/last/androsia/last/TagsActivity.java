@@ -1,6 +1,7 @@
 package com.last.androsia.last;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -24,15 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagsActivity extends Activity {
-    private ArrayList<TagsListItem> m_tagsList;
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
-    private DBConnect m_dbConnect;
     private DBItemsGetter m_dbItems;
     private ImageView m_btnGoToAddActivity;
     private TextView m_txtConnexionIssue;
-    private File m_justAddedPictureFile;
-    private final int ADD_ACTIVITY = 1;
+    private GlobalUtilities m_global;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +38,8 @@ public class TagsActivity extends Activity {
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.tags_activity);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title);
-        Context context = getApplicationContext();
 
-        m_dbConnect = new DBConnect(this, context);
+        m_global = (GlobalUtilities) getApplicationContext();
 
         m_btnGoToAddActivity = (ImageView) findViewById(R.id.btnGoToAddActivity);
         m_btnGoToAddActivity.setOnClickListener(new View.OnClickListener() {
@@ -53,12 +50,9 @@ public class TagsActivity extends Activity {
 
         m_txtConnexionIssue = (TextView) findViewById(R.id.txtConnexionIssue);
 
-        if(isNetworkAvailable()) {
-            m_dbConnect.execute();
-            return;
+        if(!m_global.connectToDB(this)) {
+            Toast.makeText(m_global, "You should try again with internet on", Toast.LENGTH_LONG).show();
         }
-
-        Toast.makeText(context, "You should try again with internet on", Toast.LENGTH_LONG).show();
     }
 
     public void notifyMapperReady(DynamoDBMapper mapper) {
@@ -67,20 +61,13 @@ public class TagsActivity extends Activity {
     }
 
     public void notifyItemsReady(ArrayList<TagsListItem> tagsList) {
-        m_tagsList = tagsList;
-        displayTags();
+        m_global.setTagsList(tagsList);
+        displayTags(tagsList);
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private void displayTags(){
+    private void displayTags(ArrayList<TagsListItem> tagsList){
         List trioList;
-        ArrayList<TagsListItem> clonedList = new ArrayList<>(m_tagsList);
+        ArrayList<TagsListItem> clonedList = new ArrayList<>(tagsList);
         if (clonedList.size() > 3) {
             trioList = new ArrayList<>(clonedList.subList(0, 3));
         } else {
@@ -106,10 +93,7 @@ public class TagsActivity extends Activity {
     }
 
     public void goToAddActivity(){
-        Intent intent = new Intent(this, AddTagActivity.class);
-        //intent.putExtra("com.last.androsia.last.dbconnect", m_dbConnect);
-        intent.putExtra("com.last.androsia.last.mapper", m_dbConnect.getMapper());
-        startActivityForResult(intent, ADD_ACTIVITY);
+        startActivity(new Intent(this, AddTagActivity.class));
     }
 
     public void notifyConnexionIssue() {
@@ -118,95 +102,8 @@ public class TagsActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ADD_ACTIVITY && resultCode == RESULT_OK && data != null) {
-            DBItem item = (DBItem) data.getSerializableExtra("item");
-            m_justAddedPictureFile = (File) data.getSerializableExtra("pictureFile");
-            m_dbConnect.createNewItem(item);
-        }
-    }
-
-    public void notifyItemCreated(String newItemId) {
-        AmazonS3Client s3 = m_dbConnect.connectToAmazonS3(getApplicationContext());
-        String url = uploadPicture(s3, newItemId);
-        deleteLastDirectory();
-        finishReturningNewTag(newItemId, url);
-
-
-
-        // Fill in DBItem
-        DBItem item = new DBItem();
-        item.setId(id);
-        item.setTitle(title);
-        item.setImageUrl(url);
-        if(counter.isEmpty()) {
-            double dSeason = Double.parseDouble(season);
-            double dEpisode = Double.parseDouble(episode);
-            dEpisode /= 100;
-
-            item.setCtrSeen(dSeason + dEpisode);
-        } else{
-            item.setCtrSeen(Double.parseDouble(counter));
-        }
-
-        // Encapsulate it in TagsListItem
-        TagsListItem tagsListItem = new TagsListItem(item, mapper);
-        tagsListItem.setType(type);
-
-        // Update this item in the DB
-        new DBUpdater(mapper).execute(item);
-
-
-
-
-        m_tagsList.add(0, item);
-    }
-
-    private String uploadPicture(AmazonS3Client s3, String newItemId){
-        TransferUtility transferUtility = new TransferUtility(s3, getApplicationContext());
-
-        TransferObserver transferObserver = transferUtility.upload(
-                m_dbConnect.getBucketName(),
-                newItemId,
-                m_justAddedPictureFile);
-
-        transferObserverListener(transferObserver);
-
-        return s3.getResourceUrl(m_dbConnect.getBucketName(), newItemId);
-    }
-
-    private void transferObserverListener(TransferObserver transferObserver){
-        transferObserver.setTransferListener(new TransferListener(){
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                Toast.makeText(getApplicationContext(), "onStateChanged " + state, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                int percentage = (int) (bytesCurrent/bytesTotal * 100);
-                Toast.makeText(getApplicationContext(), "onProgressChanged " + percentage, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                Toast.makeText(getApplicationContext(), "onError ", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void deleteLastDirectory(){
-        if(m_justAddedPictureFile != null){
-            File lastDir = m_justAddedPictureFile.getParentFile();
-
-            if (lastDir.isDirectory())
-            {
-                String[] children = lastDir.list();
-                for (int i = 0; i < children.length; i++)
-                {
-                    new File(lastDir, children[i]).delete();
-                }
-                lastDir.delete();
-            }
+        if (resultCode == RESULT_OK) {
+            displayTags(m_global.getTagsList());
         }
     }
 }
