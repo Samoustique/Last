@@ -6,4 +6,5 @@ package com.last.androsia.last;
 public interface INotifiedActivity {
     void notifyIdGenerated(String newItemId);
     void notifyItemCreated(DBItem dbItem);
+    void notifyPictureUploaded(String newItemId);
 }

@@ -228,46 +228,12 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
     }
 
     private void uploadPicture(String newItemId){
-        String bucketName = m_global.getBucketName();
-        TransferUtility transferUtility = new TransferUtility(m_global.getS3Client(), getApplicationContext());
-
-        TransferObserver transferObserver =
-                transferUtility.upload(bucketName, newItemId, m_pictureFile/*, CannedAccessControlList.PublicRead*/);
-
-        transferObserverListener(transferObserver, newItemId);
-    }
-
-    private void transferObserverListener(TransferObserver transferObserver, final String newItemId){
-        transferObserver.setTransferListener(new TransferListener(){
-            @Override
-            public void onStateChanged(int id, TransferState state) {
-                if(state == TransferState.COMPLETED){
-                    Toast.makeText(getApplicationContext(), "COMPLETED", Toast.LENGTH_LONG).show();
-
-                    //deleteLastDirectory();
-                    UploadUrl(newItemId);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "onStateChanged " + state, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                if(bytesTotal == 0){
-                    Toast.makeText(getApplicationContext(), "onProgressChanged total = ZERO", Toast.LENGTH_LONG).show();
-                }  else {
-                    int percentage = (int) (bytesCurrent / bytesTotal * 100);
-                    Toast.makeText(getApplicationContext(), "onProgressChanged " + percentage, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onError(int id, Exception ex) {
-                // TODO delete the DBItem created and delete folder Last
-                Toast.makeText(getApplicationContext(), "onError ", Toast.LENGTH_LONG).show();
-            }
-        });
+        new DBPictureUploader(
+                this,
+                m_global.getS3Client(),
+                m_global.getBucketName(),
+                getApplicationContext(),
+                m_pictureFile).execute(newItemId);
     }
 
     private void deleteLastDirectory(){
@@ -362,7 +328,9 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
         return isValid;
     }
 
-    private void UploadUrl(String newItemId) {
+    @Override
+    public void notifyPictureUploaded(String newItemId) {
+        //deleteLastDirectory();
         String url = m_global.getResourceUrl(newItemId);
         new DBItemUrlSetter(this, m_global.getDynamoDBMapper(), url, newItemId).execute();
     }

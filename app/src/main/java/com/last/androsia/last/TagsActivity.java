@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagsActivity extends Activity {
+    private final int ADD_ACTIVITY = 1;
+
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
     private DBItemsGetter m_dbItems;
@@ -93,7 +95,7 @@ public class TagsActivity extends Activity {
     }
 
     public void goToAddActivity(){
-        startActivity(new Intent(this, AddTagActivity.class));
+        startActivityForResult(new Intent(this, AddTagActivity.class), ADD_ACTIVITY);
     }
 
     public void notifyConnexionIssue() {
@@ -102,8 +104,6 @@ public class TagsActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            displayTags(m_global.getTagsList());
-        }
+        displayTags(m_global.getTagsList());
     }
 }
