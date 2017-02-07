@@ -23,12 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -330,7 +324,7 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
 
     @Override
     public void notifyPictureUploaded(String newItemId) {
-        //deleteLastDirectory();
+        deleteLastDirectory();
         String url = m_global.getResourceUrl(newItemId);
         new DBItemUrlSetter(this, m_global.getDynamoDBMapper(), url, newItemId).execute();
     }
