@@ -10,6 +10,7 @@ import com.amazonaws.regions.Regions;
  */
 
 public class DBCredentialsProvider {
+    public static final String STR_BUCKET = "androsialast";
 
     private static CognitoCachingCredentialsProvider INSTANCE;
 
@@ -17,7 +18,7 @@ public class DBCredentialsProvider {
         if(INSTANCE == null){
             INSTANCE = new CognitoCachingCredentialsProvider(
                     context,
-                    XXXX,
+                    xxxxx,
                     Regions.US_WEST_2
             );
         }

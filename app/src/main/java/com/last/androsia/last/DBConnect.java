@@ -19,8 +19,6 @@ import java.io.Serializable;
  */
 
 public class DBConnect extends AsyncTask <Void, Void, DynamoDBMapper>  implements Serializable {
-    private final String STR_BUCKET = "androsialast";
-
     private DynamoDBMapper m_mapper;
     private Context m_context;
     private TagsActivity m_tagsActivity;
@@ -53,11 +51,11 @@ public class DBConnect extends AsyncTask <Void, Void, DynamoDBMapper>  implement
         CognitoCachingCredentialsProvider credentialsProvider = DBCredentialsProvider.get(context);
 
         AmazonS3Client s3 = new AmazonS3Client(credentialsProvider);
-        s3.setRegion(Region.getRegion(Regions.US_EAST_1));
+        s3.setRegion(Region.getRegion(Regions.US_WEST_2));
         return s3;
     }
 
     public String getBucketName(){
-        return STR_BUCKET;
+        return DBCredentialsProvider.STR_BUCKET;
     }
 }
