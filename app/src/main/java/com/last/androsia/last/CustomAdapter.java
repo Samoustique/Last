@@ -55,7 +55,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder mViewHolder = null;
+        MyViewHolder mViewHolder;
         boolean doCenter = false;
 
         if (convertView == null) {
@@ -74,7 +74,7 @@ public class CustomAdapter extends BaseAdapter {
         } else {
             mViewHolder = (MyViewHolder) convertView.getTag();
         }
-        TagsListItem tagsListItem = (TagsListItem) getItem(position);
+        TagsListItem tagsListItem = getItem(position);
 
         m_imageLoader.loadImage(tagsListItem.getImageUrl(), m_context, mViewHolder.m_imageView);
         SpannableString counter = CounterHelper.formatCounter(tagsListItem);

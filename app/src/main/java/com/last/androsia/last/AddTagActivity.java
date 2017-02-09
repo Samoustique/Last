@@ -147,7 +147,7 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
                 Environment.DIRECTORY_PICTURES);
         final File lastDir = new File(storageDir.getAbsolutePath() + "/Last/");
         lastDir.mkdir();
-        m_pictureImagePath = lastDir.getPath() + imageFileName;
+        m_pictureImagePath = lastDir.getPath() + "/" + imageFileName;
         File file = new File(m_pictureImagePath);
         Uri outputFileUri = Uri.fromFile(file);
 
@@ -165,7 +165,8 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
                 case TAKE_PICTURE:
                     m_pictureFile = new File(m_pictureImagePath);
                     if(m_pictureFile.exists()){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(m_pictureFile.getAbsolutePath());
+                        String picturePath = m_pictureFile.getAbsolutePath();
+                        Bitmap myBitmap = BitmapFactory.decodeFile(picturePath);
                         m_imagePreview.setImageBitmap(myBitmap);
                     }
                     break;

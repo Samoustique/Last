@@ -12,8 +12,8 @@ import com.squareup.picasso.Picasso;
 public class ImageLoader {
     public void loadImage(String url, Context context, final ImageView imageView) {
         Picasso.with(context).load(url)
+                .noPlaceholder()
                 .error(R.drawable.logo)
-                .placeholder(android.R.drawable.stat_notify_error)
                 .into(imageView);
     }
 }

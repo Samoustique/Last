@@ -116,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
+                android:listSelector="@android:color/transparent"
                 android:gravity="center"/>
         </LinearLayout>
     </ScrollView>
