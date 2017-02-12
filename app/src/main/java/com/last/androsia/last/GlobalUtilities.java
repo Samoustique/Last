@@ -2,12 +2,7 @@ package com.last.androsia.last;
 
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.services.s3.AmazonS3Client;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
@@ -16,52 +11,26 @@ import java.util.ArrayList;
  */
 
 public class GlobalUtilities extends Application {
-    private DBConnect m_dbConnect;
-    private AmazonS3Client m_s3Client;
-    private ArrayList<TagsListItem> m_tagsList;
+    private ArrayList<TagItem> m_tagsList;
+    private SQLiteDatabase m_db;
 
-    public Boolean connectToDB(TagsActivity activity){
-        Boolean isConnectionOK = false;
-        if(isNetworkAvailable()) {
-            Context context = getApplicationContext();
-            m_dbConnect = new DBConnect(activity, context);
-            m_dbConnect.execute();
-            m_s3Client = m_dbConnect.connectToAmazonS3(context);
-            isConnectionOK = true;
-        }
-        return isConnectionOK;
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public AmazonS3Client getS3Client() { return m_s3Client; }
-
-    public String getBucketName() {
-        return m_dbConnect.getBucketName();
-    }
-
-    public DynamoDBMapper getDynamoDBMapper() {
-        return m_dbConnect.getMapper();
-    }
-
-    public void setTagsList(ArrayList<TagsListItem> tagsList) {
+    public void setTagsList(ArrayList<TagItem> tagsList) {
         m_tagsList = tagsList;
     }
 
-    public ArrayList<TagsListItem> getTagsList() {
+    public ArrayList<TagItem> getTagsList() {
         return m_tagsList;
     }
 
-    public void addTagItemBeginning(TagsListItem tagItem) {
+    public void addTagItemBeginning(TagItem tagItem) {
         m_tagsList.add(0, tagItem);
     }
 
-    public String getResourceUrl(String newItemId) {
-        return m_s3Client.getResourceUrl(m_dbConnect.getBucketName(), newItemId);
+    public SQLiteDatabase getDB(){
+        if(m_db == null){
+            DBManagerHelper dbManager = new DBManagerHelper(getBaseContext());
+            m_db = dbManager.getWritableDatabase();
+        }
+        return m_db;
     }
 }

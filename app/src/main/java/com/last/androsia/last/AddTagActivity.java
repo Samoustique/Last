@@ -2,13 +2,13 @@ package com.last.androsia.last;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,13 +22,12 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddTagActivity extends Activity implements INotifiedActivity {
+public class AddTagActivity extends Activity {
     private final int TAKE_PICTURE = 1;
     private final int ACTIVITY_SELECT_IMAGE = 2;
     private final String DLG_PICTURE_TITLE = "Picture";
@@ -46,6 +45,7 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
     private EditText m_edtScreenEpisode;
     private RadioButton m_radScreen;
     private File m_pictureFile;
+    private Bitmap m_img;
     private GlobalUtilities m_global;
     private int m_pictureMode = -1;
 
@@ -165,8 +165,8 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
                 case TAKE_PICTURE:
                     m_pictureFile = new File(m_pictureImagePath);
                     if(m_pictureFile.exists()){
-                        Bitmap myBitmap = BitmapFactory.decodeFile(m_pictureFile.getAbsolutePath());
-                        m_imagePreview.setImageBitmap(myBitmap);
+                        m_img = BitmapFactory.decodeFile(m_pictureFile.getAbsolutePath());
+                        m_imagePreview.setImageBitmap(m_img);
                     }
                     break;
                 case ACTIVITY_SELECT_IMAGE:
@@ -178,9 +178,9 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
                     String picturePath = c.getString(columnIndex);
                     m_pictureFile = new File(picturePath);
                     c.close();
-                    Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                    Drawable drawable = new BitmapDrawable(thumbnail);
-                    m_imagePreview.setImageDrawable(drawable);
+                    m_img = (BitmapFactory.decodeFile(picturePath));
+                    /*Drawable drawable = new BitmapDrawable(thumbnail);
+                    m_imagePreview.setImageDrawable(drawable);*/
                     break;
             }
         }
@@ -221,15 +221,6 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
         }
     }
 
-    private void uploadPicture(String newItemId){
-        new DBPictureUploader(
-                this,
-                m_global.getS3Client(),
-                m_global.getBucketName(),
-                getApplicationContext(),
-                m_pictureFile).execute(newItemId);
-    }
-
     private void deleteLastDirectory(){
         if(m_pictureFile != null && m_pictureMode == TAKE_PICTURE){
             File lastDir = m_pictureFile.getParentFile();
@@ -245,15 +236,13 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
     }
 
     private void createNewItem(){
-        DynamoDBMapper mapper = m_global.getDynamoDBMapper();
-
         String title = m_edtTitle.getText().toString();
         String season = m_edtScreenSeason.getText().toString();
         String episode = m_edtScreenEpisode.getText().toString();
         String counter = m_edtCounter.getText().toString();
-        TagsListItem.Type type = TagsListItem.Type.BOOK;
+        TagItem.Type type = TagItem.Type.BOOK;
         if(m_radScreen.isChecked()) {
-            type = TagsListItem.Type.SCREEN;
+            type = TagItem.Type.SCREEN;
         }
 
         Double dCounter;
@@ -267,15 +256,35 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
             dCounter = Double.parseDouble(counter);
         }
 
-        DBItem item = new DBItem();
-        item.setTitle(title);
-        item.setCtrSeen(dCounter);
+        TagItem tagItem = new TagItem();
+        tagItem.setTitle(title);
+        tagItem.setDate((new Date()).getTime());
+        tagItem.setCtrSeen(dCounter);
+        tagItem.setType(type);
 
-        // Encapsulate it in TagsListItem
-        TagsListItem tagsListItem = new TagsListItem(item, mapper);
-        tagsListItem.setType(type);
+        //tagItem.setImageUrl(m_pictureFile.getPath());
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        m_img.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        tagItem.setImage(stream.toByteArray());
 
-        new DBUpdater(this, m_global.getDynamoDBMapper()).execute(tagsListItem.getDBItem());
+        saveTagItem(tagItem);
+        m_global.addTagItemBeginning(tagItem);
+        // Return it in the main activity
+        finish();
+    }
+
+    private void saveTagItem(TagItem tagItem) {
+        SQLiteDatabase db = m_global.getDB();
+        ContentValues values = new ContentValues();
+        values.put(DBContract.TagItem.COLUMN_TITLE, tagItem.getTitle());
+        values.put(DBContract.TagItem.COLUMN_IMG, tagItem.getImage());
+        values.put(DBContract.TagItem.COLUMN_CTR_SEEN, tagItem.getCtrSeen());
+        values.put(DBContract.TagItem.COLUMN_CTR_OWNED, tagItem.getCtrOwned());
+        values.put(DBContract.TagItem.COLUMN_TYPE, tagItem.getIType());
+        values.put(DBContract.TagItem.COLUMN_DATE, tagItem.getDate());
+        //values.put(DBContract.TagItem.COLUMN_IMG_URL, m_pictureFile.getPath());
+
+        long newRowId = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
     }
 
     private boolean isFormValid(){
@@ -320,25 +329,5 @@ public class AddTagActivity extends Activity implements INotifiedActivity {
         }
 
         return isValid;
-    }
-
-    @Override
-    public void notifyPictureUploaded(String newItemId) {
-        deleteLastDirectory();
-        String url = m_global.getResourceUrl(newItemId);
-        new DBItemUrlSetter(this, m_global.getDynamoDBMapper(), url, newItemId).execute();
-    }
-
-    @Override
-    public void notifyIdGenerated(String newItemId) {
-        uploadPicture(newItemId);
-    }
-
-    @Override
-    public void notifyItemCreated(DBItem dbItem) {
-        TagsListItem tagItem = new TagsListItem(dbItem, m_global.getDynamoDBMapper());
-        m_global.addTagItemBeginning(tagItem);
-        // Return it in the main activity
-        finish();
     }
 }

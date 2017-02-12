@@ -17,8 +17,6 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
-
 /**
  * Instrumentation test, which will execute on an Android device.
  *
@@ -41,7 +39,7 @@ public class ExampleInstrumentedTest {
         AmazonDynamoDBClient dynamoDB = new AmazonDynamoDBClient(arnCredentials);
         dynamoDB.setRegion(Region.getRegion(Regions.US_WEST_2));
         DynamoDBMapper mapper = new DynamoDBMapper(dynamoDB);
-        TagsListItem putItem = new TagsListItem();
+        TagItem putItem = new TagItem();
         putItem.setCtrOwned(10);
         putItem.setCtrSeen(20);
         putItem.setId("5");
@@ -50,7 +48,7 @@ public class ExampleInstrumentedTest {
         putItem.setType(2);
         //mapper.save(putItem);
 
-        TagsListItem item = mapper.load(TagsListItem.class, "0");
+        TagItem item = mapper.load(TagItem.class, "0");
         //int i = 2;
     }
 }

@@ -1,9 +1,9 @@
 package com.last.androsia.last;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.SpannableString;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 public class TagView {
     private ImgCounterView m_imgCounterView;
-    private TagsListItem m_item;
+    private TagItem m_item;
     private Context m_context;
     private ImageLoader m_imageLoader;
 
-    public TagView(ImgCounterView imgCounterView, TagsListItem item, Context context){
+    public TagView(ImgCounterView imgCounterView, TagItem item, Context context){
         m_imgCounterView = imgCounterView;
         m_item = item;
         m_context = context;
@@ -39,7 +39,8 @@ public class TagView {
 
     public void display(boolean doCenter) {
         // Img
-        m_imageLoader.loadImage(m_item.getImageUrl(), m_context, m_imgCounterView.getImg());
+        m_imgCounterView.getImg().setImageBitmap(BitmapUtility.getImage(m_item.getImage()));
+
         // Txt
         SpannableString counter = CounterHelper.formatCounter(m_item);
         m_imgCounterView.getTxt().setText(counter, TextView.BufferType.SPANNABLE);

@@ -1,26 +1,15 @@
 package com.last.androsia.last;
 
 import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.*;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.services.s3.AmazonS3Client;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +18,66 @@ public class TagsActivity extends Activity {
 
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
-    private DBItemsGetter m_dbItems;
     private ImageView m_btnGoToAddActivity;
-    private TextView m_txtConnexionIssue;
     private GlobalUtilities m_global;
+
+    TagsActivity(){}
+
+    private void deleteDB(SQLiteDatabase db){
+        DBManagerHelper dbManager = new DBManagerHelper(getBaseContext());
+        dbManager.onUpgrade(db, 0, 0);
+    }
+
+    private ArrayList<TagItem> retrieveTagsFromDB(){
+        SQLiteDatabase db = m_global.getDB();
+
+        //deleteDB(db);
+
+        String sortOrder = DBContract.TagItem.COLUMN_DATE + " DESC";
+
+        String[] selectionArgs = new String[]{
+                DBContract.TagItem.COLUMN_TITLE,
+                DBContract.TagItem.COLUMN_IMG,
+                DBContract.TagItem.COLUMN_CTR_SEEN,
+                DBContract.TagItem.COLUMN_CTR_OWNED,
+                DBContract.TagItem.COLUMN_TYPE,
+                DBContract.TagItem.COLUMN_DATE
+        };
+
+        Cursor cursor = db.query(
+                DBContract.TagItem.TABLE_NAME,            // The table to query
+                null,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                sortOrder                                 // The sort order
+        );
+
+        ArrayList<TagItem> items = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            String title = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_TITLE));
+            double date = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_DATE));
+            //String url = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_IMG_URL));
+            byte[] img = cursor.getBlob(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_IMG));
+            double ctrOwned = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_CTR_OWNED));
+            double ctrSeen = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_CTR_SEEN));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_TYPE));
+
+            TagItem item = new TagItem();
+            item.setTitle(title);
+            item.setDate(date);
+            //item.setImageUrl(url);
+            item.setImage(img);
+            item.setCtrOwned(ctrOwned);
+            item.setCtrSeen(ctrSeen);
+            item.setIType(type);
+            items.add(item);
+        }
+        cursor.close();
+
+        return items;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,26 +95,13 @@ public class TagsActivity extends Activity {
             }
         });
 
-        m_txtConnexionIssue = (TextView) findViewById(R.id.txtConnexionIssue);
-
-        if(!m_global.connectToDB(this)) {
-            Toast.makeText(m_global, "You should try again with internet on", Toast.LENGTH_LONG).show();
-        }
+        m_global.setTagsList(retrieveTagsFromDB());
+        displayTags();
     }
 
-    public void notifyMapperReady(DynamoDBMapper mapper) {
-        m_dbItems = new DBItemsGetter(this, mapper);
-        m_dbItems.execute(mapper);
-    }
-
-    public void notifyItemsReady(ArrayList<TagsListItem> tagsList) {
-        m_global.setTagsList(tagsList);
-        displayTags(tagsList);
-    }
-
-    private void displayTags(ArrayList<TagsListItem> tagsList){
+    private void displayTags(){
         List trioList;
-        ArrayList<TagsListItem> clonedList = new ArrayList<>(tagsList);
+        ArrayList<TagItem> clonedList = new ArrayList<>(m_global.getTagsList());
         if (clonedList.size() > 3) {
             trioList = new ArrayList<>(clonedList.subList(0, 3));
         } else {
@@ -98,12 +130,8 @@ public class TagsActivity extends Activity {
         startActivityForResult(new Intent(this, AddTagActivity.class), ADD_ACTIVITY);
     }
 
-    public void notifyConnexionIssue() {
-        m_txtConnexionIssue.setVisibility(View.VISIBLE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        displayTags(m_global.getTagsList());
+        displayTags();
     }
 }

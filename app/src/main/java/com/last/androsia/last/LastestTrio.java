@@ -1,11 +1,6 @@
 package com.last.androsia.last;
 
 import android.content.Context;
-import android.text.SpannableString;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +13,7 @@ public class LastestTrio {
     private List<TagView> m_tagViews;
 
     public LastestTrio(Context context,
-                       List<TagsListItem> tags,
+                       List<TagItem> tags,
                        ImgCounterView... imgCounterViews) {
         m_tagViews = new ArrayList<>();
         for(int i = 0 ; i < tags.size() ; ++i){

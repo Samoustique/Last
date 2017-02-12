@@ -16,7 +16,7 @@ import java.util.Locale;
  */
 
 public class CounterHelper {
-    static public SpannableString formatCounter(TagsListItem item){
+    static public SpannableString formatCounter(TagItem item){
         switch(item.getType()){
             case BOOK:
                 return new SpannableString(String.valueOf((int) item.getCtrSeen()));
@@ -58,7 +58,7 @@ public class CounterHelper {
     txtView.setLayoutParams(lp);
     }
 
-    static private SpannableString formatScreenCounter(TagsListItem item, float fontSize){
+    static private SpannableString formatScreenCounter(TagItem item, float fontSize){
         int real = (int) item.getCtrSeen();
         int decimal = (int) (item.getCtrSeen() * 100 - real * 100);
 
