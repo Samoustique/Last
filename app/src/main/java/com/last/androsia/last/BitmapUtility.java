@@ -10,14 +10,17 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class BitmapUtility {
-    // convert from bitmap to byte array
-    public static byte[] getBytes(Bitmap bitmap) {
+
+    public static byte[] getBytes(Bitmap bitmap, int compression) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, compression, stream);
         return stream.toByteArray();
     }
 
-    // convert from byte array to bitmap
+    public static byte[] getBytes(Bitmap bitmap) {
+        return getBytes(bitmap, 50);
+    }
+
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }

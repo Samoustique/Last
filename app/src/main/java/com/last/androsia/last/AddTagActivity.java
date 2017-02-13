@@ -37,15 +37,15 @@ public class AddTagActivity extends Activity {
     private ImageView m_imagePreview;
     private ImageView m_btnSave;
     private ImageView m_btnBack;
-    private String m_pictureImagePath;
     private LinearLayout m_layoutScreen;
     private EditText m_edtTitle;
     private EditText m_edtCounter;
     private EditText m_edtScreenSeason;
     private EditText m_edtScreenEpisode;
     private RadioButton m_radScreen;
-    private File m_pictureFile;
+    private File m_takenPictureFile;
     private Bitmap m_img;
+    private byte[] m_imgBytes;
     private GlobalUtilities m_global;
     private int m_pictureMode = -1;
 
@@ -119,6 +119,9 @@ public class AddTagActivity extends Activity {
 
         // 6. Form : radio
         m_radScreen = (RadioButton) this.findViewById(R.id.radScreen);
+
+        // 7. Create "Last" folder
+        FilesUtility.createLastFolder();
     }
 
     public void displayImageChoice(){
@@ -132,7 +135,7 @@ public class AddTagActivity extends Activity {
                 if(options[which].equals(STR_TAKE_PICTURE)){
                     takePicture();
                 } else if(options[which].equals(STR_GALLERY)){
-                    Intent intent=new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, ACTIVITY_SELECT_IMAGE);
                 }
             }
@@ -141,15 +144,8 @@ public class AddTagActivity extends Activity {
     }
 
     private void takePicture() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = timeStamp + ".jpg";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        final File lastDir = new File(storageDir.getAbsolutePath() + "/Last/");
-        lastDir.mkdir();
-        m_pictureImagePath = lastDir.getPath() + imageFileName;
-        File file = new File(m_pictureImagePath);
-        Uri outputFileUri = Uri.fromFile(file);
+        m_takenPictureFile = FilesUtility.createNewImageInLast();
+        Uri outputFileUri = Uri.fromFile(m_takenPictureFile);
 
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
@@ -163,10 +159,15 @@ public class AddTagActivity extends Activity {
             m_pictureMode = requestcode;
             switch (requestcode) {
                 case TAKE_PICTURE:
-                    m_pictureFile = new File(m_pictureImagePath);
-                    if(m_pictureFile.exists()){
-                        m_img = BitmapFactory.decodeFile(m_pictureFile.getAbsolutePath());
+                    if(m_takenPictureFile.exists()){
+                        m_img = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(m_takenPictureFile.getAbsolutePath()),100, 100, true);
+                        //m_img = BitmapFactory.decodeFile(m_takenPictureFile.getAbsolutePath());
+                        // compress img
+                        m_imgBytes = BitmapUtility.getBytes(m_img);
+                        m_img = BitmapUtility.getImage(m_imgBytes);
                         m_imagePreview.setImageBitmap(m_img);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
                     }
                     break;
                 case ACTIVITY_SELECT_IMAGE:
@@ -176,11 +177,18 @@ public class AddTagActivity extends Activity {
                     c.moveToFirst();
                     int columnIndex = c.getColumnIndex(filePath[0]);
                     String picturePath = c.getString(columnIndex);
-                    m_pictureFile = new File(picturePath);
+                    File pictureFile = new File(picturePath);
                     c.close();
-                    m_img = (BitmapFactory.decodeFile(picturePath));
-                    /*Drawable drawable = new BitmapDrawable(thumbnail);
-                    m_imagePreview.setImageDrawable(drawable);*/
+                    try {
+                        FilesUtility.copyToLast(pictureFile);
+                        m_img = (BitmapFactory.decodeFile(picturePath));
+                        // compress img
+                        m_imgBytes = BitmapUtility.getBytes(m_img);
+                        m_img = BitmapUtility.getImage(m_imgBytes);
+                        m_imagePreview.setImageBitmap(m_img);
+                    } catch (Exception e){
+                        Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
+                    }
                     break;
             }
         }
@@ -213,7 +221,7 @@ public class AddTagActivity extends Activity {
 
     public void save() {
         if(isFormValid()) {
-            if(m_pictureFile != null){
+            if(m_img != null){
                 createNewItem();
             } else{
                 Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
@@ -222,8 +230,8 @@ public class AddTagActivity extends Activity {
     }
 
     private void deleteLastDirectory(){
-        if(m_pictureFile != null && m_pictureMode == TAKE_PICTURE){
-            File lastDir = m_pictureFile.getParentFile();
+        if(m_takenPictureFile != null && m_pictureMode == TAKE_PICTURE){
+            File lastDir = m_takenPictureFile.getParentFile();
 
             if (lastDir.isDirectory()){
                 String[] children = lastDir.list();
@@ -263,9 +271,7 @@ public class AddTagActivity extends Activity {
         tagItem.setType(type);
 
         //tagItem.setImageUrl(m_pictureFile.getPath());
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        m_img.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-        tagItem.setImage(stream.toByteArray());
+        tagItem.setImage(m_imgBytes);
 
         saveTagItem(tagItem);
         m_global.addTagItemBeginning(tagItem);
@@ -284,7 +290,12 @@ public class AddTagActivity extends Activity {
         values.put(DBContract.TagItem.COLUMN_DATE, tagItem.getDate());
         //values.put(DBContract.TagItem.COLUMN_IMG_URL, m_pictureFile.getPath());
 
+        long startTime = System.currentTimeMillis();
         long newRowId = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
+        long millis = System.currentTimeMillis() - startTime;
+        int seconds = (int) (millis / 1000);
+        Toast.makeText(getApplicationContext(), "insert : " + seconds, Toast.LENGTH_LONG).show();
+
     }
 
     private boolean isFormValid(){
