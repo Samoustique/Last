@@ -160,8 +160,7 @@ public class AddTagActivity extends Activity {
             switch (requestcode) {
                 case TAKE_PICTURE:
                     if(m_takenPictureFile.exists()){
-                        m_img = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(m_takenPictureFile.getAbsolutePath()),100, 100, true);
-                        //m_img = BitmapFactory.decodeFile(m_takenPictureFile.getAbsolutePath());
+                        m_img = BitmapFactory.decodeFile(m_takenPictureFile.getAbsolutePath());
                         // compress img
                         m_imgBytes = BitmapUtility.getBytes(m_img);
                         m_img = BitmapUtility.getImage(m_imgBytes);
@@ -249,6 +248,7 @@ public class AddTagActivity extends Activity {
         String episode = m_edtScreenEpisode.getText().toString();
         String counter = m_edtCounter.getText().toString();
         TagItem.Type type = TagItem.Type.BOOK;
+
         if(m_radScreen.isChecked()) {
             type = TagItem.Type.SCREEN;
         }
@@ -258,7 +258,6 @@ public class AddTagActivity extends Activity {
             double dSeason = Double.parseDouble(season);
             double dEpisode = Double.parseDouble(episode);
             dEpisode /= 100;
-
             dCounter = dSeason + dEpisode;
         }else{
             dCounter = Double.parseDouble(counter);
@@ -269,8 +268,6 @@ public class AddTagActivity extends Activity {
         tagItem.setDate((new Date()).getTime());
         tagItem.setCtrSeen(dCounter);
         tagItem.setType(type);
-
-        //tagItem.setImageUrl(m_pictureFile.getPath());
         tagItem.setImage(m_imgBytes);
 
         saveTagItem(tagItem);
@@ -281,6 +278,7 @@ public class AddTagActivity extends Activity {
 
     private void saveTagItem(TagItem tagItem) {
         SQLiteDatabase db = m_global.getDB();
+
         ContentValues values = new ContentValues();
         values.put(DBContract.TagItem.COLUMN_TITLE, tagItem.getTitle());
         values.put(DBContract.TagItem.COLUMN_IMG, tagItem.getImage());
@@ -288,14 +286,10 @@ public class AddTagActivity extends Activity {
         values.put(DBContract.TagItem.COLUMN_CTR_OWNED, tagItem.getCtrOwned());
         values.put(DBContract.TagItem.COLUMN_TYPE, tagItem.getIType());
         values.put(DBContract.TagItem.COLUMN_DATE, tagItem.getDate());
-        //values.put(DBContract.TagItem.COLUMN_IMG_URL, m_pictureFile.getPath());
 
-        long startTime = System.currentTimeMillis();
-        long newRowId = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
-        long millis = System.currentTimeMillis() - startTime;
-        int seconds = (int) (millis / 1000);
-        Toast.makeText(getApplicationContext(), "insert : " + seconds, Toast.LENGTH_LONG).show();
-
+        long id = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
+        tagItem.setId(id);
+        tagItem.setDB(db);
     }
 
     private boolean isFormValid(){

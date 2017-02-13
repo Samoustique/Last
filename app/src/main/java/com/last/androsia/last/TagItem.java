@@ -1,5 +1,10 @@
 package com.last.androsia.last;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.Date;
+
 /**
  * Created by SPhilipps on 1/3/2017.
  */
@@ -11,25 +16,25 @@ public class TagItem {
         BOOK
     }
 
+    private long m_id;
     private String m_title;
-    //private String m_imgUrl;
     private byte[] m_img;
     private double m_ctrSeen;
     private double m_ctrOwned;
     private int m_iType;
     private double m_date;
 
+    private SQLiteDatabase m_db;
+
+    public long getId() {
+        return m_id;
+    }
+    public void setId(long id) { m_id = id; }
+
     public String getTitle() {
         return m_title;
     }
     public void setTitle(String title) { m_title = title; }
-
-    /*public String getImageUrl() {
-        return m_imgUrl;
-    }
-    public void setImageUrl(String imgUrl) {
-        m_imgUrl = imgUrl;
-    }*/
 
     public byte[] getImage() {
         return m_img;
@@ -46,6 +51,8 @@ public class TagItem {
 
     public double getDate() { return m_date; }
     public void setDate(double date) { m_date = date; }
+
+    public void setDB(SQLiteDatabase db) { m_db = db; }
 
     public int getIType() { return m_iType; }
     public void setIType(int type) { m_iType = type; }
@@ -90,6 +97,14 @@ public class TagItem {
             default:
                 break;
         }
+
+        m_date = (new Date()).getTime();
+
+        // upload increment
+        ContentValues values = new ContentValues();
+        values.put(DBContract.TagItem.COLUMN_CTR_SEEN, m_ctrSeen);
+        values.put(DBContract.TagItem.COLUMN_DATE, m_date);
+        m_db.update(DBContract.TagItem.TABLE_NAME, values, "_id=" + m_id, null);
     }
 
     @Override

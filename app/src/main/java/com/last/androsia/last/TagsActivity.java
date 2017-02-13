@@ -30,19 +30,9 @@ public class TagsActivity extends Activity {
 
     private ArrayList<TagItem> retrieveTagsFromDB(){
         SQLiteDatabase db = m_global.getDB();
-
         //deleteDB(db);
 
         String sortOrder = DBContract.TagItem.COLUMN_DATE + " DESC";
-
-        String[] selectionArgs = new String[]{
-                DBContract.TagItem.COLUMN_TITLE,
-                DBContract.TagItem.COLUMN_IMG,
-                DBContract.TagItem.COLUMN_CTR_SEEN,
-                DBContract.TagItem.COLUMN_CTR_OWNED,
-                DBContract.TagItem.COLUMN_TYPE,
-                DBContract.TagItem.COLUMN_DATE
-        };
 
         Cursor cursor = db.query(
                 DBContract.TagItem.TABLE_NAME,            // The table to query
@@ -56,9 +46,9 @@ public class TagsActivity extends Activity {
 
         ArrayList<TagItem> items = new ArrayList<>();
         while(cursor.moveToNext()) {
+            long id = cursor.getLong(cursor.getColumnIndexOrThrow(DBContract.TagItem._ID));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_TITLE));
             double date = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_DATE));
-            //String url = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_IMG_URL));
             byte[] img = cursor.getBlob(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_IMG));
             double ctrOwned = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_CTR_OWNED));
             double ctrSeen = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_CTR_SEEN));
@@ -67,11 +57,13 @@ public class TagsActivity extends Activity {
             TagItem item = new TagItem();
             item.setTitle(title);
             item.setDate(date);
-            //item.setImageUrl(url);
             item.setImage(img);
             item.setCtrOwned(ctrOwned);
             item.setCtrSeen(ctrSeen);
             item.setIType(type);
+            item.setId(id);
+            item.setDB(db);
+
             items.add(item);
         }
         cursor.close();
