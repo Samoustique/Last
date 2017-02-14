@@ -18,7 +18,7 @@ public class LastestTrio {
         m_tagViews = new ArrayList<>();
         for(int i = 0 ; i < tags.size() ; ++i){
             imgCounterViews[i].show();
-            m_tagViews.add(new TagView(imgCounterViews[i], tags.get(i), context));
+            m_tagViews.add(new TagView(i, imgCounterViews[i], tags.get(i), context));
         }
 
         if(tags.size() > 0) {

@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
@@ -22,9 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class AddTagActivity extends Activity {
@@ -163,8 +160,12 @@ public class AddTagActivity extends Activity {
                         m_img = BitmapFactory.decodeFile(m_takenPictureFile.getAbsolutePath());
                         // compress img
                         m_imgBytes = BitmapUtility.getBytes(m_img);
-                        m_img = BitmapUtility.getImage(m_imgBytes);
-                        m_imagePreview.setImageBitmap(m_img);
+                        try {
+                            m_img = BitmapUtility.getImage(m_imgBytes);
+                            m_imagePreview.setImageBitmap(m_img);
+                        } catch(Error e){
+                            Toast.makeText(getApplicationContext(), "Unable to compress this picture", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
                     }
@@ -183,8 +184,12 @@ public class AddTagActivity extends Activity {
                         m_img = (BitmapFactory.decodeFile(picturePath));
                         // compress img
                         m_imgBytes = BitmapUtility.getBytes(m_img);
-                        m_img = BitmapUtility.getImage(m_imgBytes);
-                        m_imagePreview.setImageBitmap(m_img);
+                        try {
+                            m_img = BitmapUtility.getImage(m_imgBytes);
+                            m_imagePreview.setImageBitmap(m_img);
+                        } catch(Error e){
+                            Toast.makeText(getApplicationContext(), "Unable to compress this picture", Toast.LENGTH_LONG).show();
+                        }
                     } catch (Exception e){
                         Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
                     }

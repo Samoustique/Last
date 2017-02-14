@@ -18,7 +18,6 @@ public final class DBContract {
     public static class TagItem implements BaseColumns {
         public static final String TABLE_NAME = "TagItems";
         public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_IMG_URL = "img url";
         public static final String COLUMN_IMG = "img";
         public static final String COLUMN_CTR_SEEN = "ctrSeen";
         public static final String COLUMN_CTR_OWNED = "ctrOwned";
@@ -29,7 +28,6 @@ public final class DBContract {
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY," +
                 COLUMN_TITLE + TEXT_TYPE + COMMA_SEP +
-                // COLUMN_IMG_URL + TEXT_TYPE + COMMA_SEP +
                 COLUMN_IMG + BLOB_TYPE + COMMA_SEP +
                 COLUMN_CTR_SEEN + TEXT_TYPE + COMMA_SEP +
                 COLUMN_CTR_OWNED + TEXT_TYPE + COMMA_SEP +

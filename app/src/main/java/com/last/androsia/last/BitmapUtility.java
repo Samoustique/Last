@@ -21,7 +21,7 @@ public class BitmapUtility {
         return getBytes(bitmap, 50);
     }
 
-    public static Bitmap getImage(byte[] image) {
+    public static Bitmap getImage(byte[] image) throws Error {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

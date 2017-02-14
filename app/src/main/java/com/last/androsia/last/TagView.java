@@ -1,7 +1,6 @@
 package com.last.androsia.last;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.text.SpannableString;
 import android.view.View;
 import android.widget.TextView;
@@ -14,13 +13,13 @@ public class TagView {
     private ImgCounterView m_imgCounterView;
     private TagItem m_item;
     private Context m_context;
-    private ImageLoader m_imageLoader;
+    private int m_role;
 
-    public TagView(ImgCounterView imgCounterView, TagItem item, Context context){
+    public TagView(int role, ImgCounterView imgCounterView, TagItem item, Context context){
         m_imgCounterView = imgCounterView;
         m_item = item;
         m_context = context;
-        m_imageLoader = new ImageLoader();
+        m_role = role;
     }
 
     public void focus(){
@@ -39,7 +38,11 @@ public class TagView {
 
     public void display(boolean doCenter) {
         // Img
-        m_imgCounterView.getImg().setImageBitmap(BitmapUtility.getImage(m_item.getImage()));
+        try {
+            m_imgCounterView.getImg().setImageBitmap(BitmapUtility.getImage(m_item.getImage()));
+        } catch(Error e){
+
+        }
 
         // Txt
         SpannableString counter = CounterHelper.formatCounter(m_item);
@@ -47,7 +50,7 @@ public class TagView {
         //m_txtGold.setTextSize(fontSize + 0.3f);
         m_imgCounterView.getTxt().setTypeface(CounterHelper.getFont(m_context));
         if(doCenter) {
-            CounterHelper.centerCounter(m_imgCounterView.getTxt());
+            CounterHelper.centerTrioCounter(m_role, m_imgCounterView.getTxt());
         }
     }
 }

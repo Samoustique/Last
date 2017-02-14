@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class CustomAdapter extends BaseAdapter {
     private ArrayList<TagItem> m_tagList = new ArrayList<TagItem>();
     private Context m_context;
-    private ImageLoader m_imageLoader = new ImageLoader();
 
     private class MyViewHolder {
         ImageView m_imageView;
@@ -48,7 +47,7 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder mViewHolder = null;
+        MyViewHolder mViewHolder;
         boolean doCenter = false;
 
         if (convertView == null) {
@@ -67,16 +66,17 @@ public class CustomAdapter extends BaseAdapter {
         } else {
             mViewHolder = (MyViewHolder) convertView.getTag();
         }
-        TagItem tagItem = (TagItem) getItem(position);
+        TagItem tagItem = getItem(position);
 
-        mViewHolder.m_imageView.setImageBitmap(BitmapUtility.getImage(tagItem.getImage()));
-        //m_imageLoader.loadImage(tagItem.getImageUrl(), m_context, mViewHolder.m_imageView);
-        SpannableString counter = CounterHelper.formatCounter(tagItem);
-        mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
+        try {
+            mViewHolder.m_imageView.setImageBitmap(BitmapUtility.getImage(tagItem.getImage()));
+            SpannableString counter = CounterHelper.formatCounter(tagItem);
+            mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
 
-        if (doCenter) {
-            CounterHelper.centerCounter(mViewHolder.m_textViewCounter);
-        }
+            if (doCenter) {
+                CounterHelper.centerCounter(mViewHolder.m_textViewCounter);
+            }
+        } catch(Error e){}
 
         return convertView;
     }
