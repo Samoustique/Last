@@ -2,6 +2,8 @@ package com.last.androsia.last;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +71,9 @@ public class CustomAdapter extends BaseAdapter {
         TagItem tagItem = getItem(position);
 
         try {
-            mViewHolder.m_imageView.setImageBitmap(BitmapUtility.getImage(tagItem.getImage()));
+
+            Bitmap img = BitmapFactory.decodeFile(tagItem.getImgUrl());
+            mViewHolder.m_imageView.setImageBitmap(img);
             SpannableString counter = CounterHelper.formatCounter(tagItem);
             mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
 

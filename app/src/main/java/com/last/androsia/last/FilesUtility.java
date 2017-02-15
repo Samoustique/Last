@@ -1,13 +1,11 @@
 package com.last.androsia.last;
 
-import android.os.Environment;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,36 +14,17 @@ import java.util.Date;
  */
 
 public class FilesUtility {
-    public static void copyToLast(File src) throws IOException {
-        InputStream in = new FileInputStream(src);
-
-        File dstFile = FilesUtility.createNewImageInLast();
-        OutputStream out = new FileOutputStream(dstFile);
-
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
-
-    public static File createNewImageInLast(){
+    public static String saveToInternalSorage(Bitmap bitmapImage, Context ctx) throws Exception {
+        ContextWrapper cw = new ContextWrapper(ctx);
+        File directory = cw.getDir("Last", Context.MODE_PRIVATE);
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        timeStamp += ".jpg";
-        String pictureImagePath = FilesUtility.getLastFolderPath() + timeStamp;
-        return new File(pictureImagePath);
-    }
+        File imagePath = new File(directory, timeStamp + ".jpg");
 
-    public static void createLastFolder() {
-        final File lastDir = new File(getLastFolderPath());
-        lastDir.mkdir();
-    }
+        FileOutputStream fos;
+        fos = new FileOutputStream(imagePath);
+        bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+        fos.close();
 
-    public static String getLastFolderPath(){
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        return storageDir.getAbsolutePath() + "/Last/";
+        return imagePath.getPath();
     }
 }

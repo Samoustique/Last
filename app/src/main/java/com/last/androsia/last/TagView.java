@@ -1,6 +1,8 @@
 package com.last.androsia.last;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.SpannableString;
 import android.view.View;
 import android.widget.TextView;
@@ -39,10 +41,9 @@ public class TagView {
     public void display(boolean doCenter) {
         // Img
         try {
-            m_imgCounterView.getImg().setImageBitmap(BitmapUtility.getImage(m_item.getImage()));
-        } catch(Error e){
-
-        }
+            Bitmap img = BitmapFactory.decodeFile(m_item.getImgUrl());
+            m_imgCounterView.getImg().setImageBitmap(img);
+        } catch(Error e){}
 
         // Txt
         SpannableString counter = CounterHelper.formatCounter(m_item);

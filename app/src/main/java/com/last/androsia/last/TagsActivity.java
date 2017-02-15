@@ -23,6 +23,7 @@ public class TagsActivity extends Activity {
 
     TagsActivity(){}
 
+    // only for debug
     private void deleteDB(SQLiteDatabase db){
         DBManagerHelper dbManager = new DBManagerHelper(getBaseContext());
         dbManager.onUpgrade(db, 0, 0);
@@ -49,7 +50,7 @@ public class TagsActivity extends Activity {
             long id = cursor.getLong(cursor.getColumnIndexOrThrow(DBContract.TagItem._ID));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_TITLE));
             double date = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_DATE));
-            byte[] img = cursor.getBlob(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_IMG));
+            String imgUrl = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_IMG_URL));
             double ctrOwned = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_CTR_OWNED));
             double ctrSeen = cursor.getDouble(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_CTR_SEEN));
             int type = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.TagItem.COLUMN_TYPE));
@@ -57,7 +58,7 @@ public class TagsActivity extends Activity {
             TagItem item = new TagItem();
             item.setTitle(title);
             item.setDate(date);
-            item.setImage(img);
+            item.setImgUrl(imgUrl);
             item.setCtrOwned(ctrOwned);
             item.setCtrSeen(ctrSeen);
             item.setIType(type);

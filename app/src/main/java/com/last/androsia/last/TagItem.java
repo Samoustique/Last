@@ -18,7 +18,7 @@ public class TagItem {
 
     private long m_id;
     private String m_title;
-    private byte[] m_img;
+    private String m_imgUrl;
     private double m_ctrSeen;
     private double m_ctrOwned;
     private int m_iType;
@@ -36,11 +36,11 @@ public class TagItem {
     }
     public void setTitle(String title) { m_title = title; }
 
-    public byte[] getImage() {
-        return m_img;
+    public String getImgUrl() {
+        return m_imgUrl;
     }
-    public void setImage(byte[] img) {
-        m_img = img;
+    public void setImgUrl(String imgUrl) {
+        m_imgUrl = imgUrl;
     }
 
     public double getCtrSeen() { return m_ctrSeen; }
