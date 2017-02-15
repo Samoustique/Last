@@ -3,9 +3,11 @@ package com.last.androsia.last;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,5 +28,11 @@ public class FilesUtility {
         fos.close();
 
         return imagePath.getPath();
+    }
+
+    public static File createImageFile() throws IOException {
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg";
+        return new File(storageDir.getAbsolutePath() + "/" + timeStamp);
     }
 }

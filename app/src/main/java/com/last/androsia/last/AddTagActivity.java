@@ -21,6 +21,8 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 public class AddTagActivity extends Activity {
@@ -41,6 +43,8 @@ public class AddTagActivity extends Activity {
     private RadioButton m_radScreen;
     private Bitmap m_img;
     private GlobalUtilities m_global;
+    private StringBuilder m_picturePath;
+    private File m_photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +128,18 @@ public class AddTagActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 if(options[which].equals(STR_TAKE_PICTURE)){
                     Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, TAKE_PICTURE);
+                    if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                        // Create the File where the photo should go
+                        m_photoFile = null;
+                        try {
+                            m_photoFile = FilesUtility.createImageFile();
+                        } catch (IOException ex) {}
+
+                        if (m_photoFile != null) {
+                            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(m_photoFile));
+                            startActivityForResult(cameraIntent, TAKE_PICTURE);
+                        }
+                    }
                 } else if(options[which].equals(STR_GALLERY)){
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, ACTIVITY_SELECT_IMAGE);
@@ -140,12 +155,13 @@ public class AddTagActivity extends Activity {
         if (resultcode == RESULT_OK) {
             switch (requestcode) {
                 case TAKE_PICTURE:
-                    if(intent == null || intent.getExtras() == null) {
+                    if(m_photoFile != null) {
+                        m_img = BitmapFactory.decodeFile(m_photoFile.getAbsolutePath());
+                        m_imagePreview.setImageBitmap(m_img);
+                        m_photoFile.delete();
+                    } else {
                         Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
-                        return;
                     }
-                    m_img = (Bitmap) intent.getExtras().get("data");
-                    m_imagePreview.setImageBitmap(m_img);
                     break;
                 case ACTIVITY_SELECT_IMAGE:
                     Uri selectedImage = intent.getData();
