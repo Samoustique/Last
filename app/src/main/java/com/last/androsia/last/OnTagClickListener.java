@@ -19,6 +19,7 @@ public class OnTagClickListener implements OnItemClickListener {
     public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
         TagItem item = (TagItem) adapterView.getItemAtPosition(pos);
         item.incrementCounter();
+        m_adapter.dataWillChange(pos);
         m_adapter.notifyDataSetChanged();
     }
 }

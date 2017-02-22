@@ -3,7 +3,6 @@ package com.last.androsia.last;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,14 @@ import java.util.ArrayList;
  */
 
 public class CustomAdapter extends BaseAdapter {
-    private ArrayList<TagItem> m_tagList = new ArrayList<TagItem>();
+    private ArrayList<TagItem> m_tagList = new ArrayList<>();
     private Context m_context;
+    // -1 means we want to update ALL items
+    private int m_posToChange = -1;
+
+    public void dataWillChange(int pos) {
+        m_posToChange = pos;
+    }
 
     private class MyViewHolder {
         ImageView m_imageView;
@@ -49,38 +54,41 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MyViewHolder mViewHolder;
-        boolean doCenter = false;
+        if(m_posToChange == -1 || m_posToChange == position) {
+            MyViewHolder mViewHolder;
+            boolean doCenter = false;
 
-        if (convertView == null) {
-            LayoutInflater mInflater = (LayoutInflater) m_context
-                    .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            if (convertView == null) {
+                LayoutInflater mInflater = (LayoutInflater) m_context
+                        .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
-            convertView = mInflater.inflate(R.layout.tag, parent, false);
+                convertView = mInflater.inflate(R.layout.tag, parent, false);
 
-            mViewHolder = new MyViewHolder();
-            mViewHolder.m_imageView = (ImageView) convertView.findViewById(R.id.imgUser);
-            mViewHolder.m_textViewCounter = (TextView) convertView.findViewById(R.id.txtCounter);
-            mViewHolder.m_textViewCounter.setTypeface(CounterHelper.getFont(m_context));
+                mViewHolder = new MyViewHolder();
+                mViewHolder.m_imageView = (ImageView) convertView.findViewById(R.id.imgUser);
+                mViewHolder.m_textViewCounter = (TextView) convertView.findViewById(R.id.txtCounter);
+                mViewHolder.m_textViewCounter.setTypeface(CounterHelper.getFont(m_context));
 
-            convertView.setTag(mViewHolder);
-            doCenter = true;
-        } else {
-            mViewHolder = (MyViewHolder) convertView.getTag();
-        }
-        TagItem tagItem = getItem(position);
-
-        try {
-            Bitmap img = FilesUtility.decodeSampledBitmapFromResource(tagItem.getImgUrl());
-            mViewHolder.m_imageView.setImageBitmap(img);
-            SpannableString counter = CounterHelper.formatCounter(tagItem);
-            mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
-
-            if (doCenter) {
-                CounterHelper.centerCounter(mViewHolder.m_textViewCounter);
+                convertView.setTag(mViewHolder);
+                doCenter = true;
+            } else {
+                mViewHolder = (MyViewHolder) convertView.getTag();
             }
-        } catch(Error e){}
 
+            TagItem tagItem = getItem(position);
+
+            try {
+                Bitmap img = FilesUtility.decodeSampledBitmapFromResource(tagItem.getImgUrl());
+                mViewHolder.m_imageView.setImageBitmap(img);
+                SpannableString counter = CounterHelper.formatCounter(tagItem);
+                mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
+
+                if (doCenter) {
+                    CounterHelper.centerCounter(mViewHolder.m_textViewCounter);
+                }
+            } catch (Error e) { }
+            m_posToChange = -1;
+        }
         return convertView;
     }
 }
