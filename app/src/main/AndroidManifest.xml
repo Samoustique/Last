@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/CustomTheme">
         <activity
-            android:name=".TagsActivity"
+            android:name=".Activities.TagsActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +23,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddTagActivity"
+            android:name=".Activities.AddTagActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_add_tag"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/CustomTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="TagsActivity" />
+                android:value=".Activities.TagsActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.ModifyTagActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/PopUpTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activities.TagsActivity" />
         </activity>
     </application>
 

@@ -7,6 +7,8 @@ import android.text.SpannableString;
 import android.view.View;
 import android.widget.TextView;
 
+import com.last.androsia.last.Activities.TagsActivity;
+
 /**
  * Created by SPhilipps on 1/11/2017.
  */
@@ -28,12 +30,20 @@ public class TagView {
         m_imgCounterView.focus();
     }
 
-    public void setupClickListener() {
+    public void setupClickListeners(final TagsActivity tagsActivity) {
         m_imgCounterView.getImg().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 m_item.incrementCounter();
                 display(false);
+            }
+        });
+        m_imgCounterView.getImg().setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                tagsActivity.createPopUp(m_item);
+                return true;
             }
         });
     }

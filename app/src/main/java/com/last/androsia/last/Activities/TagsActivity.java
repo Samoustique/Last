@@ -1,4 +1,4 @@
-package com.last.androsia.last;
+package com.last.androsia.last.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,19 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.last.androsia.last.Activities.AddTagActivity;
+import com.last.androsia.last.CustomAdapter;
+import com.last.androsia.last.DBContract;
+import com.last.androsia.last.DBManagerHelper;
+import com.last.androsia.last.ExpandedGridView;
+import com.last.androsia.last.GlobalUtilities;
+import com.last.androsia.last.ImgCounterView;
+import com.last.androsia.last.LastestTrio;
+import com.last.androsia.last.OnTagClickListener;
+import com.last.androsia.last.R;
+import com.last.androsia.last.TagItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,5 +139,9 @@ public class TagsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         displayTags();
+    }
+
+    public void createPopUp(TagItem item) {
+        startActivityForResult(new Intent(this, ModifyTagActivity.class), 2);
     }
 }

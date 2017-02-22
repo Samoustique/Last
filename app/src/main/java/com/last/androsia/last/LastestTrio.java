@@ -2,6 +2,8 @@ package com.last.androsia.last;
 
 import android.content.Context;
 
+import com.last.androsia.last.Activities.TagsActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +13,16 @@ import java.util.List;
 
 public class LastestTrio {
     private List<TagView> m_tagViews;
+    private TagsActivity m_tagsActivity;
 
-    public LastestTrio(Context context,
+    public LastestTrio(TagsActivity tagsActivity,
                        List<TagItem> tags,
                        ImgCounterView... imgCounterViews) {
         m_tagViews = new ArrayList<>();
+        m_tagsActivity = tagsActivity;
         for(int i = 0 ; i < tags.size() ; ++i){
             imgCounterViews[i].show();
-            m_tagViews.add(new TagView(i, imgCounterViews[i], tags.get(i), context));
+            m_tagViews.add(new TagView(i, imgCounterViews[i], tags.get(i), tagsActivity.getBaseContext()));
         }
 
         if(tags.size() > 0) {
@@ -28,7 +32,7 @@ public class LastestTrio {
 
     public void setupClickListeners() {
         for (TagView tagView : m_tagViews) {
-            tagView.setupClickListener();
+            tagView.setupClickListeners(m_tagsActivity);
         }
     }
 

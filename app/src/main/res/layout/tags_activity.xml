@@ -5,7 +5,7 @@
     android:id="@+id/activity_tags"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.last.androsia.last.TagsActivity"
+    tools:context="com.last.androsia.last.Activities.TagsActivity"
     android:background="@color/white"
     android:orientation="vertical">
 
