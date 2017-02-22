@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -41,9 +40,8 @@ public class AddTagActivity extends Activity {
     private EditText m_edtScreenSeason;
     private EditText m_edtScreenEpisode;
     private RadioButton m_radScreen;
-    private Bitmap m_img;
     private GlobalUtilities m_global;
-    private StringBuilder m_picturePath;
+    private String m_picturePath;
     private File m_photoFile;
 
     @Override
@@ -156,11 +154,10 @@ public class AddTagActivity extends Activity {
             switch (requestcode) {
                 case TAKE_PICTURE:
                     if(m_photoFile != null) {
-                        m_img = BitmapFactory.decodeFile(m_photoFile.getAbsolutePath());
-                        m_imagePreview.setImageBitmap(m_img);
-                        m_photoFile.delete();
+                        m_picturePath = m_photoFile.getAbsolutePath();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Unable to retrieve the picture from camera", Toast.LENGTH_LONG).show();
+                        return;
                     }
                     break;
                 case ACTIVITY_SELECT_IMAGE:
@@ -169,15 +166,16 @@ public class AddTagActivity extends Activity {
                     Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
                     c.moveToFirst();
                     int columnIndex = c.getColumnIndex(filePath[0]);
-                    String picturePath = c.getString(columnIndex);
+                    m_picturePath = c.getString(columnIndex);
                     c.close();
-                    try {
-                        m_img = (BitmapFactory.decodeFile(picturePath));
-                        m_imagePreview.setImageBitmap(m_img);
-                    } catch (Exception e){
-                        Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
-                    }
                     break;
+            }
+
+            try {
+                Bitmap image = FilesUtility.decodeSampledBitmapFromResource(m_picturePath);
+                m_imagePreview.setImageBitmap(image);
+            } catch (Exception e){
+                Toast.makeText(getApplicationContext(), "Unable to retrieve the picture", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -209,7 +207,7 @@ public class AddTagActivity extends Activity {
 
     public void save() {
         if(isFormValid()) {
-            if(m_img != null){
+            if(m_picturePath != null && m_picturePath != ""){
                 createNewItem();
             } else{
                 Toast.makeText(getApplicationContext(), "Please select your picture again", Toast.LENGTH_LONG).show();
@@ -244,7 +242,10 @@ public class AddTagActivity extends Activity {
         tagItem.setCtrSeen(dCounter);
         tagItem.setType(type);
         try {
-            String imgUrl = FilesUtility.saveToInternalSorage(m_img, getApplicationContext());
+            String imgUrl = FilesUtility.saveToInternalSorage(m_picturePath, getApplicationContext());
+            if(m_photoFile != null){
+                m_photoFile.delete();
+            }
             tagItem.setImgUrl(imgUrl);
         } catch(Exception e){
             Toast.makeText(getApplicationContext(), "Trouble while saving the picture", Toast.LENGTH_LONG).show();

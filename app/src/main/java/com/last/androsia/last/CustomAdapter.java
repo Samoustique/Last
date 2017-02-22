@@ -71,8 +71,7 @@ public class CustomAdapter extends BaseAdapter {
         TagItem tagItem = getItem(position);
 
         try {
-
-            Bitmap img = BitmapFactory.decodeFile(tagItem.getImgUrl());
+            Bitmap img = FilesUtility.decodeSampledBitmapFromResource(tagItem.getImgUrl());
             mViewHolder.m_imageView.setImageBitmap(img);
             SpannableString counter = CounterHelper.formatCounter(tagItem);
             mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);

@@ -41,7 +41,7 @@ public class TagView {
     public void display(boolean doCenter) {
         // Img
         try {
-            Bitmap img = BitmapFactory.decodeFile(m_item.getImgUrl());
+            Bitmap img = FilesUtility.decodeSampledBitmapFromResource(m_item.getImgUrl());
             m_imgCounterView.getImg().setImageBitmap(img);
         } catch(Error e){}
 
