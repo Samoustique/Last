@@ -54,7 +54,10 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(m_posToChange == -1 || m_posToChange == position) {
+        if(convertView == null ||
+           m_posToChange == -1 ||
+           m_posToChange == position) {
+
             MyViewHolder mViewHolder;
             boolean doCenter = false;
 

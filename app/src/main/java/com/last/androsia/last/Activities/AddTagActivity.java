@@ -208,6 +208,9 @@ public class AddTagActivity extends Activity {
     }
 
     public void back() {
+        Intent intent = new Intent();
+        intent.putExtra(m_global.IS_ITEM_SAVED, false);
+        setResult(m_global.ADD_ACTIVITY, intent);
         this.finish();
     }
 
@@ -259,7 +262,11 @@ public class AddTagActivity extends Activity {
 
         saveTagItem(tagItem);
         m_global.addTagItemBeginning(tagItem);
+
         // Return it in the main activity
+        Intent intent = new Intent();
+        intent.putExtra(m_global.IS_ITEM_SAVED, true);
+        setResult(m_global.ADD_ACTIVITY, intent);
         finish();
     }
 

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.last.androsia.last.Activities.AddTagActivity;
 import com.last.androsia.last.CustomAdapter;
 import com.last.androsia.last.DBContract;
 import com.last.androsia.last.DBManagerHelper;
@@ -27,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagsActivity extends Activity {
-    private final int ADD_ACTIVITY = 1;
-
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
     private ImageView m_btnGoToAddActivity;
@@ -133,12 +130,18 @@ public class TagsActivity extends Activity {
     }
 
     public void goToAddActivity(){
-        startActivityForResult(new Intent(this, AddTagActivity.class), ADD_ACTIVITY);
+        startActivityForResult(new Intent(this, AddTagActivity.class), m_global.ADD_ACTIVITY);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        displayTags();
+        if(requestCode == m_global.ADD_ACTIVITY){
+            if(null != data){
+                if(data.getBooleanExtra(m_global.IS_ITEM_SAVED, false)){
+                    displayTags();
+                }
+            }
+        }
     }
 
     public void createPopUp(TagItem item) {

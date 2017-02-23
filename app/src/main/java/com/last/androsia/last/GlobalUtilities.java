@@ -11,6 +11,9 @@ import java.util.ArrayList;
  */
 
 public class GlobalUtilities extends Application {
+    public final int ADD_ACTIVITY = 1;
+    public final String IS_ITEM_SAVED = "isItemSaved";
+
     private ArrayList<TagItem> m_tagsList;
     private SQLiteDatabase m_db;
 
