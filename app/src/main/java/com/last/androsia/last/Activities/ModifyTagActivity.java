@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.last.androsia.last.Common.GlobalUtilities;
+import com.last.androsia.last.Common.TagItem;
 import com.last.androsia.last.R;
 
 /**
@@ -12,6 +16,10 @@ import com.last.androsia.last.R;
  */
 
 public class ModifyTagActivity extends Activity {
+    private TextView m_txtTitle;
+
+    private TagItem m_item;
+    private GlobalUtilities m_global;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,5 +34,16 @@ public class ModifyTagActivity extends Activity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width * .9),(int)(height * 0.6));
+
+        initItem();
+    }
+
+    private void initItem(){
+        m_global = (GlobalUtilities) getApplicationContext();
+
+        m_item = m_global.getSelectedItem();
+
+        m_txtTitle = (TextView) findViewById(R.id.edtTitle);
+        m_txtTitle.setText(m_item.getTitle());
     }
 }

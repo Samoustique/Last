@@ -1,4 +1,4 @@
-package com.last.androsia.last;
+package com.last.androsia.last.Common;
 
 import android.provider.BaseColumns;
 

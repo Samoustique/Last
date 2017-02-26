@@ -1,8 +1,8 @@
-package com.last.androsia.last;
-
-import android.content.Context;
+package com.last.androsia.last.Trio;
 
 import com.last.androsia.last.Activities.TagsActivity;
+import com.last.androsia.last.Common.ImgCounterView;
+import com.last.androsia.last.Common.TagItem;
 
 import java.util.ArrayList;
 import java.util.List;

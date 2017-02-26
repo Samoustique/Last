@@ -99,7 +99,7 @@
 >
             </LinearLayout>
 
-            <com.last.androsia.last.ExpandedGridView
+            <com.last.androsia.last.Grid.ExpandedGridView
                 android:id="@+id/tagsGridView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

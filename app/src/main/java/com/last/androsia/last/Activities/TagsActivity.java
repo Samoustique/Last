@@ -11,16 +11,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.last.androsia.last.CustomAdapter;
-import com.last.androsia.last.DBContract;
-import com.last.androsia.last.DBManagerHelper;
-import com.last.androsia.last.ExpandedGridView;
-import com.last.androsia.last.GlobalUtilities;
-import com.last.androsia.last.ImgCounterView;
-import com.last.androsia.last.LastestTrio;
-import com.last.androsia.last.OnTagClickListener;
+import com.last.androsia.last.Grid.CustomAdapter;
+import com.last.androsia.last.Common.DBContract;
+import com.last.androsia.last.Common.DBManagerHelper;
+import com.last.androsia.last.Grid.ExpandedGridView;
+import com.last.androsia.last.Common.GlobalUtilities;
+import com.last.androsia.last.Common.ImgCounterView;
+import com.last.androsia.last.Grid.OnLongTagClickListener;
+import com.last.androsia.last.Trio.LastestTrio;
+import com.last.androsia.last.Grid.OnTagClickListener;
 import com.last.androsia.last.R;
-import com.last.androsia.last.TagItem;
+import com.last.androsia.last.Common.TagItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,7 @@ public class TagsActivity extends Activity {
         m_tagsGridView.setAdapter(adapter);
         m_tagsGridView.setExpanded(true);
         m_tagsGridView.setOnItemClickListener(new OnTagClickListener(adapter));
+        m_tagsGridView.setOnItemLongClickListener(new OnLongTagClickListener(this, adapter));
     }
 
     public void goToAddActivity(){
@@ -135,16 +137,19 @@ public class TagsActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == m_global.ADD_ACTIVITY){
+        if (requestCode == m_global.ADD_ACTIVITY) {
             if(null != data){
                 if(data.getBooleanExtra(m_global.IS_ITEM_SAVED, false)){
                     displayTags();
                 }
             }
+        } else if (requestCode == m_global.MODIFY_ACTIVITY) {
+            m_global.setSelectedItem(null);
         }
     }
 
     public void createPopUp(TagItem item) {
-        startActivityForResult(new Intent(this, ModifyTagActivity.class), 2);
+        m_global.setSelectedItem(item);
+        startActivityForResult(new Intent(this, ModifyTagActivity.class), m_global.MODIFY_ACTIVITY);
     }
 }

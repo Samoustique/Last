@@ -20,11 +20,11 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.last.androsia.last.DBContract;
-import com.last.androsia.last.FilesUtility;
-import com.last.androsia.last.GlobalUtilities;
+import com.last.androsia.last.Common.DBContract;
+import com.last.androsia.last.Common.FilesUtility;
+import com.last.androsia.last.Common.GlobalUtilities;
 import com.last.androsia.last.R;
-import com.last.androsia.last.TagItem;
+import com.last.androsia.last.Common.TagItem;
 
 import java.io.File;
 import java.io.IOException;

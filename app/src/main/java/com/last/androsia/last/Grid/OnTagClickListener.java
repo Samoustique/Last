@@ -1,8 +1,10 @@
-package com.last.androsia.last;
+package com.last.androsia.last.Grid;
 
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+
+import com.last.androsia.last.Common.TagItem;
 
 /**
  * Created by Samoustique on 07/01/2017.
