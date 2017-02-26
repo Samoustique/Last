@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -60,6 +61,7 @@ public class CustomAdapter extends BaseAdapter {
 
             MyViewHolder mViewHolder;
             boolean doCenter = false;
+            TagItem tagItem = getItem(position);
 
             if (convertView == null) {
                 LayoutInflater mInflater = (LayoutInflater) m_context
@@ -68,21 +70,23 @@ public class CustomAdapter extends BaseAdapter {
                 convertView = mInflater.inflate(R.layout.tag, parent, false);
 
                 mViewHolder = new MyViewHolder();
-                mViewHolder.m_imageView = (ImageView) convertView.findViewById(R.id.imgUser);
                 mViewHolder.m_textViewCounter = (TextView) convertView.findViewById(R.id.txtCounter);
                 mViewHolder.m_textViewCounter.setTypeface(CounterHelper.getFont(m_context));
+
+                mViewHolder.m_imageView = (ImageView) convertView.findViewById(R.id.imgUser);
+                Bitmap img = FilesUtility.decodeSampledBitmapFromResource(tagItem.getImgUrl());
+                mViewHolder.m_imageView.setImageBitmap(img);
 
                 convertView.setTag(mViewHolder);
                 doCenter = true;
             } else {
                 mViewHolder = (MyViewHolder) convertView.getTag();
             }
-
-            TagItem tagItem = getItem(position);
+            //Toast.makeText(m_context, String.valueOf(position), Toast.LENGTH_SHORT).show();
 
             try {
-                Bitmap img = FilesUtility.decodeSampledBitmapFromResource(tagItem.getImgUrl());
-                mViewHolder.m_imageView.setImageBitmap(img);
+                /*Bitmap img = FilesUtility.decodeSampledBitmapFromResource(tagItem.getImgUrl());
+                mViewHolder.m_imageView.setImageBitmap(img);*/
                 SpannableString counter = CounterHelper.formatCounter(tagItem);
                 mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
 
