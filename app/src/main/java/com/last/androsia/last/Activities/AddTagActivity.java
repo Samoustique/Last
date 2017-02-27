@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.last.androsia.last.Common.DBContract;
@@ -73,8 +74,12 @@ public class AddTagActivity extends Activity {
                 back();
             }
         });
+        TextView title = (TextView) findViewById(R.id.lblTitle);
+        title.setText("New Tag");
 
         // 2. User Image
+        RelativeLayout layoutSilver = (RelativeLayout) this.findViewById(R.id.layoutSilver);
+        layoutSilver.setVisibility(View.GONE);
         RelativeLayout layoutGold = (RelativeLayout) this.findViewById(R.id.layoutGold);
         layoutGold.setVisibility(View.VISIBLE);
         m_imagePreview = (ImageView) this.findViewById(R.id.imgUserGold);

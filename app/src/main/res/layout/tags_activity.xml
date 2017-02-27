@@ -35,34 +35,7 @@
                     android:layout_marginTop="10dp">
 
                     <!--   SILVER  -->
-                    <RelativeLayout
-                        android:id="@+id/layoutSilver"
-                        android:visibility="invisible"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_gravity="center">
-
-                        <ImageView
-                            android:id="@+id/imgUserSilver"
-                            android:scaleType="centerCrop"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"/>
-
-                        <ImageView
-                            android:src="@drawable/middle_tag"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"/>
-
-                        <TextView
-                            android:id="@+id/txtCounterSilver"
-                            android:textColor="#ff0000"
-                            android:textSize="30dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:rotation="-35"
-                            android:layout_marginLeft="67dp"
-                            android:layout_marginTop="77dp"/>
-                    </RelativeLayout >
+                    <include layout="@layout/silver_tag" />
                     <!--  / SILVER  -->
 
                     <!--   BRONZE  -->
