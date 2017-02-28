@@ -10,7 +10,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.last.androsia.last.Grid.CustomAdapter;
 import com.last.androsia.last.Common.DBContract;

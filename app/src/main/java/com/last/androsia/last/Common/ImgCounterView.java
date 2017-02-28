@@ -36,4 +36,8 @@ public class ImgCounterView {
         m_img.setFocusableInTouchMode(true);
         m_img.requestFocus();
     }
+
+    public void hide() {
+        m_layout.setVisibility(View.INVISIBLE);
+    }
 }

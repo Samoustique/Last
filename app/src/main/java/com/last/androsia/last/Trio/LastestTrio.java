@@ -20,6 +20,10 @@ public class LastestTrio {
                        ImgCounterView... imgCounterViews) {
         m_tagViews = new ArrayList<>();
         m_tagsActivity = tagsActivity;
+        for(int i = 0 ; i < imgCounterViews.length ; ++i) {
+            imgCounterViews[i].hide();
+        }
+
         for(int i = 0 ; i < tags.size() ; ++i){
             imgCounterViews[i].show();
             m_tagViews.add(new TagView(i, imgCounterViews[i], tags.get(i), tagsActivity.getBaseContext()));

@@ -1,8 +1,6 @@
 package com.last.androsia.last.Activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,18 +8,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.last.androsia.last.Common.DBContract;
 import com.last.androsia.last.Common.FilesUtility;
-import com.last.androsia.last.Common.GlobalUtilities;
 import com.last.androsia.last.Common.TagItem;
 import com.last.androsia.last.R;
 

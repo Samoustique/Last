@@ -1,6 +1,5 @@
 package com.last.androsia.last.Common;
 
-
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
