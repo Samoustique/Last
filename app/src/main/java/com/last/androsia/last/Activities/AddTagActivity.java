@@ -1,35 +1,15 @@
 package com.last.androsia.last.Activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.last.androsia.last.Common.DBContract;
-import com.last.androsia.last.Common.FilesUtility;
-import com.last.androsia.last.Common.GlobalUtilities;
 import com.last.androsia.last.R;
 import com.last.androsia.last.Common.TagItem;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
 
 public class AddTagActivity extends TagEdit {
     private ImageView m_btnSave;
@@ -64,7 +44,7 @@ public class AddTagActivity extends TagEdit {
         activateGoldImage();
     }
 
-    public void back() {
+    private void back() {
         Intent intent = new Intent();
         intent.putExtra(m_global.IS_ITEM_SAVED, false);
         setResult(m_global.ADD_ACTIVITY, intent);
@@ -86,5 +66,14 @@ public class AddTagActivity extends TagEdit {
         long id = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
         tagItem.setId(id);
         tagItem.setDB(db);
+
+        m_global.addTagItemBeginning(tagItem);
+    }
+
+    @Override
+    protected void returnParam() {
+        Intent intent = new Intent();
+        intent.putExtra(m_global.IS_ITEM_SAVED, true);
+        setResult(m_global.ADD_ACTIVITY, intent);
     }
 }

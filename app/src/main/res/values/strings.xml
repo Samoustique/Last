@@ -12,4 +12,5 @@
     <string name="edtCounter">XXX</string>
     <string name="edtScreen">XX</string>
     <string name="edtBook">Counter...</string>
+    <string name="title_activity_modify_tag">Last - Edit Tag</string>
 </resources>

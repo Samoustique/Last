@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.last.androsia.last.Grid.CustomAdapter;
 import com.last.androsia.last.Common.DBContract;
@@ -113,6 +114,8 @@ public class TagsActivity extends Activity {
         }
         clonedList.removeAll(trioList);
 
+       // Toast.makeText(getApplicationContext(), "Trouble while saving the picture", Toast.LENGTH_LONG).show();
+
         m_trio = new LastestTrio(
                 this,
                 trioList,
@@ -145,6 +148,7 @@ public class TagsActivity extends Activity {
             }
         } else if (requestCode == m_global.MODIFY_ACTIVITY) {
             m_global.setSelectedItem(null);
+            displayTags();
         }
     }
 

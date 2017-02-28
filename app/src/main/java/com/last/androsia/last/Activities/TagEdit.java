@@ -229,14 +229,13 @@ public abstract class TagEdit extends Activity {
         }
 
         saveTagItem(tagItem);
-        m_global.addTagItemBeginning(tagItem);
 
         // Return it in the main activity
-        Intent intent = new Intent();
-        intent.putExtra(m_global.IS_ITEM_SAVED, true);
-        setResult(m_global.ADD_ACTIVITY, intent);
+        returnParam();
         finish();
     }
+
+    protected abstract void returnParam();
 
     protected abstract void saveTagItem(TagItem tagItem);
 

@@ -39,6 +39,10 @@ public class GlobalUtilities extends Application {
         m_tagsList.add(0, tagItem);
     }
 
+    public void addDeleteItem(TagItem item) {
+        m_tagsList.remove(item);
+    }
+
     public SQLiteDatabase getDB(){
         if(m_db == null){
             DBManagerHelper dbManager = new DBManagerHelper(getBaseContext());

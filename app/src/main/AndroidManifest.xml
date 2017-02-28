@@ -35,7 +35,7 @@
         <activity
             android:name=".Activities.ModifyTagActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
+            android:label="@string/title_activity_modify_tag"
             android:theme="@style/PopUpTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
