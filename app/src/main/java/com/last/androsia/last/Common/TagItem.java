@@ -104,7 +104,7 @@ public class TagItem {
         ContentValues values = new ContentValues();
         values.put(DBContract.TagItem.COLUMN_CTR_SEEN, m_ctrSeen);
         values.put(DBContract.TagItem.COLUMN_DATE, m_date);
-        m_db.update(DBContract.TagItem.TABLE_NAME, values, "_id=" + m_id, null);
+        m_db.update(DBContract.TagItem.TABLE_NAME, values, DBContract.TagItem._ID + " = " + m_id, null);
     }
 
     @Override

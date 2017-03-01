@@ -4,6 +4,7 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Samoustique on 03/02/2017.
@@ -13,6 +14,7 @@ public class GlobalUtilities extends Application {
     public final int ADD_ACTIVITY = 1;
     public final int MODIFY_ACTIVITY = 2;
     public final String IS_ITEM_SAVED = "isItemSaved";
+    public final String IS_ITEM_MODIFIED = "isItemModified";
 
     private ArrayList<TagItem> m_tagsList;
     private SQLiteDatabase m_db;
@@ -38,8 +40,19 @@ public class GlobalUtilities extends Application {
         m_tagsList.add(0, tagItem);
     }
 
-    public void addDeleteItem(TagItem item) {
+    public void deleteItem(TagItem item) {
         m_tagsList.remove(item);
+    }
+
+    public void ModifyItemAndSetBeginning(TagItem itemToUse) {
+        Iterator<TagItem> iterator = m_tagsList.iterator();
+        while (iterator.hasNext()) {
+            TagItem item = iterator.next();
+            if(item.getId() == itemToUse.getId()){
+                iterator.remove();
+            }
+        }
+        addTagItemBeginning(itemToUse);
     }
 
     public SQLiteDatabase getDB(){

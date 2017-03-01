@@ -1,6 +1,7 @@
 package com.last.androsia.last.Activities;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -91,18 +92,36 @@ public class ModifyTagActivity extends TagEdit {
         }
 
         // fill the image
-        Bitmap img = FilesUtility.decodeSampledBitmapFromResource(m_item.getImgUrl());
+        m_picturePath = m_item.getImgUrl();
+        Bitmap img = FilesUtility.decodeSampledBitmapFromResource(m_picturePath);
         m_imagePreview.setImageBitmap(img);
     }
 
     @Override
     protected void saveTagItem(TagItem tagItem) {
+        SQLiteDatabase db = m_global.getDB();
 
+        tagItem.setId(m_item.getId());
+        tagItem.setDB(db);
+
+        ContentValues values = new ContentValues();
+        values.put(DBContract.TagItem.COLUMN_TITLE, tagItem.getTitle());
+        values.put(DBContract.TagItem.COLUMN_IMG_URL, tagItem.getImgUrl());
+        values.put(DBContract.TagItem.COLUMN_CTR_SEEN, tagItem.getCtrSeen());
+        values.put(DBContract.TagItem.COLUMN_CTR_OWNED, tagItem.getCtrOwned());
+        values.put(DBContract.TagItem.COLUMN_TYPE, tagItem.getIType());
+        values.put(DBContract.TagItem.COLUMN_DATE, tagItem.getDate());
+
+        db.update(DBContract.TagItem.TABLE_NAME, values, DBContract.TagItem._ID + " = " + tagItem.getId(), null);
+
+        m_global.ModifyItemAndSetBeginning(tagItem);
     }
 
     @Override
     protected void returnParam() {
-        setResult(m_global.MODIFY_ACTIVITY, new Intent());
+        Intent intent = new Intent();
+        intent.putExtra(m_global.IS_ITEM_MODIFIED, true);
+        setResult(m_global.MODIFY_ACTIVITY, intent);
     }
 
     private void delete() {
@@ -122,9 +141,9 @@ public class ModifyTagActivity extends TagEdit {
 
         db.delete(DBContract.TagItem.TABLE_NAME, DBContract.TagItem._ID + " = " + m_item.getId(), null);
 
-        m_global.addDeleteItem(m_item);
+        m_global.deleteItem(m_item);
 
-        setResult(m_global.MODIFY_ACTIVITY, new Intent());
+        returnParam();
         finish();
     }
 }

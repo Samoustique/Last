@@ -113,8 +113,6 @@ public class TagsActivity extends Activity {
         }
         clonedList.removeAll(trioList);
 
-       // Toast.makeText(getApplicationContext(), "Trouble while saving the picture", Toast.LENGTH_LONG).show();
-
         m_trio = new LastestTrio(
                 this,
                 trioList,
@@ -140,14 +138,14 @@ public class TagsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == m_global.ADD_ACTIVITY) {
-            if(null != data){
-                if(data.getBooleanExtra(m_global.IS_ITEM_SAVED, false)){
-                    displayTags();
-                }
+            if(null != data && data.getBooleanExtra(m_global.IS_ITEM_SAVED, false)){
+                displayTags();
             }
         } else if (requestCode == m_global.MODIFY_ACTIVITY) {
             m_global.setSelectedItem(null);
-            displayTags();
+            if(null != data && data.getBooleanExtra(m_global.IS_ITEM_MODIFIED, false)){
+                displayTags();
+            }
         }
     }
 
