@@ -1,15 +1,22 @@
 package com.last.androsia.last.Activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.last.androsia.last.Grid.CustomAdapter;
 import com.last.androsia.last.Common.DBContract;
@@ -27,12 +34,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagsActivity extends Activity {
+    private final int REQUEST_PERMISSION_READ = 1;
+    private final int REQUEST_PERMISSION_WRITE = 2;
+    private final int REQUEST_PERMISSION_CAMERA = 3;
+
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
     private ImageView m_btnGoToAddActivity;
     private GlobalUtilities m_global;
 
-    TagsActivity(){}
+    public TagsActivity(){}
 
     // only for debug
     private void deleteDB(SQLiteDatabase db){
@@ -92,6 +103,8 @@ public class TagsActivity extends Activity {
 
         m_global = (GlobalUtilities) getApplicationContext();
 
+        createPermissions();
+
         m_btnGoToAddActivity = (ImageView) findViewById(R.id.btnGoToAddActivity);
         m_btnGoToAddActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -101,6 +114,48 @@ public class TagsActivity extends Activity {
 
         m_global.setTagsList(retrieveTagsFromDB());
         displayTags();
+    }
+
+    private void createPermissions(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            createPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_PERMISSION_READ);
+            createPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_PERMISSION_WRITE);
+            createPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_CAMERA);
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void createPermission(String perm, int requestCode){
+        if (ContextCompat.checkSelfPermission(m_global, perm) != PackageManager.PERMISSION_GRANTED){
+            if(!ActivityCompat.shouldShowRequestPermissionRationale(this, perm)){
+                requestPermissions(new String[]{perm}, requestCode);
+            }
+        }
+    }
+
+    private void reAskPermissions(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            reAskPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_PERMISSION_READ);
+            reAskPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_PERMISSION_WRITE);
+            reAskPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_CAMERA);
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private void reAskPermission(String perm, int requestCode){
+        if (ContextCompat.checkSelfPermission(m_global, perm) == PackageManager.PERMISSION_DENIED){
+            requestPermissions(new String[]{perm}, requestCode);
+        }
+    }
+
+    private boolean hasPermissions() {
+        return  hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) &&
+                hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+                hasPermission(Manifest.permission.CAMERA);
+    }
+
+    private boolean hasPermission(String perm) {
+        return ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void displayTags(){
@@ -131,8 +186,14 @@ public class TagsActivity extends Activity {
         m_tagsGridView.setOnItemLongClickListener(new OnLongTagClickListener(this, adapter));
     }
 
+
     public void goToAddActivity(){
-        startActivityForResult(new Intent(this, AddTagActivity.class), m_global.ADD_ACTIVITY);
+        if(hasPermissions()){
+            startActivityForResult(new Intent(this, AddTagActivity.class), m_global.ADD_ACTIVITY);
+        } else {
+            Toast.makeText(m_global, "You need to accept Permissions before adding a new Tag...", Toast.LENGTH_LONG).show();
+            reAskPermissions();
+        }
     }
 
     @Override

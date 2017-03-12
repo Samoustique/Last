@@ -33,6 +33,7 @@ import java.util.Date;
 public abstract class TagEdit extends Activity {
     protected final int TAKE_PICTURE = 1;
     protected final int ACTIVITY_SELECT_IMAGE = 2;
+
     private final String DLG_PICTURE_TITLE = "Picture";
     private final String STR_TAKE_PICTURE = "Take Photo";
     private final String STR_GALLERY = "Choose from Gallery";
