@@ -194,18 +194,15 @@ public abstract class TagEdit extends Activity {
         switch (requestCode) {
             case REQUEST_PERMISSION_CAMERA:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(m_global, "Camera OK", Toast.LENGTH_SHORT).show();
                     CharSequence[] options = {STR_GALLERY, STR_TAKE_PICTURE};
                     displayImageChoice(options);
                 } else {
-                    Toast.makeText(m_global, "Camera denied", Toast.LENGTH_SHORT).show();
                     CharSequence[] options = {STR_GALLERY};
                     displayImageChoice(options);
                 }
                 break;
 
             default:
-                Toast.makeText(m_global, "Other", Toast.LENGTH_SHORT).show();
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

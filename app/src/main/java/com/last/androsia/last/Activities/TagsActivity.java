@@ -16,7 +16,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.last.androsia.last.Grid.CustomAdapter;
 import com.last.androsia.last.Common.DBContract;
@@ -127,15 +126,11 @@ public class TagsActivity extends Activity {
         switch (requestCode) {
             case REQUEST_PERMISSION_WRITE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(m_global, "Write OK", Toast.LENGTH_SHORT).show();
                     goToAddActivity();
-                } else {
-                    Toast.makeText(m_global, "Write denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
 
             default:
-                Toast.makeText(m_global, "Other", Toast.LENGTH_SHORT).show();
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
