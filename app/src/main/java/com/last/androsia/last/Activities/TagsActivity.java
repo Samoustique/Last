@@ -1,7 +1,6 @@
 package com.last.androsia.last.Activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -34,9 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagsActivity extends Activity {
-    private final int REQUEST_PERMISSION_READ = 1;
-    private final int REQUEST_PERMISSION_WRITE = 2;
-    private final int REQUEST_PERMISSION_CAMERA = 3;
+    private final int REQUEST_PERMISSION_WRITE = 1;
 
     private LastestTrio m_trio;
     private ExpandedGridView m_tagsGridView;
@@ -103,12 +101,10 @@ public class TagsActivity extends Activity {
 
         m_global = (GlobalUtilities) getApplicationContext();
 
-        createPermissions();
-
         m_btnGoToAddActivity = (ImageView) findViewById(R.id.btnGoToAddActivity);
         m_btnGoToAddActivity.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                goToAddActivity();
+                onBtnAddActivityClicked();
             }
         });
 
@@ -116,46 +112,38 @@ public class TagsActivity extends Activity {
         displayTags();
     }
 
-    private void createPermissions(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    /*private void createPermissions(){
             createPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_PERMISSION_READ);
             createPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_PERMISSION_WRITE);
             createPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_CAMERA);
+        }*/
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean createPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION_WRITE);
+            return false;
         }
+        return true;
     }
 
-    @SuppressLint("NewApi")
-    private void createPermission(String perm, int requestCode){
-        if (ContextCompat.checkSelfPermission(m_global, perm) != PackageManager.PERMISSION_GRANTED){
-            if(!ActivityCompat.shouldShowRequestPermissionRationale(this, perm)){
-                requestPermissions(new String[]{perm}, requestCode);
-            }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_WRITE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(m_global, "Write OK", Toast.LENGTH_SHORT).show();
+                    goToAddActivity();
+                } else {
+                    Toast.makeText(m_global, "Write denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+                Toast.makeText(m_global, "Other", Toast.LENGTH_SHORT).show();
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
-
-    private void reAskPermissions(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            reAskPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_PERMISSION_READ);
-            reAskPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_PERMISSION_WRITE);
-            reAskPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_CAMERA);
-        }
-    }
-
-    @SuppressLint("NewApi")
-    private void reAskPermission(String perm, int requestCode){
-        if (ContextCompat.checkSelfPermission(m_global, perm) == PackageManager.PERMISSION_DENIED){
-            requestPermissions(new String[]{perm}, requestCode);
-        }
-    }
-
-    private boolean hasPermissions() {
-        return  hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) &&
-                hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
-                hasPermission(Manifest.permission.CAMERA);
-    }
-
-    private boolean hasPermission(String perm) {
-        return ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void displayTags(){
@@ -186,14 +174,16 @@ public class TagsActivity extends Activity {
         m_tagsGridView.setOnItemLongClickListener(new OnLongTagClickListener(this, adapter));
     }
 
+    public void onBtnAddActivityClicked(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(createPermission()){
+                goToAddActivity();
+            }
+        }
+    }
 
     public void goToAddActivity(){
-        if(hasPermissions()){
-            startActivityForResult(new Intent(this, AddTagActivity.class), m_global.ADD_ACTIVITY);
-        } else {
-            Toast.makeText(m_global, "You need to accept Permissions before adding a new Tag...", Toast.LENGTH_LONG).show();
-            reAskPermissions();
-        }
+        startActivityForResult(new Intent(this, AddTagActivity.class), m_global.ADD_ACTIVITY);
     }
 
     @Override

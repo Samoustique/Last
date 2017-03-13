@@ -1,13 +1,19 @@
 package com.last.androsia.last.Activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,7 +30,9 @@ import com.last.androsia.last.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Samoustique on 27/02/2017.
@@ -37,6 +45,7 @@ public abstract class TagEdit extends Activity {
     private final String DLG_PICTURE_TITLE = "Picture";
     private final String STR_TAKE_PICTURE = "Take Photo";
     private final String STR_GALLERY = "Choose from Gallery";
+    private final int REQUEST_PERMISSION_CAMERA = 2;
 
     protected EditText m_edtTitle;
     protected EditText m_edtCounter;
@@ -131,8 +140,28 @@ public abstract class TagEdit extends Activity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean createPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                    REQUEST_PERMISSION_CAMERA);
+            return false;
+        }
+        return true;
+    }
+
     public void displayImageChoice(){
-        final CharSequence[] options = {STR_TAKE_PICTURE, STR_GALLERY};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!createPermission()) {
+                return;
+            }
+        }
+
+        CharSequence[] options = {STR_GALLERY, STR_TAKE_PICTURE};
+        displayImageChoice(options);
+    }
+
+    public void displayImageChoice(final CharSequence[] options){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(TagEdit.this);
         builder.setTitle(DLG_PICTURE_TITLE);
@@ -160,6 +189,27 @@ public abstract class TagEdit extends Activity {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(m_global, "Camera OK", Toast.LENGTH_SHORT).show();
+                    CharSequence[] options = {STR_GALLERY, STR_TAKE_PICTURE};
+                    displayImageChoice(options);
+                } else {
+                    Toast.makeText(m_global, "Camera denied", Toast.LENGTH_SHORT).show();
+                    CharSequence[] options = {STR_GALLERY};
+                    displayImageChoice(options);
+                }
+                break;
+
+            default:
+                Toast.makeText(m_global, "Other", Toast.LENGTH_SHORT).show();
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     public void onRadioButtonClicked(View view) {
