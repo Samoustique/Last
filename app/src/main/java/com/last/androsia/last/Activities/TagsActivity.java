@@ -112,12 +112,6 @@ public class TagsActivity extends Activity {
         displayTags();
     }
 
-    /*private void createPermissions(){
-            createPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_PERMISSION_READ);
-            createPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_PERMISSION_WRITE);
-            createPermission(Manifest.permission.CAMERA, REQUEST_PERMISSION_CAMERA);
-        }*/
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean createPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

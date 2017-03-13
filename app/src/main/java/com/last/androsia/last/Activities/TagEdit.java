@@ -30,9 +30,7 @@ import com.last.androsia.last.R;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Samoustique on 27/02/2017.
