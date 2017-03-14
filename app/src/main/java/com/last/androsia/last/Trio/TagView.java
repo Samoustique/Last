@@ -20,13 +20,11 @@ public class TagView {
     private ImgCounterView m_imgCounterView;
     private TagItem m_item;
     private Context m_context;
-    private int m_role;
 
-    public TagView(int role, ImgCounterView imgCounterView, TagItem item, Context context){
+    public TagView(ImgCounterView imgCounterView, TagItem item, Context context){
         m_imgCounterView = imgCounterView;
         m_item = item;
         m_context = context;
-        m_role = role;
     }
 
     public void focus(){
@@ -38,7 +36,7 @@ public class TagView {
             @Override
             public void onClick(View v) {
                 m_item.incrementCounter();
-                display(false);
+                display();
             }
         });
         m_imgCounterView.getImg().setOnLongClickListener(new View.OnLongClickListener() {
@@ -51,7 +49,7 @@ public class TagView {
         });
     }
 
-    public void display(boolean doCenter) {
+    public void display() {
         // Img
         try {
             Bitmap img = FilesUtility.decodeSampledBitmapFromResource(m_item.getImgUrl());
@@ -63,8 +61,5 @@ public class TagView {
         m_imgCounterView.getTxt().setText(counter, TextView.BufferType.SPANNABLE);
         //m_txtGold.setTextSize(fontSize + 0.3f);
         m_imgCounterView.getTxt().setTypeface(CounterHelper.getFont(m_context));
-        if(doCenter) {
-            CounterHelper.centerTrioCounter(m_role, m_imgCounterView.getTxt());
-        }
     }
 }

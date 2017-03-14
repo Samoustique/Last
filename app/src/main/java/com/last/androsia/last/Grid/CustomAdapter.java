@@ -64,7 +64,6 @@ public class CustomAdapter extends BaseAdapter {
            m_posToChange == position) {
 
             MyViewHolder mViewHolder;
-            boolean doCenter = false;
             TagItem tagItem = getItem(position);
 
             if (convertView == null) {
@@ -82,7 +81,6 @@ public class CustomAdapter extends BaseAdapter {
                 mViewHolder.m_imageView.setImageBitmap(img);
 
                 convertView.setTag(mViewHolder);
-                doCenter = true;
             } else {
                 mViewHolder = (MyViewHolder) convertView.getTag();
             }
@@ -90,10 +88,6 @@ public class CustomAdapter extends BaseAdapter {
             try {
                 SpannableString counter = CounterHelper.formatCounter(tagItem);
                 mViewHolder.m_textViewCounter.setText(counter, TextView.BufferType.SPANNABLE);
-
-                if (doCenter) {
-                    CounterHelper.centerCounter(mViewHolder.m_textViewCounter);
-                }
             } catch (Error e) { }
             m_posToChange = -1;
         }

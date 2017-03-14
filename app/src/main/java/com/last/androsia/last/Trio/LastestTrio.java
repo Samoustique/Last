@@ -26,7 +26,7 @@ public class LastestTrio {
 
         for(int i = 0 ; i < tags.size() ; ++i){
             imgCounterViews[i].show();
-            m_tagViews.add(new TagView(i, imgCounterViews[i], tags.get(i), tagsActivity.getBaseContext()));
+            m_tagViews.add(new TagView(imgCounterViews[i], tags.get(i), tagsActivity.getBaseContext()));
         }
 
         if(tags.size() > 0) {
@@ -42,7 +42,7 @@ public class LastestTrio {
 
     public void display() {
         for (TagView tagView : m_tagViews) {
-            tagView.display(true);
+            tagView.display();
         }
     }
 }

@@ -24,9 +24,10 @@
         android:id="@+id/txtCounterGold"
         android:textColor="#ff0000"
         android:textSize="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:rotation="-35"
-        android:layout_marginLeft="125dp"
-        android:layout_marginTop="145dp"/>
+        android:gravity="center"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="125dp"/>
 </RelativeLayout>

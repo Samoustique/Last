@@ -61,11 +61,12 @@
                             android:id="@+id/txtCounterBronze"
                             android:textColor="#ff0000"
                             android:textSize="30dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
                             android:rotation="-35"
-                            android:layout_marginLeft="55dp"
-                            android:layout_marginTop="70dp"/>
+                            android:gravity="center"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginTop="60dp"/>
                     </RelativeLayout >
                     <!--  / BRONZE  -->
                 </LinearLayout
