@@ -168,6 +168,8 @@ public class TagsActivity extends Activity {
             if(createPermission()){
                 goToAddActivity();
             }
+        } else {
+            goToAddActivity();
         }
     }
 
