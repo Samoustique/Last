@@ -2,6 +2,7 @@ package com.last.androsia.last.Activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -48,9 +49,24 @@ public class TagsActivity extends Activity {
         dbManager.onUpgrade(db, 0, 0);
     }
 
+    private void createFake(SQLiteDatabase db) {
+        for(int i = 0 ; i < 20 ; ++i) {
+            ContentValues values = new ContentValues();
+            values.put(DBContract.TagItem.COLUMN_TITLE, "title");
+            values.put(DBContract.TagItem.COLUMN_IMG_URL, "");
+            values.put(DBContract.TagItem.COLUMN_CTR_SEEN, 12);
+            values.put(DBContract.TagItem.COLUMN_CTR_OWNED, 0);
+            values.put(DBContract.TagItem.COLUMN_TYPE, 1);
+            values.put(DBContract.TagItem.COLUMN_DATE, 1);
+
+            long id = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
+        }
+    }
+
     private ArrayList<TagItem> retrieveTagsFromDB(){
         SQLiteDatabase db = m_global.getDB();
-        //deleteDB(db);
+        deleteDB(db);
+        createFake(db);
 
         String sortOrder = DBContract.TagItem.COLUMN_DATE + " DESC";
 
