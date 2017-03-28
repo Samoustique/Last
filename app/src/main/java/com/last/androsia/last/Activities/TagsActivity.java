@@ -14,6 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,24 +51,9 @@ public class TagsActivity extends Activity {
         dbManager.onUpgrade(db, 0, 0);
     }
 
-    private void createFake(SQLiteDatabase db) {
-        for(int i = 0 ; i < 20 ; ++i) {
-            ContentValues values = new ContentValues();
-            values.put(DBContract.TagItem.COLUMN_TITLE, "title");
-            values.put(DBContract.TagItem.COLUMN_IMG_URL, "");
-            values.put(DBContract.TagItem.COLUMN_CTR_SEEN, 12);
-            values.put(DBContract.TagItem.COLUMN_CTR_OWNED, 0);
-            values.put(DBContract.TagItem.COLUMN_TYPE, 1);
-            values.put(DBContract.TagItem.COLUMN_DATE, 1);
-
-            long id = db.insert(DBContract.TagItem.TABLE_NAME, null, values);
-        }
-    }
-
     private ArrayList<TagItem> retrieveTagsFromDB(){
         SQLiteDatabase db = m_global.getDB();
-        deleteDB(db);
-        createFake(db);
+        //deleteDB(db);
 
         String sortOrder = DBContract.TagItem.COLUMN_DATE + " DESC";
 
@@ -124,6 +111,35 @@ public class TagsActivity extends Activity {
         });
 
         m_global.setTagsList(retrieveTagsFromDB());
+
+        CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                if (isChecked){
+                    if(buttonView.getId() == R.id.chkScreen){
+                        m_global.showScreenTags();
+                    } else {
+                        m_global.showBookTags();
+                    }
+                } else {
+                    if(buttonView.getId() == R.id.chkScreen){
+                        m_global.hideScreenTags();
+                    } else {
+                        m_global.hideBookTags();
+                    }
+                }
+
+                displayTags();
+            }
+        };
+
+        CheckBox chkScreen = ( CheckBox ) findViewById( R.id.chkScreen );
+        chkScreen.setOnCheckedChangeListener(checkListener);
+        chkScreen.setChecked(true);
+        CheckBox chkBook = ( CheckBox ) findViewById( R.id.chkBook );
+        chkBook.setOnCheckedChangeListener(checkListener);
+        chkBook.setChecked(true);
+
         displayTags();
     }
 
@@ -153,7 +169,7 @@ public class TagsActivity extends Activity {
 
     private void displayTags(){
         List trioList;
-        ArrayList<TagItem> clonedList = new ArrayList<>(m_global.getTagsList());
+        ArrayList<TagItem> clonedList = new ArrayList<>(m_global.getTagsListToDisplay());
         if (clonedList.size() > 3) {
             trioList = new ArrayList<>(clonedList.subList(0, 3));
         } else {

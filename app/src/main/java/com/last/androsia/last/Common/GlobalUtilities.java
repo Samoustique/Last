@@ -19,6 +19,8 @@ public class GlobalUtilities extends Application {
     private ArrayList<TagItem> m_tagsList;
     private SQLiteDatabase m_db;
     private TagItem m_selectedItem;
+    private boolean m_isBookDisplayed = true;
+    private boolean m_isScreenDisplayed = true;
 
     public void setSelectedItem(TagItem selectedItem) {
         m_selectedItem = selectedItem;
@@ -32,8 +34,22 @@ public class GlobalUtilities extends Application {
         m_tagsList = tagsList;
     }
 
-    public ArrayList<TagItem> getTagsList() {
-        return m_tagsList;
+    public ArrayList<TagItem> getTagsListToDisplay() {
+        if(m_isScreenDisplayed && m_isBookDisplayed) {
+            return m_tagsList;
+        }
+
+        ArrayList<TagItem> tagsToDisplay = new ArrayList<>();
+
+        for(TagItem item : m_tagsList){
+            TagItem.Type type = item.getType();
+            if((type == TagItem.Type.SCREEN && m_isScreenDisplayed) ||
+                    (type == TagItem.Type.BOOK && m_isBookDisplayed)){
+                tagsToDisplay.add(item);
+            }
+        }
+
+        return tagsToDisplay;
     }
 
     public void addTagItemBeginning(TagItem tagItem) {
@@ -61,5 +77,21 @@ public class GlobalUtilities extends Application {
             m_db = dbManager.getWritableDatabase();
         }
         return m_db;
+    }
+
+    public void showScreenTags() {
+        m_isScreenDisplayed = true;
+    }
+
+    public void showBookTags() {
+        m_isBookDisplayed = true;
+    }
+
+    public void hideScreenTags() {
+        m_isScreenDisplayed = false;
+    }
+
+    public void hideBookTags() {
+        m_isBookDisplayed = false;
     }
 }
